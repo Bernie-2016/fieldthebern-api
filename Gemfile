@@ -18,13 +18,18 @@ gem 'hashie'
 
 gem 'pg'
 
+gem 'koala'
+
 group :development, :test do
+  gem 'dotenv-rails'
   gem 'rspec-rails'
 end
 
 group :test do
   gem 'factory_girl_rails'
   gem 'oauth2'
+  gem 'vcr'
+  gem 'webmock'
 end
 
 # To use ActiveModel has_secure_password
