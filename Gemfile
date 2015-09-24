@@ -8,8 +8,15 @@ gem 'active_model_serializers'
 
 gem 'spring', :group => :development
 
+gem 'rack-cors', :require => 'rack/cors'
+
+gem 'hashie'
 
 gem 'sqlite3'
+
+group :development, :test do
+  gem 'rspec-rails'
+end
 
 
 
