@@ -45,6 +45,7 @@ GEM
       minitest (~> 5.1)
       thread_safe (~> 0.3, >= 0.3.4)
       tzinfo (~> 1.1)
+    addressable (2.3.8)
     arel (6.0.3)
     bcrypt (3.1.10)
     builder (3.2.2)
@@ -52,9 +53,15 @@ GEM
       bcrypt
       email_validator (~> 1.4)
       rails (>= 3.1)
+    crack (0.4.2)
+      safe_yaml (~> 1.0.0)
     diff-lcs (1.2.5)
     doorkeeper (3.0.1)
       railties (>= 3.2)
+    dotenv (2.0.2)
+    dotenv-rails (2.0.2)
+      dotenv (= 2.0.2)
+      railties (~> 4.0)
     email_validator (1.6.0)
       activemodel
     erubis (2.7.0)
@@ -71,6 +78,10 @@ GEM
     i18n (0.7.0)
     json (1.8.3)
     jwt (1.5.1)
+    koala (2.2.0)
+      addressable
+      faraday
+      multi_json
     loofah (2.0.3)
       nokogiri (>= 1.5.9)
     mail (2.6.3)
@@ -139,6 +150,7 @@ GEM
       rspec-mocks (~> 3.3.0)
       rspec-support (~> 3.3.0)
     rspec-support (3.3.0)
+    safe_yaml (1.0.4)
     spring (1.4.0)
     sprockets (3.3.4)
       rack (~> 1.0)
@@ -150,6 +162,10 @@ GEM
     thread_safe (0.3.5)
     tzinfo (1.2.2)
       thread_safe (~> 0.1)
+    vcr (2.9.3)
+    webmock (1.21.0)
+      addressable (>= 2.3.6)
+      crack (>= 0.3.2)
 
 PLATFORMS
   ruby
@@ -158,8 +174,10 @@ DEPENDENCIES
   active_model_serializers!
   clearance
   doorkeeper
+  dotenv-rails
   factory_girl_rails
   hashie
+  koala
   oauth2
   pg
   rack-cors
@@ -167,6 +185,8 @@ DEPENDENCIES
   rails-api
   rspec-rails
   spring
+  vcr
+  webmock
 
 BUNDLED WITH
    1.10.6
