@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe "Ping API", type: :api do
+describe "Ping API" do
 
   it 'gets a pong when pinging' do
     get "#{host}/ping"

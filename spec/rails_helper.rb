@@ -9,6 +9,8 @@ Dir[Rails.root.join("spec/support/**/*.rb")].each { |f| require f }
 # See http://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
 RSpec.configure do |config|
 
+  config.infer_spec_type_from_file_location!
+
   config.expect_with :rspec do |expectations|
     # This option will default to `true` in RSpec 4. It makes the `description`
     # and `failure_message` of custom matchers include text for helper methods
@@ -26,8 +28,6 @@ RSpec.configure do |config|
     # `true` in RSpec 4.
     mocks.verify_partial_doubles = true
   end
-
-  config.include RequestHelpers
 
   # These two settings work together to allow you to limit a spec run
   # to individual examples or groups you care about by tagging them with
