@@ -7,10 +7,11 @@ gem 'rails-api'
 gem 'active_model_serializers'
 
 gem 'rack-cors', :require => 'rack/cors'
+
 gem 'doorkeeper'
+gem 'clearance'
 
 gem 'spring', :group => :development
-
 
 gem 'hashie'
 
