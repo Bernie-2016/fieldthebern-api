@@ -2,8 +2,6 @@ Doorkeeper.configure do
   # Change the ORM that doorkeeper will use (needs plugins)
   orm :active_record
 
-  use_refresh_token
-
   # This block will be called to check whether the resource owner is authenticated or not.
   resource_owner_authenticator do
     @user = env[:clearance].current_user
@@ -99,7 +97,7 @@ Doorkeeper.configure do
   #   http://tools.ietf.org/html/rfc6819#section-4.4.2
   #   http://tools.ietf.org/html/rfc6819#section-4.4.3
   #
-  # grant_flows %w(authorization_code client_credentials)
+  grant_flows %w(password)
 
   # Under some circumstances you might want to have applications auto-approved,
   # so that the user skips the authorization step.
