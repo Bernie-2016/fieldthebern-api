@@ -69,6 +69,8 @@ RSpec.configure do |config|
 
   config.order = :random
 
+  config.include FactoryGirl::Syntax::Methods
+
   def host
     "http://api.lvh.me:3000"
   end
