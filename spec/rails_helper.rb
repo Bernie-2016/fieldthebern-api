@@ -80,4 +80,8 @@ RSpec.configure do |config|
   def host
     "http://api.lvh.me:3000"
   end
+
+  def authenticated_get(path, args, token)
+    get "#{host}/#{path}", args, {"HTTP_AUTHORIZATION" => "Bearer #{token}"}
+  end
 end

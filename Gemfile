@@ -24,6 +24,7 @@ end
 
 group :test do
   gem 'factory_girl_rails'
+  gem 'oauth2'
 end
 
 # To use ActiveModel has_secure_password

@@ -1,7 +1,11 @@
 class PingController < ApplicationController
 
   def index
-    json = {"ping" => "pong"}
+    if signed_in?
+      json = {"ping" => current_user.email}
+    else
+      json = {"ping" => "pong"}
+    end
     render json: json
   end
 
