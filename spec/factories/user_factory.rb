@@ -4,5 +4,6 @@ FactoryGirl.define do
     f.last_name "Doe"
     f.email "john-doe@mail.com"
     f.password "password"
+    f.federal_state "NY"
   end
 end
