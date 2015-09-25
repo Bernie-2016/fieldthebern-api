@@ -42,12 +42,12 @@ describe "Tokens API" do
 
     end
 
-    context "with a facebook_auth_code" do
+    context "with a facebook_auth_code", sidekiq: :fake do
 
       before do
         oauth = Koala::Facebook::OAuth.new(ENV["FACEBOOK_APP_ID"], ENV["FACEBOOK_APP_SECRET"], ENV["FACEBOOK_REDIRECT_URL"])
         test_users = Koala::Facebook::TestUsers.new(app_id: ENV["FACEBOOK_APP_ID"], secret: ENV["FACEBOOK_APP_SECRET"])
-        @facebook_user = test_users.create(true, "email")
+        @facebook_user = test_users.create(true, "email,user_friends")
         short_lived_token = @facebook_user["access_token"]
         long_lived_token_info = oauth.exchange_access_token_info(short_lived_token)
         @facebook_auth_code = oauth.generate_client_code(long_lived_token_info["access_token"])
@@ -56,15 +56,18 @@ describe "Tokens API" do
       context "when the user does not already exist" do
 
         it 'creates a user from Facebook and returns a token', vcr: { cassette_name: 'requests/api/tokens/creates a user' } do
+
           post "#{host}/oauth/token", {
             facebook_auth_code: @facebook_auth_code
           }
           expect(last_response.status).to eq 200
-
           expect(json.access_token).to_not be_nil
           expect(json.user_id).to_not be_nil
           expect(json.expires_in).to eq 7200
           expect(json.token_type).to eq "bearer"
+
+          expect(AddFacebookFriendsWorker.jobs.size).to eq 1
+          AddFacebookFriendsWorker.drain
         end
 
       end
