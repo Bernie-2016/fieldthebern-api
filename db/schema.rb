@@ -65,7 +65,7 @@ ActiveRecord::Schema.define(version: 20150925071113) do
     t.string "remember_token",        limit: 128
     t.string "facebook_id"
     t.text   "facebook_access_token"
-    t.string "federal_state"
+    t.string "home_state"
   end
 
   add_index "users", ["email"], name: "index_users_on_email", using: :btree
