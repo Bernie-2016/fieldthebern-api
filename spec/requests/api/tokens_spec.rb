@@ -53,6 +53,10 @@ describe "Tokens API" do
         @facebook_auth_code = oauth.generate_client_code(long_lived_token_info["access_token"])
       end
 
+      after do
+        AddFacebookFriendsWorker.drain
+      end
+
       context "when the user does not already exist" do
 
         it 'creates a user from Facebook and returns a token', vcr: { cassette_name: 'requests/api/tokens/creates a user' } do
@@ -67,7 +71,6 @@ describe "Tokens API" do
           expect(json.token_type).to eq "bearer"
 
           expect(AddFacebookFriendsWorker.jobs.size).to eq 1
-          AddFacebookFriendsWorker.drain
         end
 
       end
