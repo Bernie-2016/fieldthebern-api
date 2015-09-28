@@ -13,8 +13,8 @@ describe User do
     expect(build(:user, password: nil)).not_to be_valid
   end
 
-  it "is valid without a federal_state" do
-    expect(build(:user, federal_state: nil)).to be_valid
+  it "is valid without a home_state" do
+    expect(build(:user, home_state: nil)).to be_valid
   end
 
   it "is valid without a first_name" do
