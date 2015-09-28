@@ -20,6 +20,8 @@ gem 'pg'
 
 gem 'koala'
 
+gem 'sidekiq'
+
 group :development, :test do
   gem 'dotenv-rails'
   gem 'rspec-rails'
