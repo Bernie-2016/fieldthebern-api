@@ -13,6 +13,18 @@ describe User do
     expect(build(:user, password: nil)).not_to be_valid
   end
 
+  it "is valid without a home_state" do
+    expect(build(:user, home_state: nil)).to be_valid
+  end
+
+  it "is valid without a first_name" do
+    expect(build(:user, first_name: nil)).to be_valid
+  end
+
+  it "is valid without a last_name" do
+    expect(build(:user, last_name: nil)).to be_valid
+  end
+
   it "can have followers" do
     user = create(:user)
     other_user_1 = create(:user)
