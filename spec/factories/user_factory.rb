@@ -3,6 +3,7 @@ FactoryGirl.define do
     f.first_name "John"
     f.last_name "Doe"
     f.password "password"
+    f.home_state "NY"
 
     sequence(:email) { |n| "user_" + n.to_s + "@mail.com" }
   end
