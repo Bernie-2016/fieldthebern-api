@@ -52,7 +52,7 @@ describe "Tokens API" do
         long_lived_token_info = oauth.exchange_access_token_info(short_lived_token)
         facebook_auth_code = oauth.generate_client_code(long_lived_token_info["access_token"])
         access_token_info = oauth.get_access_token_info(facebook_auth_code)
-        @facebook_auth_code = access_token_info["access_token"] || JSON.parse(access_token_info.keys[0])["access_token"]
+        @facebook_access_token = access_token_info["access_token"] || JSON.parse(access_token_info.keys[0])["access_token"]
       end
 
       after do
@@ -65,7 +65,7 @@ describe "Tokens API" do
 
           post "#{host}/oauth/token", {
             username: "facebook",
-            password: @facebook_auth_code
+            password: @facebook_access_token
           }
           expect(last_response.status).to eq 200
           expect(json.access_token).to_not be_nil
@@ -86,7 +86,7 @@ describe "Tokens API" do
 
             post "#{host}/oauth/token", {
               username: "facebook",
-              password: @facebook_auth_code
+              password: @facebook_access_token
             }
 
             expect(last_response.status).to eq 200
@@ -104,7 +104,7 @@ describe "Tokens API" do
 
             post "#{host}/oauth/token", {
               username: "facebook",
-              password: @facebook_auth_code
+              password: @facebook_access_token
             }
 
             expect(last_response.status).to eq 200
