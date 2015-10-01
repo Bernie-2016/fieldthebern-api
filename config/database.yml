@@ -1,6 +1,6 @@
 test:
-  adapter: postgresql
+  adapter: postgis
   database: ground_game_test
 development:
-  adapter: postgresql
+  adapter: postgis
   database: ground_game_dev

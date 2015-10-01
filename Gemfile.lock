@@ -39,6 +39,9 @@ GEM
       activemodel (= 4.2.4)
       activesupport (= 4.2.4)
       arel (~> 6.0)
+    activerecord-postgis-adapter (3.0.0)
+      activerecord (~> 4.2)
+      rgeo-activerecord (~> 4.0)
     activesupport (4.2.4)
       i18n (~> 0.7)
       json (~> 1.7, >= 1.7.7)
@@ -180,6 +183,10 @@ GEM
     redis (3.2.1)
     redis-namespace (1.5.2)
       redis (~> 3.0, >= 3.0.4)
+    rgeo (0.4.0)
+    rgeo-activerecord (4.0.0)
+      activerecord (~> 4.2)
+      rgeo (~> 0.3)
     rspec-core (3.3.2)
       rspec-support (~> 3.3.0)
     rspec-expectations (3.3.1)
@@ -228,6 +235,7 @@ PLATFORMS
 
 DEPENDENCIES
   active_model_serializers!
+  activerecord-postgis-adapter
   clearance
   doorkeeper
   dotenv-rails
