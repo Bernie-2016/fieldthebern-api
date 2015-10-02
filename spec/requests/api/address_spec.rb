@@ -18,11 +18,24 @@ describe 'Address API' do
 
       let(:token) { authenticate(email: "test-user@mail.com", password: "password") }
 
-      it 'requires lattitude and longitude as parameters' do
+      it 'requires lattitude, longitude and radius as parameters' do
         create(:user, email: "test-user@mail.com", password: "password")
         expect{ authenticated_get "addresses", {}, token }.to raise_error ActionController::ParameterMissing
 
-        expect{ authenticated_get "addresses", { lattitude: 41.233, longitude: 42.233 }, token }.not_to raise_error
+        expect{ authenticated_get "addresses", {
+          lattitude: 41.233
+        }, token }.to raise_error ActionController::ParameterMissing
+
+        expect{ authenticated_get "addresses", {
+          lattitude: 41.233,
+          longitude: 42.233
+        }, token }.to raise_error ActionController::ParameterMissing
+
+        expect{ authenticated_get "addresses", {
+          lattitude: 41.233,
+          longitude: 42.233,
+          radius: 200 * 1000
+        }, token }.not_to raise_error
       end
     end
   end

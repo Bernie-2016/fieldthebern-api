@@ -11,7 +11,8 @@ class AddressesController < ApplicationController
   def index_params
     lattitude = params.require(:lattitude)
     longitude = params.require(:longitude)
-    return { lattitude: lattitude, longitude: longitude }
+    radius = params.require(:radius)
+    return { lattitude: lattitude, longitude: longitude, radius: radius }
   end
 
 end
