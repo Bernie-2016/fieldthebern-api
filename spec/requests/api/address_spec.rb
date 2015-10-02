@@ -1,17 +1,5 @@
 require 'rails_helper'
 
-# Used temporarily for performance measurements. Will be removed
-require 'time'
-def measure(pass = 0)
-  start_time = Time.now
-  if pass == 0
-    yield
-  else
-    pass.times {|current| result = yield(current)}
-  end
-  (Time.now - start_time) / (pass == 0 ? 1 : pass)
-end
-
 describe 'Address API' do
   describe 'POST /address' do
     it 'requires authentication' do
@@ -55,26 +43,11 @@ describe 'Address API' do
       end
 
       it 'returns a list of addresses within the specified radius of the specified point' do
-        create(:address, coordinates: 'POINT(1 1)')
-        create(:address, coordinates: 'POINT(-1 -1)')
-        create(:address, coordinates: 'POINT(2 -2)')
-        create(:address, coordinates: 'POINT(-2 2)')
-        create(:address, coordinates: 'POINT(20 20)')
-
-
-        # puts measure {
-        #   for i in 0..20000
-        #     create(:address, coordinates: "POINT(1 #{1 + i * 0.001})")
-        #   end
-        # }
-
-        # puts measure {
-        #   authenticated_get "addresses", {
-        #     latitude: 0,
-        #     longitude: 0,
-        #     radius: 200 * 1000
-        #   }, token
-        # }
+        create(:address, latitude: 1, longitude: 1)
+        create(:address, latitude: -1, longitude: -1)
+        create(:address, latitude: -1, longitude: 1)
+        create(:address, latitude: 1, longitude: -1)
+        create(:address, latitude: 20, longitude: 20)
 
         authenticated_get "addresses", {
           latitude: 0,

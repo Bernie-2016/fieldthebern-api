@@ -2,7 +2,7 @@ class AddressesController < ApplicationController
   before_action :doorkeeper_authorize!
 
   def index
-    addresses = Address.within(index_params[:latitude], index_params[:longitude], index_params[:radius])
+    addresses = Address.within(index_params[:radius], origin: [index_params[:latitude], index_params[:longitude]])
     render json: addresses
   end
 

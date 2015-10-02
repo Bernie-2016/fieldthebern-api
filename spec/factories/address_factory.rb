@@ -6,6 +6,7 @@ FactoryGirl.define do
     f.state_code "NY"
     f.zip_code "12345"
     f.result :not_visited
-    f.coordinates 'POINT(-122 47)'
+    f.longitude 1.0
+    f.latitude 1.0
   end
 end

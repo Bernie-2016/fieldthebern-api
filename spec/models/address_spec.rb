@@ -21,11 +21,11 @@ describe Address do
   end
 
   it "has a working 'within' scope" do
-    first_address_in_radius = create(:address, coordinates: 'POINT(1.0 1.0)')
-    second_address_in_radius = create(:address, coordinates: 'POINT(-1.0 -1.0)')
-    third_address_outside_radius = create(:address, coordinates: 'POINT(20.0 20.0)')
+    first_address_in_radius = create(:address, latitude: 1, longitude: 1)
+    second_address_in_radius = create(:address, latitude: -1, longitude: -1)
+    third_address_outside_radius = create(:address, latitude: 20, longitude: 20)
 
-    addresses_in_radius = Address.within(0, 0, 400 * 1000) # 300 km distance
+    addresses_in_radius = Address.within(400 * 1000, origin: [0, 0]) # 400 km distance
     expect(addresses_in_radius).to include(first_address_in_radius)
     expect(addresses_in_radius).to include(second_address_in_radius)
     expect(addresses_in_radius).not_to include(third_address_outside_radius)

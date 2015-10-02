@@ -18,14 +18,15 @@ ActiveRecord::Schema.define(version: 20151001131808) do
   enable_extension "postgis"
 
   create_table "addresses", force: :cascade do |t|
-    t.geography "coordinates", limit: {:srid=>4326, :type=>"point", :geographic=>true}
-    t.string    "street_1"
-    t.string    "street_2"
-    t.string    "city"
-    t.string    "state_code"
-    t.string    "zip_code"
-    t.datetime  "visited_at"
-    t.integer   "result",                                                               default: 0
+    t.float    "latitude"
+    t.float    "longitude"
+    t.string   "street_1"
+    t.string   "street_2"
+    t.string   "city"
+    t.string   "state_code"
+    t.string   "zip_code"
+    t.datetime "visited_at"
+    t.integer  "result",     default: 0
   end
 
   create_table "oauth_access_grants", force: :cascade do |t|
@@ -78,6 +79,13 @@ ActiveRecord::Schema.define(version: 20151001131808) do
   add_index "relationships", ["followed_id"], name: "index_relationships_on_followed_id", using: :btree
   add_index "relationships", ["follower_id", "followed_id"], name: "index_relationships_on_follower_id_and_followed_id", unique: true, using: :btree
   add_index "relationships", ["follower_id"], name: "index_relationships_on_follower_id", using: :btree
+
+  create_table "spatial_ref_sys", primary_key: "srid", force: :cascade do |t|
+    t.string  "auth_name", limit: 256
+    t.integer "auth_srid"
+    t.string  "srtext",    limit: 2048
+    t.string  "proj4text", limit: 2048
+  end
 
   create_table "users", force: :cascade do |t|
     t.string "first_name"

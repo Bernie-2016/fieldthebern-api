@@ -1,7 +1,8 @@
 class CreateAddresses < ActiveRecord::Migration
   def change
     create_table :addresses do |t|
-      t.st_point :coordinates, geographic: true
+      t.float :latitude
+      t.float :longitude
       t.string :street_1
       t.string :street_2
       t.string :city

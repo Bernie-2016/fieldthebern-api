@@ -22,7 +22,7 @@ gem 'koala'
 
 gem 'sidekiq'
 
-gem 'activerecord-postgis-adapter'
+gem 'geokit-rails'
 
 group :development, :test do
   gem 'dotenv-rails'
