@@ -1,9 +1,8 @@
 class TokensController < Doorkeeper::TokensController
 
   def create
-    if params[:facebook_auth_code]
-      access_token_info = facebook_oauth.get_access_token_info(params[:facebook_auth_code])
-      facebook_access_token = access_token_info["access_token"] || JSON.parse(access_token_info.keys[0])["access_token"]
+    if params[:username] == "facebook"
+      facebook_access_token = params[:password]
       graph = Koala::Facebook::API.new(facebook_access_token, ENV["FACEBOOK_APP_SECRET"])
       facebook_user = graph.get_object("me", { fields: 'email, name'})
 

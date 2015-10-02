@@ -50,7 +50,9 @@ describe "Tokens API" do
         @facebook_user = test_users.create(true, "email,user_friends")
         short_lived_token = @facebook_user["access_token"]
         long_lived_token_info = oauth.exchange_access_token_info(short_lived_token)
-        @facebook_auth_code = oauth.generate_client_code(long_lived_token_info["access_token"])
+        facebook_auth_code = oauth.generate_client_code(long_lived_token_info["access_token"])
+        access_token_info = oauth.get_access_token_info(facebook_auth_code)
+        @facebook_access_token = access_token_info["access_token"] || JSON.parse(access_token_info.keys[0])["access_token"]
       end
 
       after do
@@ -62,7 +64,8 @@ describe "Tokens API" do
         it 'creates a user from Facebook and returns a token', vcr: { cassette_name: 'requests/api/tokens/creates a user' } do
 
           post "#{host}/oauth/token", {
-            facebook_auth_code: @facebook_auth_code
+            username: "facebook",
+            password: @facebook_access_token
           }
           expect(last_response.status).to eq 200
           expect(json.access_token).to_not be_nil
@@ -81,7 +84,10 @@ describe "Tokens API" do
           it 'updates the user from Facebook and returns a token', vcr: { cassette_name: 'requests/api/tokens/creates a user' } do
             user = create(:user, email: @facebook_user["email"], facebook_id: nil)
 
-            post "#{host}/oauth/token", { facebook_auth_code: @facebook_auth_code }
+            post "#{host}/oauth/token", {
+              username: "facebook",
+              password: @facebook_access_token
+            }
 
             expect(last_response.status).to eq 200
 
@@ -96,7 +102,10 @@ describe "Tokens API" do
           it 'updates the user from Facebook and returns a token', vcr: { cassette_name: 'requests/api/tokens/creates a user' } do
             user = create(:user, email: "different@email.com", facebook_id: @facebook_user["id"])
 
-            post "#{host}/oauth/token", { facebook_auth_code: @facebook_auth_code }
+            post "#{host}/oauth/token", {
+              username: "facebook",
+              password: @facebook_access_token
+            }
 
             expect(last_response.status).to eq 200
 
