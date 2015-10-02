@@ -1,6 +1,5 @@
 source 'https://rubygems.org'
 
-
 gem 'rails', '4.2.4'
 
 gem 'rails-api'
@@ -27,6 +26,10 @@ gem 'geokit-rails'
 group :development, :test do
   gem 'dotenv-rails'
   gem 'rspec-rails'
+
+  gem 'pry-rails'
+  gem 'pry'
+  gem 'pry-nav'
 end
 
 group :test do

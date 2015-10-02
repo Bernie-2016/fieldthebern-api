@@ -94,6 +94,7 @@ GEM
       bcrypt
       email_validator (~> 1.4)
       rails (>= 3.1)
+    coderay (1.1.0)
     connection_pool (2.2.0)
     crack (0.4.2)
       safe_yaml (~> 1.0.0)
@@ -133,6 +134,7 @@ GEM
       nokogiri (>= 1.5.9)
     mail (2.6.3)
       mime-types (>= 1.16, < 3)
+    method_source (0.8.2)
     mime-types (2.6.2)
     mini_portile (0.6.2)
     minitest (5.8.1)
@@ -149,6 +151,14 @@ GEM
       multi_xml (~> 0.5)
       rack (~> 1.2)
     pg (0.18.3)
+    pry (0.10.2)
+      coderay (~> 1.1.0)
+      method_source (~> 0.8.1)
+      slop (~> 3.4)
+    pry-nav (0.2.4)
+      pry (>= 0.9.10, < 0.11.0)
+    pry-rails (0.3.4)
+      pry (>= 0.9.10)
     rack (1.6.4)
     rack-cors (0.4.0)
     rack-test (0.6.3)
@@ -209,6 +219,7 @@ GEM
       json (~> 1.0)
       redis (~> 3.2, >= 3.2.1)
       redis-namespace (~> 1.5, >= 1.5.2)
+    slop (3.6.0)
     spring (1.4.0)
     sprockets (3.3.4)
       rack (~> 1.0)
@@ -241,6 +252,9 @@ DEPENDENCIES
   koala
   oauth2
   pg
+  pry
+  pry-nav
+  pry-rails
   rack-cors
   rails (= 4.2.4)
   rails-api
@@ -249,6 +263,3 @@ DEPENDENCIES
   spring
   vcr
   webmock
-
-BUNDLED WITH
-   1.10.6
