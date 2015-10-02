@@ -56,6 +56,7 @@ describe 'Address API' do
         }, token
 
         expect(last_response.status).to eq 200
+        expect(json.data.length).to eq 4
       end
     end
   end
