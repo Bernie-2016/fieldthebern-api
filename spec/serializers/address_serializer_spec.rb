@@ -2,7 +2,7 @@ require 'rails_helper'
 
 describe AddressSerializer, :type => :serializer do
 
-  context 'Individual Resource Representation' do
+  context 'individual resource representation' do
     let(:resource) { build(:address) }
 
     let(:serializer) { AddressSerializer.new(resource) }

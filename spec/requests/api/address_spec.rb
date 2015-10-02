@@ -6,6 +6,42 @@ describe 'Address API' do
       post "#{host}/addresses"
       expect(last_response.status).to eq 401
     end
+
+    context 'when authenticated' do
+      let(:token) { authenticate(email: "test-user@mail.com", password: "password") }
+
+      before do
+        create(:user, email: "test-user@mail.com", password: "password")
+      end
+
+      it 'creates an address' do
+        authenticated_post "addresses", {
+          latitude: 41.233,
+          longitude: 42.233,
+          street_1: 'A street',
+          street_2: 'Something special',
+          city: 'Testtown',
+          state_code: 'TT',
+          zip_code: '1ABCDE',
+          result: 'not_home',
+        }, token
+
+        expect(last_response.status).to eq 200
+
+        new_address = Address.last
+
+        expect(new_address.persisted?).to be true
+
+        expect(new_address.latitude).to eq 41.233
+        expect(new_address.longitude).to eq 42.233
+        expect(new_address.street_1).to eq 'A street'
+        expect(new_address.street_2).to eq 'Something special'
+        expect(new_address.city).to eq 'Testtown'
+        expect(new_address.state_code).to eq 'TT'
+        expect(new_address.zip_code).to eq '1ABCDE'
+        expect(new_address.not_home?).to be true
+      end
+    end
   end
 
   describe 'GET /address' do
