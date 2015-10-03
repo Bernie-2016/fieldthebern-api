@@ -15,7 +15,6 @@ ActiveRecord::Schema.define(version: 20151001131808) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
-  enable_extension "postgis"
 
   create_table "addresses", force: :cascade do |t|
     t.float    "latitude"
@@ -79,13 +78,6 @@ ActiveRecord::Schema.define(version: 20151001131808) do
   add_index "relationships", ["followed_id"], name: "index_relationships_on_followed_id", using: :btree
   add_index "relationships", ["follower_id", "followed_id"], name: "index_relationships_on_follower_id_and_followed_id", unique: true, using: :btree
   add_index "relationships", ["follower_id"], name: "index_relationships_on_follower_id", using: :btree
-
-  create_table "spatial_ref_sys", primary_key: "srid", force: :cascade do |t|
-    t.string  "auth_name", limit: 256
-    t.integer "auth_srid"
-    t.string  "srtext",    limit: 2048
-    t.string  "proj4text", limit: 2048
-  end
 
   create_table "users", force: :cascade do |t|
     t.string "first_name"
