@@ -23,6 +23,8 @@ gem 'sidekiq'
 
 gem 'geokit-rails'
 
+gem 'rails_12factor'
+
 group :development, :test do
   gem 'dotenv-rails'
   gem 'rspec-rails'
