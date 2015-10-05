@@ -42,6 +42,7 @@ describe 'Visit API' do
         expect(visit_json.submitted_zip_code).to eq '1ABCDE'
         expect(visit_json.result).to eq 'unsure'
         expect(visit_json.duration_sec).to eq 200
+        expect(visit_json.total_points).not_to be_nil
 
         relationships_json = json.data.relationships
 

@@ -16,6 +16,8 @@ module GroundGame
 
         visit.address = address
 
+        visit.total_points = CreateScore.new(visit: visit).call
+
         visit
       end
 

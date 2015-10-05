@@ -19,5 +19,4 @@ class VisitsController < ApplicationController
     record_attributes.permit(:submitted_latitude, :submitted_longitude, :submitted_street_1, :submitted_street_2,
       :submitted_city, :submitted_state_code, :submitted_zip_code, :result, :duration_sec)
   end
-
 end

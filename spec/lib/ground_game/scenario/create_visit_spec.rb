@@ -8,6 +8,14 @@ module GroundGame
 
       describe "#call" do
 
+        it 'computes and assigns the score' do
+          params = { submitted_latitude: 1, submitted_longitude: 1, result: :unsure, duration_sec: 150 }
+          user = create(:user)
+
+          new_visit = CreateVisit.new(params, user).call
+          expect(new_visit.total_points).not_to be_nil
+        end
+
         context 'when the address already exists' do
           it 'creates a visit and updates the address' do
             params = { submitted_latitude: 1, submitted_longitude: 1, result: :unsure, duration_sec: 150 }
@@ -17,6 +25,7 @@ module GroundGame
             new_visit = CreateVisit.new(params, user).call
 
             expect(new_visit).to be_valid
+
             expect(new_visit.address).to eq address
             expect(new_visit.user).to eq user
 
