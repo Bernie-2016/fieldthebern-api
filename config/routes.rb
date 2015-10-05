@@ -9,6 +9,8 @@ Rails.application.routes.draw do
 
     resources :users, only: [:create]
     resources :addresses, only: [:index, :create]
+
+    resources :visits, only: [:create]
   end
 
 end
