@@ -22,25 +22,25 @@ module GroundGame
       end
 
       def validate_params(params)
-        # TODO: Does nothing at the moment
-        # Should
-        #   1. reverse geocode submitted coordinates
-        #   2. validate and fill out address fields using UMTS directly (or via easypost)
-        #   3. set corrected coordinates
+        params = validate_coords(params)
+        params
+      end
 
-
+      def validate_coords(params)
+        # This part should be replaced by reverse geocoded coordinates
         params[:corrected_longitude] = params[:submitted_longitude]
         params[:corrected_latitude] = params[:submitted_latitude]
-
         params
       end
 
       def inferr_address(params)
-        # TODO: Extremely naive right now. We should probably
-        #   1. inferr it first from coordinates
-        #   2. if that doesn't work, try to find it from street fields somehow
-        #   3. if that doesn't work, create it
-        Address.find_or_initialize_by(longitude: params[:corrected_longitude], latitude: params[:corrected_latitude])
+        # TODO: This is subject to change. Right now it,
+        #   1. Tries to fetch via coordinates
+        #   2. Tries to fetch via address
+        #   3. Creates a new address if all else fails
+        address = Address.find_by(longitude: params[:corrected_longitude], latitude: params[:corrected_latitude])
+        address = Address.find_or_initialize_by(street_1: params[:submitted_street_1]) unless address
+        address
       end
     end
   end

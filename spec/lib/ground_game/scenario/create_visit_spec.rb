@@ -31,6 +31,21 @@ module GroundGame
 
             expect(new_visit.address.result).to eq new_visit.result
           end
+
+          it 'inferrs address from street_1 if coordinates do not match' do
+            params = { submitted_latitude: 1, submitted_longitude: 2, submitted_street_1: 'A street', result: :unsure, duration_sec: 150 }
+            user = create(:user)
+            address = create(:address, latitude: 1, longitude: 1, street_1: 'A street')
+
+            new_visit = CreateVisit.new(params, user).call
+
+            expect(new_visit).to be_valid
+
+            expect(new_visit.address).to eq address
+            expect(new_visit.user).to eq user
+
+            expect(new_visit.address.result).to eq new_visit.result
+          end
         end
 
         context 'when the address doesn\'t exist' do
