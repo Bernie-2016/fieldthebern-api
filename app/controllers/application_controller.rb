@@ -17,6 +17,10 @@ class ApplicationController < ActionController::API
     params.require(:data).fetch(:attributes, {})
   end
 
+  def render_validation_errors errors
+    render json: {errors: errors.to_h}, status: 422
+  end
+
   private
 
   def current_resource_owner

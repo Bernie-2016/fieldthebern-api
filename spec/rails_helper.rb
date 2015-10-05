@@ -85,4 +85,8 @@ RSpec.configure do |config|
   def authenticated_get(path, args, token)
     get "#{host}/#{path}", args, {"HTTP_AUTHORIZATION" => "Bearer #{token}"}
   end
+
+  def authenticated_post(path, args, token)
+    post "#{host}/#{path}", args, {"HTTP_AUTHORIZATION" => "Bearer #{token}"}
+  end
 end

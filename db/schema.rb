@@ -11,10 +11,22 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150925081904) do
+ActiveRecord::Schema.define(version: 20151001131808) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "addresses", force: :cascade do |t|
+    t.float    "latitude"
+    t.float    "longitude"
+    t.string   "street_1"
+    t.string   "street_2"
+    t.string   "city"
+    t.string   "state_code"
+    t.string   "zip_code"
+    t.datetime "visited_at"
+    t.integer  "result",     default: 0
+  end
 
   create_table "oauth_access_grants", force: :cascade do |t|
     t.integer  "resource_owner_id", null: false
