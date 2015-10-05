@@ -13,6 +13,11 @@ describe Address do
     expect(build(:visit, address: nil)).not_to be_valid
   end
 
+  it "supports timestaps" do
+    visit = create(:visit)
+    expect(visit.created_at).not_to be_nil
+  end
+
   it "has has working result status management" do
     visit = create(:visit)
 
