@@ -8,17 +8,23 @@ describe "Users API" do
       post "#{host}/users", {
         data: { attributes: {
           email: "joshdotsmith@gmail.com",
-          password: "password"
+          password: "password",
+          first_name: 'John',
+          last_name: 'Doe'
         } }
       }
 
       expect(last_response.status).to eq 200
 
       expect(json.data.attributes.email).to eq "joshdotsmith@gmail.com"
-      expect(json.data.attributes.password).to be_nil
+      expect(json.data.attributes.first_name).to eq 'John'
+      expect(json.data.attributes.last_name).to eq 'Doe'
 
       user = User.last
+      expect(user.persisted?).to be true
       expect(user.email).to eq "joshdotsmith@gmail.com"
+      expect(user.first_name).to eq 'John'
+      expect(user.last_name).to eq 'Doe'
     end
 
     context 'with invalid data' do
