@@ -11,10 +11,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151001131808) do
+ActiveRecord::Schema.define(version: 20151005081205) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+  enable_extension "postgis"
 
   create_table "addresses", force: :cascade do |t|
     t.float    "latitude"
@@ -79,6 +80,13 @@ ActiveRecord::Schema.define(version: 20151001131808) do
   add_index "relationships", ["follower_id", "followed_id"], name: "index_relationships_on_follower_id_and_followed_id", unique: true, using: :btree
   add_index "relationships", ["follower_id"], name: "index_relationships_on_follower_id", using: :btree
 
+  create_table "spatial_ref_sys", primary_key: "srid", force: :cascade do |t|
+    t.string  "auth_name", limit: 256
+    t.integer "auth_srid"
+    t.string  "srtext",    limit: 2048
+    t.string  "proj4text", limit: 2048
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "first_name"
     t.string "last_name"
@@ -93,5 +101,27 @@ ActiveRecord::Schema.define(version: 20151001131808) do
 
   add_index "users", ["email"], name: "index_users_on_email", using: :btree
   add_index "users", ["remember_token"], name: "index_users_on_remember_token", using: :btree
+
+  create_table "visits", force: :cascade do |t|
+    t.float    "submitted_latitude"
+    t.float    "submitted_longitude"
+    t.float    "corrected_latitude"
+    t.float    "corrected_longitude"
+    t.string   "submitted_street_1"
+    t.string   "submitted_street_2"
+    t.string   "submitted_city"
+    t.string   "submitted_state_code"
+    t.string   "submitted_zip_code"
+    t.float    "total_points"
+    t.integer  "duration_sec"
+    t.string   "result",               null: false
+    t.integer  "user_id",              null: false
+    t.integer  "address_id",           null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "visits", ["address_id"], name: "index_visits_on_address_id", using: :btree
+  add_index "visits", ["user_id"], name: "index_visits_on_user_id", using: :btree
 
 end
