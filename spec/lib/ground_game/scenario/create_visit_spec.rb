@@ -8,8 +8,8 @@ module GroundGame
 
       describe "#call" do
 
-        it 'computes and assigns the score' do
-          params = { submitted_latitude: 1, submitted_longitude: 1, result: :unsure, duration_sec: 150 }
+        it 'computes and assigns the score', vcr: { cassette_name: 'requests/lib/ground_game/scenario/create_visit/computes_and_assigns_the_score' } do
+          params = { submitted_latitude: 40.780898, submitted_longitude: -73.247246, result: :unsure, duration_sec: 150 }
           user = create(:user)
 
           new_visit = CreateVisit.new(params, user).call
@@ -17,10 +17,10 @@ module GroundGame
         end
 
         context 'when the address already exists' do
-          it 'creates a visit and updates the address' do
-            params = { submitted_latitude: 1, submitted_longitude: 1, result: :unsure, duration_sec: 150 }
+          it 'creates a visit and updates the address', vcr: { cassette_name: 'requests/lib/ground_game/scenario/create_visit/creates_a_visit_and_updates_the_address' } do
+            params = { submitted_latitude: 40.780898, submitted_longitude: -73.247246, result: :unsure, duration_sec: 150 }
             user = create(:user)
-            address = create(:address, latitude: 1, longitude: 1)
+            address = create(:address, latitude: 40.7809482, longitude: -73.2472665)
 
             new_visit = CreateVisit.new(params, user).call
 
@@ -32,10 +32,10 @@ module GroundGame
             expect(new_visit.address.result).to eq new_visit.result
           end
 
-          it 'inferrs address from street_1 if coordinates do not match' do
-            params = { submitted_latitude: 1, submitted_longitude: 2, submitted_street_1: 'A street', result: :unsure, duration_sec: 150 }
+          it 'inferrs address from street_1 if coordinates do not match', vcr: { cassette_name: 'requests/lib/ground_game/scenario/create_visit/inferrs_address_from_street_1_if_coordinates_do_not_match' }  do
+            params = { submitted_latitude: 40.780898, submitted_longitude: -73.247246, submitted_street_1: 'A street', result: :unsure, duration_sec: 150 }
             user = create(:user)
-            address = create(:address, latitude: 1, longitude: 1, street_1: 'A street')
+            address = create(:address, latitude: 40.780898, longitude: -73.247247, street_1: 'A street')
 
             new_visit = CreateVisit.new(params, user).call
 
@@ -49,8 +49,8 @@ module GroundGame
         end
 
         context 'when the address doesn\'t exist' do
-          it 'creates both the visit and the address' do
-            params = { submitted_latitude: 1, submitted_longitude: 1, result: :unsure, duration_sec: 150 }
+          it 'creates both the visit and the address', vcr: { cassette_name: 'requests/lib/ground_game/scenario/create_visit/creates_both_the_visit_and_the_address' }  do
+            params = { submitted_latitude: 40.780898, submitted_longitude: -73.247246, result: :unsure, duration_sec: 150 }
             user = create(:user)
             new_visit = CreateVisit.new(params, user).call
 

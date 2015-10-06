@@ -1,8 +1,10 @@
 module GroundGame
   module Scenario
     class CreateVisit
+      include Geokit::Geocoders
+
       def initialize(params, current_user)
-        @params = validate_params(params)
+        @params = params
         @current_user = current_user
       end
 
@@ -10,7 +12,11 @@ module GroundGame
         visit = Visit.new(@params)
         visit.user = @current_user
 
-        address = inferr_address(@params)
+        visit = correct_coordinates(visit)
+
+        address = inferr_address(visit)
+
+
         address.result = visit.result
         address.save!
 
@@ -26,20 +32,20 @@ module GroundGame
         params
       end
 
-      def validate_coords(params)
-        # This part should be replaced by reverse geocoded coordinates
-        params[:corrected_longitude] = params[:submitted_longitude]
-        params[:corrected_latitude] = params[:submitted_latitude]
-        params
+      def correct_coordinates(visit)
+        place = MultiGeocoder.reverse_geocode("#{visit.submitted_latitude} #{visit.submitted_longitude}")
+        visit.corrected_latitude = place.lat
+        visit.corrected_longitude = place.lng
+        visit
       end
 
-      def inferr_address(params)
+      def inferr_address(visit)
         # TODO: This is subject to change. Right now it,
         #   1. Tries to fetch via coordinates
         #   2. Tries to fetch via address
         #   3. Creates a new address if all else fails
-        address = Address.find_by(longitude: params[:corrected_longitude], latitude: params[:corrected_latitude])
-        address = Address.find_or_initialize_by(street_1: params[:submitted_street_1]) unless address
+        address = Address.find_by(longitude: visit.corrected_longitude, latitude: visit.corrected_latitude)
+        address = Address.find_or_initialize_by(street_1: visit.submitted_street_1) unless address
         address
       end
     end

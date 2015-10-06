@@ -1,0 +1,438 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://maps.googleapis.com/maps/api/geocode/json?key=AIzaSyBVjDvJmR9z7k3Jaj8UAoprueb5ARDaGqY&latlng=40.780898,-73.247246&sensor=false
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Content-Type:
+      - application/json; charset=UTF-8
+      Date:
+      - Tue, 06 Oct 2015 09:25:17 GMT
+      Expires:
+      - Wed, 07 Oct 2015 09:25:17 GMT
+      Cache-Control:
+      - public, max-age=86400
+      Vary:
+      - Accept-Language
+      Access-Control-Allow-Origin:
+      - "*"
+      Server:
+      - mafe
+      X-Xss-Protection:
+      - 1; mode=block
+      X-Frame-Options:
+      - SAMEORIGIN
+      Alternate-Protocol:
+      - 443:quic,p=1
+      Alt-Svc:
+      - quic=":443"; p="1"; ma=604800
+      Transfer-Encoding:
+      - chunked
+    body:
+      encoding: ASCII-8BIT
+      string: |
+        {
+           "results" : [
+              {
+                 "address_components" : [
+                    {
+                       "long_name" : "766-784",
+                       "short_name" : "766-784",
+                       "types" : [ "street_number" ]
+                    },
+                    {
+                       "long_name" : "Suffolk Avenue",
+                       "short_name" : "County Rd 100",
+                       "types" : [ "route" ]
+                    },
+                    {
+                       "long_name" : "Brentwood",
+                       "short_name" : "Brentwood",
+                       "types" : [ "locality", "political" ]
+                    },
+                    {
+                       "long_name" : "Islip",
+                       "short_name" : "Islip",
+                       "types" : [ "administrative_area_level_3", "political" ]
+                    },
+                    {
+                       "long_name" : "Suffolk County",
+                       "short_name" : "Suffolk County",
+                       "types" : [ "administrative_area_level_2", "political" ]
+                    },
+                    {
+                       "long_name" : "New York",
+                       "short_name" : "NY",
+                       "types" : [ "administrative_area_level_1", "political" ]
+                    },
+                    {
+                       "long_name" : "United States",
+                       "short_name" : "US",
+                       "types" : [ "country", "political" ]
+                    },
+                    {
+                       "long_name" : "11717",
+                       "short_name" : "11717",
+                       "types" : [ "postal_code" ]
+                    },
+                    {
+                       "long_name" : "4401",
+                       "short_name" : "4401",
+                       "types" : [ "postal_code_suffix" ]
+                    }
+                 ],
+                 "formatted_address" : "766-784 Suffolk Ave, Brentwood, NY 11717, USA",
+                 "geometry" : {
+                    "bounds" : {
+                       "northeast" : {
+                          "lat" : 40.78098139999999,
+                          "lng" : -73.24718709999999
+                       },
+                       "southwest" : {
+                          "lat" : 40.7808551,
+                          "lng" : -73.2477257
+                       }
+                    },
+                    "location" : {
+                       "lat" : 40.7809482,
+                       "lng" : -73.24726649999999
+                    },
+                    "location_type" : "RANGE_INTERPOLATED",
+                    "viewport" : {
+                       "northeast" : {
+                          "lat" : 40.7822672302915,
+                          "lng" : -73.24610741970851
+                       },
+                       "southwest" : {
+                          "lat" : 40.7795692697085,
+                          "lng" : -73.24880538029151
+                       }
+                    }
+                 },
+                 "place_id" : "Ei03NjYtNzg0IFN1ZmZvbGsgQXZlLCBCcmVudHdvb2QsIE5ZIDExNzE3LCBVU0E",
+                 "types" : [ "street_address" ]
+              },
+              {
+                 "address_components" : [
+                    {
+                       "long_name" : "Brentwood",
+                       "short_name" : "Brentwood",
+                       "types" : [ "locality", "political" ]
+                    },
+                    {
+                       "long_name" : "Islip",
+                       "short_name" : "Islip",
+                       "types" : [ "administrative_area_level_3", "political" ]
+                    },
+                    {
+                       "long_name" : "Suffolk County",
+                       "short_name" : "Suffolk County",
+                       "types" : [ "administrative_area_level_2", "political" ]
+                    },
+                    {
+                       "long_name" : "New York",
+                       "short_name" : "NY",
+                       "types" : [ "administrative_area_level_1", "political" ]
+                    },
+                    {
+                       "long_name" : "United States",
+                       "short_name" : "US",
+                       "types" : [ "country", "political" ]
+                    }
+                 ],
+                 "formatted_address" : "Brentwood, NY, USA",
+                 "geometry" : {
+                    "bounds" : {
+                       "northeast" : {
+                          "lat" : 40.8071239,
+                          "lng" : -73.20922299999999
+                       },
+                       "southwest" : {
+                          "lat" : 40.7548436,
+                          "lng" : -73.295676
+                       }
+                    },
+                    "location" : {
+                       "lat" : 40.7812093,
+                       "lng" : -73.2462273
+                    },
+                    "location_type" : "APPROXIMATE",
+                    "viewport" : {
+                       "northeast" : {
+                          "lat" : 40.8071239,
+                          "lng" : -73.20922299999999
+                       },
+                       "southwest" : {
+                          "lat" : 40.7548436,
+                          "lng" : -73.295676
+                       }
+                    }
+                 },
+                 "place_id" : "ChIJ4aWnSZMx6IkRGiO9VLjTjvw",
+                 "types" : [ "locality", "political" ]
+              },
+              {
+                 "address_components" : [
+                    {
+                       "long_name" : "11717",
+                       "short_name" : "11717",
+                       "types" : [ "postal_code" ]
+                    },
+                    {
+                       "long_name" : "Brentwood",
+                       "short_name" : "Brentwood",
+                       "types" : [ "locality", "political" ]
+                    },
+                    {
+                       "long_name" : "Suffolk County",
+                       "short_name" : "Suffolk County",
+                       "types" : [ "administrative_area_level_2", "political" ]
+                    },
+                    {
+                       "long_name" : "New York",
+                       "short_name" : "NY",
+                       "types" : [ "administrative_area_level_1", "political" ]
+                    },
+                    {
+                       "long_name" : "United States",
+                       "short_name" : "US",
+                       "types" : [ "country", "political" ]
+                    }
+                 ],
+                 "formatted_address" : "Brentwood, NY 11717, USA",
+                 "geometry" : {
+                    "bounds" : {
+                       "northeast" : {
+                          "lat" : 40.8071239,
+                          "lng" : -73.20922299999999
+                       },
+                       "southwest" : {
+                          "lat" : 40.7547011,
+                          "lng" : -73.2951618
+                       }
+                    },
+                    "location" : {
+                       "lat" : 40.7754622,
+                       "lng" : -73.2411506
+                    },
+                    "location_type" : "APPROXIMATE",
+                    "viewport" : {
+                       "northeast" : {
+                          "lat" : 40.8071239,
+                          "lng" : -73.20922299999999
+                       },
+                       "southwest" : {
+                          "lat" : 40.7547011,
+                          "lng" : -73.2951618
+                       }
+                    }
+                 },
+                 "place_id" : "ChIJdX30T5Mx6IkR2AEzv7kccLw",
+                 "types" : [ "postal_code" ]
+              },
+              {
+                 "address_components" : [
+                    {
+                       "long_name" : "Islip",
+                       "short_name" : "Islip",
+                       "types" : [ "administrative_area_level_3", "political" ]
+                    },
+                    {
+                       "long_name" : "Suffolk County",
+                       "short_name" : "Suffolk County",
+                       "types" : [ "administrative_area_level_2", "political" ]
+                    },
+                    {
+                       "long_name" : "New York",
+                       "short_name" : "NY",
+                       "types" : [ "administrative_area_level_1", "political" ]
+                    },
+                    {
+                       "long_name" : "United States",
+                       "short_name" : "US",
+                       "types" : [ "country", "political" ]
+                    }
+                 ],
+                 "formatted_address" : "Islip, NY, USA",
+                 "geometry" : {
+                    "bounds" : {
+                       "northeast" : {
+                          "lat" : 40.832977,
+                          "lng" : -73.03787969999999
+                       },
+                       "southwest" : {
+                          "lat" : 40.6218023,
+                          "lng" : -73.3182693
+                       }
+                    },
+                    "location" : {
+                       "lat" : 40.7244213,
+                       "lng" : -73.2293542
+                    },
+                    "location_type" : "APPROXIMATE",
+                    "viewport" : {
+                       "northeast" : {
+                          "lat" : 40.832977,
+                          "lng" : -73.03787969999999
+                       },
+                       "southwest" : {
+                          "lat" : 40.6844449,
+                          "lng" : -73.3182693
+                       }
+                    }
+                 },
+                 "place_id" : "ChIJQ31O4ZM06IkRViOB2gbibWA",
+                 "types" : [ "administrative_area_level_3", "political" ]
+              },
+              {
+                 "address_components" : [
+                    {
+                       "long_name" : "Suffolk County",
+                       "short_name" : "Suffolk County",
+                       "types" : [ "administrative_area_level_2", "political" ]
+                    },
+                    {
+                       "long_name" : "New York",
+                       "short_name" : "NY",
+                       "types" : [ "administrative_area_level_1", "political" ]
+                    },
+                    {
+                       "long_name" : "United States",
+                       "short_name" : "US",
+                       "types" : [ "country", "political" ]
+                    }
+                 ],
+                 "formatted_address" : "Suffolk County, NY, USA",
+                 "geometry" : {
+                    "bounds" : {
+                       "northeast" : {
+                          "lat" : 41.2923797,
+                          "lng" : -71.8562082
+                       },
+                       "southwest" : {
+                          "lat" : 40.6094203,
+                          "lng" : -73.497125
+                       }
+                    },
+                    "location" : {
+                       "lat" : 40.9848784,
+                       "lng" : -72.61511689999999
+                    },
+                    "location_type" : "APPROXIMATE",
+                    "viewport" : {
+                       "northeast" : {
+                          "lat" : 41.2923194,
+                          "lng" : -71.8562082
+                       },
+                       "southwest" : {
+                          "lat" : 40.6094203,
+                          "lng" : -73.497125
+                       }
+                    }
+                 },
+                 "place_id" : "ChIJ1_mbyICu4IkRU18dDUkMxJU",
+                 "types" : [ "administrative_area_level_2", "political" ]
+              },
+              {
+                 "address_components" : [
+                    {
+                       "long_name" : "New York",
+                       "short_name" : "NY",
+                       "types" : [ "administrative_area_level_1", "political" ]
+                    },
+                    {
+                       "long_name" : "United States",
+                       "short_name" : "US",
+                       "types" : [ "country", "political" ]
+                    }
+                 ],
+                 "formatted_address" : "New York, USA",
+                 "geometry" : {
+                    "bounds" : {
+                       "northeast" : {
+                          "lat" : 45.015865,
+                          "lng" : -71.8562755
+                       },
+                       "southwest" : {
+                          "lat" : 40.4913686,
+                          "lng" : -79.76214379999999
+                       }
+                    },
+                    "location" : {
+                       "lat" : 43.2994285,
+                       "lng" : -74.21793260000001
+                    },
+                    "location_type" : "APPROXIMATE",
+                    "viewport" : {
+                       "northeast" : {
+                          "lat" : 45.0156272,
+                          "lng" : -71.8562755
+                       },
+                       "southwest" : {
+                          "lat" : 40.4913686,
+                          "lng" : -79.76214379999999
+                       }
+                    }
+                 },
+                 "place_id" : "ChIJqaUj8fBLzEwRZ5UY3sHGz90",
+                 "types" : [ "administrative_area_level_1", "political" ]
+              },
+              {
+                 "address_components" : [
+                    {
+                       "long_name" : "United States",
+                       "short_name" : "US",
+                       "types" : [ "country", "political" ]
+                    }
+                 ],
+                 "formatted_address" : "United States",
+                 "geometry" : {
+                    "bounds" : {
+                       "northeast" : {
+                          "lat" : 71.3867745,
+                          "lng" : -66.9502861
+                       },
+                       "southwest" : {
+                          "lat" : 18.9110642,
+                          "lng" : 172.4458955
+                       }
+                    },
+                    "location" : {
+                       "lat" : 37.09024,
+                       "lng" : -95.712891
+                    },
+                    "location_type" : "APPROXIMATE",
+                    "viewport" : {
+                       "northeast" : {
+                          "lat" : 49.38,
+                          "lng" : -66.94
+                       },
+                       "southwest" : {
+                          "lat" : 25.82,
+                          "lng" : -124.39
+                       }
+                    }
+                 },
+                 "place_id" : "ChIJCzYy5IS16lQRQrfeQ5K5Oxw",
+                 "types" : [ "country", "political" ]
+              }
+           ],
+           "status" : "OK"
+        }
+    http_version: 
+  recorded_at: Tue, 06 Oct 2015 09:25:17 GMT
+recorded_with: VCR 2.9.3

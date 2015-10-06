@@ -14,12 +14,12 @@ describe 'Visit API' do
         create(:user, id: 11, email: "test-user@mail.com", password: "password")
       end
 
-      it 'should return the created visit' do
-        address = create(:address, id: 22, latitude: 1, longitude: 2)
+      it 'should return the created visit', vcr: { cassette_name: 'requests/api/visits/should_return_the_created_visit' } do
+        address = create(:address, id: 22, latitude: 40.7809482, longitude: -73.2472665)
 
         authenticated_post "visits", { data: { attributes: {
-          submitted_latitude: 1,
-          submitted_longitude: 2,
+          submitted_latitude: 40.780898,
+          submitted_longitude: -73.247246,
           submitted_street_1: 'A street',
           submitted_street_2: 'Something special',
           submitted_city: 'Testtown',
@@ -33,8 +33,12 @@ describe 'Visit API' do
 
         visit_json = json.data.attributes
 
-        expect(visit_json.submitted_latitude).to eq 1
-        expect(visit_json.submitted_longitude).to eq 2
+        expect(visit_json.submitted_latitude).to eq 40.780898
+        expect(visit_json.submitted_longitude).to eq -73.247246
+
+        expect(visit_json.corrected_latitude).to eq 40.7809482
+        expect(visit_json.corrected_longitude).to eq -73.2472665
+
         expect(visit_json.submitted_street_1).to eq 'A street'
         expect(visit_json.submitted_street_2).to eq 'Something special'
         expect(visit_json.submitted_city).to eq 'Testtown'
@@ -55,12 +59,12 @@ describe 'Visit API' do
       end
 
       context 'when address already exists' do
-        it 'creates a visit and updates the address' do
-          address = create(:address, latitude: 1, longitude: 1)
+        it 'creates a visit and updates the address', vcr: { cassette_name: 'requests/api/visits/creates_a_visit_and_updates_the_address' } do
+          address = create(:address, latitude: 40.7809482, longitude: -73.2472665)
 
           authenticated_post "visits", { data: { attributes: {
-            submitted_latitude: 1,
-            submitted_longitude: 1,
+            submitted_latitude: 40.780898,
+            submitted_longitude: -73.247246,
             submitted_street_1: 'A street',
             submitted_street_2: 'Something special',
             submitted_city: 'Testtown',
@@ -80,10 +84,10 @@ describe 'Visit API' do
       end
 
       context 'when address doesn\'t already exist' do
-        it 'creates a visit as well as an address' do
+        it 'creates a visit as well as an address', vcr: { cassette_name: 'requests/api/visits/creates_a_visit_as_well_as_an_address' } do
           authenticated_post "visits", { data: { attributes: {
-            submitted_latitude: 1,
-            submitted_longitude: 1,
+            submitted_latitude: 40.780898,
+            submitted_longitude: -73.247246,
             submitted_street_1: 'A street',
             submitted_street_2: 'Something special',
             submitted_city: 'Testtown',
