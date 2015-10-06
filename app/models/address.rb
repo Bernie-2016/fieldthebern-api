@@ -1,5 +1,11 @@
 class Address < ActiveRecord::Base
-  enum result: { not_visited: 0, not_home: 1, not_interested: 2, interested: 3, unsure: 4 }
+  enum latest_result: {
+    not_visited: 'Not visited',
+    not_home: 'Not home',
+    not_interested: 'Not interested',
+    interested: 'Interested',
+    unsure: 'Not sure'
+  }
 
   acts_as_mappable :default_units => :meters,
                    :default_formula => :sphere,

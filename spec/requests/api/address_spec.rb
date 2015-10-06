@@ -23,7 +23,7 @@ describe 'Address API' do
           city: 'Testtown',
           state_code: 'TT',
           zip_code: '1ABCDE',
-          result: 'not_home',
+          latest_result: 'Not home',
         }, token
 
         expect(last_response.status).to eq 200

@@ -70,7 +70,7 @@ describe 'Visit API' do
             submitted_city: 'Testtown',
             submitted_state_code: 'TT',
             submitted_zip_code: '1ABCDE',
-            result: 'interested',
+            result: 'Interested',
             duration_sec: 200
           } } }, token
 
@@ -79,7 +79,7 @@ describe 'Visit API' do
           new_visit = Visit.last
           expect(new_visit).not_to be_nil
           expect(new_visit.address).to eq address
-          expect(new_visit.address.result).to eq 'interested'
+          expect(new_visit.address.interested?).to be true
         end
       end
 
@@ -93,7 +93,7 @@ describe 'Visit API' do
             submitted_city: 'Testtown',
             submitted_state_code: 'TT',
             submitted_zip_code: '1ABCDE',
-            result: 'interested',
+            result: 'Interested',
             duration_sec: 200
           } } }, token
 
@@ -104,7 +104,7 @@ describe 'Visit API' do
 
           new_address = Address.last
           expect(new_visit.address).to eq new_address
-          expect(new_visit.address.result).to eq 'interested'
+          expect(new_visit.address.interested?).to be true
         end
       end
     end

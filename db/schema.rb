@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151005081205) do
+ActiveRecord::Schema.define(version: 20151006112442) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -25,7 +25,7 @@ ActiveRecord::Schema.define(version: 20151005081205) do
     t.string   "state_code"
     t.string   "zip_code"
     t.datetime "visited_at"
-    t.integer  "result",     default: 0
+    t.string   "latest_result"
   end
 
   create_table "oauth_access_grants", force: :cascade do |t|

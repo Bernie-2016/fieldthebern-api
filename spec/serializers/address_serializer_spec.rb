@@ -65,8 +65,8 @@ describe AddressSerializer, :type => :serializer do
         expect(subject['visited_at']).to eql(resource.visited_at)
       end
 
-      it 'has a result' do
-        expect(subject['result']).to eql(resource.result)
+      it 'has a latest_result' do
+        expect(subject['latest_result']).to eql(resource.latest_result)
       end
     end
   end
