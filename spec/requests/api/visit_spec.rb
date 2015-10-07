@@ -80,6 +80,7 @@ describe 'Visit API' do
           expect(new_visit).not_to be_nil
           expect(new_visit.address).to eq address
           expect(new_visit.address.interested?).to be true
+          expect(new_visit.address.visited_at).to be_within(1.second).of(Time.now)
         end
       end
 
@@ -105,6 +106,7 @@ describe 'Visit API' do
           new_address = Address.last
           expect(new_visit.address).to eq new_address
           expect(new_visit.address.interested?).to be true
+          expect(new_visit.address.visited_at).to be_within(1.second).of(Time.now)
         end
       end
     end

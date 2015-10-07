@@ -30,6 +30,7 @@ module GroundGame
             expect(new_visit.user).to eq user
 
             expect(new_visit.address.latest_result).to eq new_visit.result
+            expect(new_visit.address.visited_at).to be_within(1.second).of Time.now
           end
 
           it 'inferrs address from street_1 if coordinates do not match', vcr: { cassette_name: 'requests/lib/ground_game/scenario/create_visit/inferrs_address_from_street_1_if_coordinates_do_not_match' }  do
@@ -45,6 +46,7 @@ module GroundGame
             expect(new_visit.user).to eq user
 
             expect(new_visit.address.latest_result).to eq new_visit.result
+            expect(new_visit.address.visited_at).to be_within(1.second).of Time.now
           end
         end
 
@@ -66,6 +68,7 @@ module GroundGame
             expect(new_visit.address.zip_code).to eq new_visit.submitted_zip_code
             expect(new_visit.address.latitude).to eq new_visit.corrected_latitude
             expect(new_visit.address.longitude).to eq new_visit.corrected_longitude
+            expect(new_visit.address.visited_at).to be_within(1.second).of Time.now
           end
         end
       end

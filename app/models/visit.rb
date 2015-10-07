@@ -12,5 +12,4 @@ class Visit < ActiveRecord::Base
     interested: 'Interested',
     unsure: 'Not sure'
   }
-
 end

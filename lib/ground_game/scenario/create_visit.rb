@@ -16,6 +16,7 @@ module GroundGame
 
         address = inferr_address(visit)
         address.latest_result = visit.result
+        address.visited_at = Time.now
         address.save!
 
         visit.address = address
