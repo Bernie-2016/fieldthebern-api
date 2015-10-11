@@ -9,7 +9,7 @@ module GroundGame
         # TODO: Returns a scalar for now.
         # Should eventually return a Score record, which includes a total_points property
         # The formula is arbitrary as well
-        if @visit.interested? && @visit.duration_sec < 600
+        if @visit.duration_sec < 600
           600 - @visit.duration_sec
         else
           0
