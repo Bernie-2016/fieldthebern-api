@@ -46,5 +46,15 @@ describe UserSerializer, :type => :serializer do
       end
 
     end
+
+    context 'includes' do
+      subject do
+        JSON.parse(serialization.to_json)["data"]['includes']
+      end
+
+      it 'should be empty' do
+        expect(subject).to be_nil
+      end
+    end
   end
 end

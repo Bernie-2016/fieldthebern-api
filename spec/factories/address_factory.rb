@@ -10,10 +10,12 @@ FactoryGirl.define do
 
     after(:build) do |address, evaluator|
       address.most_supportive_resident = FactoryGirl.build(:person, address: address)
+      address.people = FactoryGirl.build_list(:person, 1, address: address)
     end
 
     after(:create) do |address, evaluator|
       address.most_supportive_resident = FactoryGirl.build(:person, address: address)
+      address.people = FactoryGirl.create_list(:person, 1, address: address)
     end
   end
 end

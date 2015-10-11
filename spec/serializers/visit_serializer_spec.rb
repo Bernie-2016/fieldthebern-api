@@ -53,14 +53,20 @@ describe VisitSerializer, :type => :serializer do
       it 'should include a user relationship' do
         expect(subject['user']).not_to be_nil
         expect(subject['user']['data']['id']).to eq resource.user_id.to_s
+        expect(subject['user']['data']['type']).to eq 'users'
       end
 
       it 'should include an address relationship' do
         expect(subject['address']).not_to be_nil
         expect(subject['address']['data']['id']).to eq resource.address_id.to_s
+        expect(subject['address']['data']['type']).to eq 'addresses'
       end
 
-      it 'should include a people relationship'
+      it 'should include a people relationship' do
+        expect(subject['people']).not_to be_nil
+        expect(subject['people']['data'][0]['id']).to eq resource.people.first.id.to_s
+        expect(subject['people']['data'][0]['type']).to eq 'people'
+      end
     end
 
     context 'includes' do
