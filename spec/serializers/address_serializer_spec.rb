@@ -67,8 +67,19 @@ describe AddressSerializer, :type => :serializer do
     end
 
     context 'relationships' do
-      it "should include a 'people' relationship"
-      it "should include a 'most_supportive_resident' relationship"
+      subject do
+        JSON.parse(serialization.to_json)['data']['relationships']
+      end
+
+      it 'should include a people relationship' do
+        expect(subject['people']).not_to be_nil
+        expect(subject['people']['data'][0]['id']).to eq resource.people.first.id.to_s
+      end
+
+      it 'should include a most_supportive_resident relationship' do
+        expect(subject['most_supportive_resident']).not_to be_nil
+        expect(subject['most_supportive_resident']['data']['id']).to eq resource.most_supportive_resident_id.to_s
+      end
     end
 
     context 'includes' do
