@@ -12,10 +12,12 @@ module GroundGame
         visit = Visit.new(@params)
         visit.user = @current_user
 
-        visit = correct_coordinates(visit)
+        # TODO: Create or update address
+        # TODO: Create or update each person
 
-        address = inferr_address(visit)
-        address.latest_result = visit.result
+        address = update_address(@params[:address_attributes]) if @params[:address_id]
+        address = create_address(@params[:address_attributes]) unless @params[:address_id]
+
         address.visited_at = Time.now
         address.save!
 
@@ -26,41 +28,12 @@ module GroundGame
         visit
       end
 
-      def validate_params(params)
-        params = validate_coords(params)
-        params
+      def create_address(address_params)
+        address = Address.new(address_params)
       end
 
-      def correct_coordinates(visit)
-        place = MultiGeocoder.reverse_geocode("#{visit.submitted_latitude} #{visit.submitted_longitude}")
-        visit.corrected_latitude = place.lat
-        visit.corrected_longitude = place.lng
-        visit
-      end
-
-      def create_new_address(visit)
-        address = Address.new
-        address.latitude = visit.corrected_latitude
-        address.longitude = visit.corrected_longitude
-
-        # TODO: we will likely replace this with 'corrected_x' fields
-        address.street_1 = visit.submitted_street_1
-        address.street_2 = visit.submitted_street_2
-        address.city = visit.submitted_city
-        address.state_code = visit.submitted_state_code
-        address.zip_code = visit.submitted_zip_code
-        address
-      end
-
-      def inferr_address(visit)
-        # TODO: This is subject to change. Right now it,
-        #   1. Tries to fetch via coordinates
-        #   2. Tries to fetch via address
-        #   3. Creates a new address if all else fails
-        address = Address.find_by(longitude: visit.corrected_longitude, latitude: visit.corrected_latitude)
-        address = Address.find_by(street_1: visit.submitted_street_1) unless address
-        address = create_new_address(visit) unless address
-        address
+      def update_address(address_params)
+        address = Address.find(address_params[:id]).update(address_params)
       end
     end
   end

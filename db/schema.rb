@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151006112442) do
+ActiveRecord::Schema.define(version: 20151011070451) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -25,7 +25,7 @@ ActiveRecord::Schema.define(version: 20151006112442) do
     t.string   "state_code"
     t.string   "zip_code"
     t.datetime "visited_at"
-    t.string   "latest_result"
+    t.integer  "most_supportive_resident_id"
   end
 
   create_table "oauth_access_grants", force: :cascade do |t|
@@ -68,6 +68,16 @@ ActiveRecord::Schema.define(version: 20151006112442) do
 
   add_index "oauth_applications", ["uid"], name: "index_oauth_applications_on_uid", unique: true, using: :btree
 
+  create_table "people", force: :cascade do |t|
+    t.string   "first_name"
+    t.string   "last_name"
+    t.string   "canvas_response"
+    t.string   "party_affiliation"
+    t.integer  "address_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "relationships", force: :cascade do |t|
     t.integer  "follower_id"
     t.integer  "followed_id"
@@ -95,25 +105,12 @@ ActiveRecord::Schema.define(version: 20151006112442) do
   add_index "users", ["remember_token"], name: "index_users_on_remember_token", using: :btree
 
   create_table "visits", force: :cascade do |t|
-    t.float    "submitted_latitude"
-    t.float    "submitted_longitude"
-    t.float    "corrected_latitude"
-    t.float    "corrected_longitude"
-    t.string   "submitted_street_1"
-    t.string   "submitted_street_2"
-    t.string   "submitted_city"
-    t.string   "submitted_state_code"
-    t.string   "submitted_zip_code"
     t.float    "total_points"
     t.integer  "duration_sec"
-    t.string   "result",               null: false
-    t.integer  "user_id",              null: false
-    t.integer  "address_id",           null: false
+    t.integer  "user_id",      null: false
+    t.integer  "address_id",   null: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
-
-  add_index "visits", ["address_id"], name: "index_visits_on_address_id", using: :btree
-  add_index "visits", ["user_id"], name: "index_visits_on_user_id", using: :btree
 
 end

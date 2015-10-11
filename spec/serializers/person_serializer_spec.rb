@@ -1,11 +1,11 @@
 require 'rails_helper'
 
-describe VisitSerializer, :type => :serializer do
+describe PersonSerializer, :type => :serializer do
 
   context 'individual resource representation' do
-    let(:resource) { build(:visit) }
+    let(:resource) { build(:person) }
 
-    let(:serializer) { VisitSerializer.new(resource) }
+    let(:serializer) { PersonSerializer.new(resource) }
     let(:serialization) { ActiveModel::Serializer::Adapter.create(serializer) }
 
     context 'root' do
@@ -21,8 +21,8 @@ describe VisitSerializer, :type => :serializer do
         expect(subject['id']).not_to be nil
       end
 
-      it 'has a type set to `visits`' do
-        expect(subject['type']).to eq 'visits'
+      it 'has a type set to `people`' do
+        expect(subject['type']).to eq 'people'
       end
     end
 
@@ -32,17 +32,12 @@ describe VisitSerializer, :type => :serializer do
         JSON.parse(serialization.to_json)["data"]['attributes']
       end
 
-      it 'has a created_at' do
-        expect(subject['created_at']).to eql(resource.created_at)
-      end
-
-      it 'has a total_points' do
-        expect(subject['total_points']).to eql(resource.total_points)
-      end
-
-      it 'has a duration_sec' do
-        expect(subject['duration_sec']).to eql(resource.duration_sec)
-      end
+      it 'has a first_name'
+      it 'has a last_name'
+      it 'has a canvas_response'
+      it 'has a party_affiliation'
+      it 'has a created_at'
+      it 'has an updated_at'
     end
 
     context 'relationships' do
@@ -50,17 +45,10 @@ describe VisitSerializer, :type => :serializer do
         JSON.parse(serialization.to_json)['data']['relationships']
       end
 
-      it 'should include a user relationship' do
-        expect(subject['user']).not_to be_nil
-        expect(subject['user']['data']['id']).to eq resource.user_id.to_s
-      end
-
       it 'should include an address relationship' do
         expect(subject['address']).not_to be_nil
         expect(subject['address']['data']['id']).to eq resource.address_id.to_s
       end
-
-      it 'should include a people relationship'
     end
 
     context 'includes' do

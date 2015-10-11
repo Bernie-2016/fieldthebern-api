@@ -5,21 +5,6 @@ describe Address do
     expect(build(:address)).to be_valid
   end
 
-  it "has has working result status management" do
-    address = create(:address)
-
-    expect(address.not_visited?).to be true
-
-    address.not_home!
-    expect(address.not_home?).to be true
-
-    address.not_interested!
-    expect(address.not_interested?).to be true
-
-    address.interested!
-    expect(address.interested?).to be true
-  end
-
   it "has a working 'within' scope" do
     first_address_in_radius = create(:address, latitude: 1, longitude: 1)
     second_address_in_radius = create(:address, latitude: -1, longitude: -1)

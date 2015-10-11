@@ -39,7 +39,6 @@ describe 'Address API' do
         expect(new_address.city).to eq 'Testtown'
         expect(new_address.state_code).to eq 'TT'
         expect(new_address.zip_code).to eq '1ABCDE'
-        expect(new_address.not_home?).to be true
       end
     end
   end

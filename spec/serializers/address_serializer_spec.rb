@@ -64,10 +64,10 @@ describe AddressSerializer, :type => :serializer do
       it 'has a visited_at' do
         expect(subject['visited_at']).to eql(resource.visited_at)
       end
+    end
 
-      it 'has a latest_result' do
-        expect(subject['latest_result']).to eql(resource.latest_result)
-      end
+    context 'relationships' do
+      it "should include a 'people' relationship"
     end
   end
 end
