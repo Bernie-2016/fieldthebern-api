@@ -32,12 +32,29 @@ describe PersonSerializer, :type => :serializer do
         JSON.parse(serialization.to_json)["data"]['attributes']
       end
 
-      it 'has a first_name'
-      it 'has a last_name'
-      it 'has a canvas_response'
-      it 'has a party_affiliation'
-      it 'has a created_at'
-      it 'has an updated_at'
+      it 'has a first_name' do
+        expect(subject['first_name']).to eql(resource.first_name)
+      end
+
+      it 'has a last_name' do
+        expect(subject['last_name']).to eql(resource.last_name)
+      end
+
+      it 'has a canvas_response' do
+        expect(subject['canvas_response']).to eql(resource.canvas_response)
+      end
+
+      it 'has a party_affiliation' do
+        expect(subject['party_affiliation']).to eql(resource.party_affiliation)
+      end
+
+      it 'has a created_at' do
+        expect(subject['created_at']).to eql(resource.created_at)
+      end
+
+      it 'has a updated_at' do
+        expect(subject['updated_at']).to eql(resource.updated_at)
+      end
     end
 
     context 'relationships' do
