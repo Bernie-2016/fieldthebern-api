@@ -69,9 +69,9 @@ describe VisitSerializer, :type => :serializer do
       end
     end
 
-    context 'includes' do
+    context "included" do
       subject do
-        JSON.parse(serialization.to_json)["data"]['includes']
+        JSON.parse(serialization.to_json)["included"]
       end
 
       it 'should be empty' do

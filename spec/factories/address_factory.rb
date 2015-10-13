@@ -8,14 +8,18 @@ FactoryGirl.define do
     f.longitude 1.0
     f.latitude 1.0
 
-    after(:build) do |address, evaluator|
-      address.most_supportive_resident = FactoryGirl.build(:person, address: address)
-      address.people = FactoryGirl.build_list(:person, 1, address: address)
-    end
+    trait :with_1_person do
+      after(:build) do |address, evaluator|
+        person = FactoryGirl.build(:person, address: address)
+        address.most_supportive_resident = person
+        address.people = [person]
+      end
 
-    after(:create) do |address, evaluator|
-      address.most_supportive_resident = FactoryGirl.build(:person, address: address)
-      address.people = FactoryGirl.create_list(:person, 1, address: address)
+      after(:create) do |address, evaluator|
+        person = FactoryGirl.create(:person, address: address)
+        address.most_supportive_resident = person
+        address.people = [person]
+      end
     end
   end
 end

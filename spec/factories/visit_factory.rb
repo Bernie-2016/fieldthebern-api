@@ -3,7 +3,7 @@ FactoryGirl.define do
     f.total_points 1000
     f.duration_sec 300
 
-    association :user, factory: :user
-    association :address, factory: :address
+    association :user
+    association :address, :with_1_person
   end
 end

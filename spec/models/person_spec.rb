@@ -5,7 +5,7 @@ describe Person do
     expect(build(:person)).to be_valid
   end
 
-  it "has a working party_affiliation enum" do
+  it "has a working canvas_response enum" do
     person = create(:person)
 
     expect(person.unknown?).to be true
@@ -26,7 +26,7 @@ describe Person do
     expect(person.strongly_against?).to be true
   end
 
-  it "has a working canvas_response enum" do
+  it "has a working party_affiliation enum" do
     person = create(:person)
 
     expect(person.unknown_affiliation?).to be true
