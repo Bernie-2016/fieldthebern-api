@@ -13,9 +13,6 @@ module GroundGame
         visit = Visit.new(@visit_params)
         visit.user = @current_user
 
-        # TODO: Create or update address
-        # TODO: Create or update each person
-
         address = create_or_update_address(@included_record_params[:address]) if @included_record_params[:address]
         visit.address = address
 
@@ -32,7 +29,7 @@ module GroundGame
       private
 
       def create_or_update_address(address_params)
-        address_attributes = address_params.fetch(:attributes, {})
+        address_attributes = address_params.fetch(:attributes, {}).permit(:latitude, :longitude, :street_1, :street_2, :city, :state_code, :zip_code)
         address_id = address_params.fetch(:id, nil)
         if address_id
           address = Address.find(address_id)

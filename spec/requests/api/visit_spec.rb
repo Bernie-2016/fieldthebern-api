@@ -48,7 +48,19 @@ describe "Visit API" do
                 }
               },
               included: [
-                { type: "addresses", id: 1 },
+                {
+                  type: "addresses",
+                  id: 1,
+                  attributes: {
+                    latitude: 2.0,
+                    longitude: 3.0,
+                    city: "New York",
+                    state_code: "NY",
+                    zip_code: "12345",
+                    street_1: "Test street",
+                    street_2: "Additional data"
+                  }
+                },
                 { type: "people", id: 10, attributes: { canvas_response: "Leaning for", party_affiliation: "Democrat" } }
               ]
             }, token
@@ -59,12 +71,19 @@ describe "Visit API" do
             expect(Address.count).to eq 1
 
             modified_address = Address.find(1)
+            expect(modified_address.latitude).to eq 2.0
+            expect(modified_address.longitude).to eq 3.0
+            expect(modified_address.city).to eq "New York"
+            expect(modified_address.state_code).to eq "NY"
+            expect(modified_address.zip_code).to eq "12345"
+            expect(modified_address.street_1).to eq "Test street"
+            expect(modified_address.street_2).to eq "Additional data"
+
             modified_person = Person.find(10)
-
-            expect(modified_address.most_supportive_resident).to eq modified_person
-
             expect(modified_person.leaning_for?).to be true
             expect(modified_person.democrat_affiliation?).to be true
+
+            expect(modified_address.most_supportive_resident).to eq modified_person
           end
         end
         context "when person does not exist" do
@@ -81,7 +100,19 @@ describe "Visit API" do
                 }
               },
               included: [
-                { type: "addresses", id: 1 },
+                {
+                  type: "addresses",
+                  id: 1,
+                  attributes: {
+                    latitude: 2.0,
+                    longitude: 3.0,
+                    city: "New York",
+                    state_code: "NY",
+                    zip_code: "12345",
+                    street_1: "Test street",
+                    street_2: "Additional data"
+                  }
+                },
                 { type: "people", attributes: { canvas_response: "Leaning for", party_affiliation: "Democrat" } }
               ]
             }, token
@@ -93,12 +124,19 @@ describe "Visit API" do
             expect(Address.count).to eq 1
 
             modified_address = Address.find(1)
+            expect(modified_address.latitude).to eq 2.0
+            expect(modified_address.longitude).to eq 3.0
+            expect(modified_address.city).to eq "New York"
+            expect(modified_address.state_code).to eq "NY"
+            expect(modified_address.zip_code).to eq "12345"
+            expect(modified_address.street_1).to eq "Test street"
+            expect(modified_address.street_2).to eq "Additional data"
+
             new_person = Person.last
-
-            expect(modified_address.most_supportive_resident).to eq new_person
-
             expect(new_person.leaning_for?).to be true
             expect(new_person.democrat_affiliation?).to be true
+
+            expect(modified_address.most_supportive_resident).to eq new_person
           end
         end
 
@@ -116,7 +154,19 @@ describe "Visit API" do
                 }
               },
               included: [
-                { type: "addresses", id: 1 },
+                {
+                  type: "addresses",
+                  id: 1,
+                  attributes: {
+                    latitude: 2.0,
+                    longitude: 3.0,
+                    city: "New York",
+                    state_code: "NY",
+                    zip_code: "12345",
+                    street_1: "Test street",
+                    street_2: "Additional data"
+                  }
+                },
                 { type: "people", id: 10, attributes: { canvas_response: "Leaning for", party_affiliation: "Democrat" } },
                 { type: "people", attributes: { canvas_response: "Strongly for", party_affiliation: "Republican" } }
               ]
@@ -128,16 +178,23 @@ describe "Visit API" do
             expect(Address.count).to eq 1
 
             modified_address = Address.find(1)
+            expect(modified_address.latitude).to eq 2.0
+            expect(modified_address.longitude).to eq 3.0
+            expect(modified_address.city).to eq "New York"
+            expect(modified_address.state_code).to eq "NY"
+            expect(modified_address.zip_code).to eq "12345"
+            expect(modified_address.street_1).to eq "Test street"
+            expect(modified_address.street_2).to eq "Additional data"
+
             modified_person = Person.find(10)
-            new_person = Person.last
-
-            expect(modified_address.most_supportive_resident).to eq new_person
-
             expect(modified_person.leaning_for?).to be true
             expect(modified_person.democrat_affiliation?).to be true
 
+            new_person = Person.last
             expect(new_person.strongly_for?).to be true
             expect(new_person.republican_affiliation?).to be true
+
+            expect(modified_address.most_supportive_resident).to eq new_person
           end
         end
       end
@@ -149,7 +206,18 @@ describe "Visit API" do
               attributes: { duration_sec: 200 }
             },
             included: [
-              { type: "addresses" },
+              {
+                type: "addresses",
+                attributes: {
+                  latitude: 2.0,
+                  longitude: 3.0,
+                  city: "New York",
+                  state_code: "NY",
+                  zip_code: "12345",
+                  street_1: "Test street",
+                  street_2: "Additional data"
+                }
+              },
               { type: "people", attributes: { canvas_response: "Leaning for", party_affiliation: "Democrat" } }
             ]
           }, token
@@ -159,13 +227,21 @@ describe "Visit API" do
           expect(Person.count).to eq 1
           expect(Address.count).to eq 1
 
+
           new_address = Address.last
+          expect(new_address.latitude).to eq 2.0
+          expect(new_address.longitude).to eq 3.0
+          expect(new_address.city).to eq "New York"
+          expect(new_address.state_code).to eq "NY"
+          expect(new_address.zip_code).to eq "12345"
+          expect(new_address.street_1).to eq "Test street"
+          expect(new_address.street_2).to eq "Additional data"
+
           new_person = Person.last
-
-          expect(new_address.most_supportive_resident).to eq new_person
-
           expect(new_person.leaning_for?).to be true
           expect(new_person.democrat_affiliation?).to be true
+
+          expect(new_address.most_supportive_resident).to eq new_person
         end
       end
     end
