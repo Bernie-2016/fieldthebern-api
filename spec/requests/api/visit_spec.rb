@@ -61,7 +61,16 @@ describe "Visit API" do
                     street_2: "Additional data"
                   }
                 },
-                { type: "people", id: 10, attributes: { canvas_response: "Leaning for", party_affiliation: "Democrat" } }
+                {
+                  type: "people",
+                  id: 10,
+                  attributes: {
+                    first_name: "John",
+                    last_name: "Doe",
+                    canvas_response: "Leaning for",
+                    party_affiliation: "Democrat"
+                  }
+                }
               ]
             }, token
 
@@ -80,9 +89,12 @@ describe "Visit API" do
             expect(modified_address.street_2).to eq "Additional data"
 
             modified_person = Person.find(10)
+            expect(modified_person.first_name).to eq "John"
+            expect(modified_person.last_name).to eq "Doe"
             expect(modified_person.leaning_for?).to be true
             expect(modified_person.democrat_affiliation?).to be true
 
+            expect(modified_person.address).to eq modified_address
             expect(modified_address.most_supportive_resident).to eq modified_person
           end
         end
@@ -113,7 +125,15 @@ describe "Visit API" do
                     street_2: "Additional data"
                   }
                 },
-                { type: "people", attributes: { canvas_response: "Leaning for", party_affiliation: "Democrat" } }
+                {
+                  type: "people",
+                  attributes: {
+                    first_name: "John",
+                    last_name: "Doe",
+                    canvas_response: "Leaning for",
+                    party_affiliation: "Democrat"
+                  }
+                }
               ]
             }, token
 
@@ -133,9 +153,12 @@ describe "Visit API" do
             expect(modified_address.street_2).to eq "Additional data"
 
             new_person = Person.last
+            expect(new_person.first_name).to eq "John"
+            expect(new_person.last_name).to eq "Doe"
             expect(new_person.leaning_for?).to be true
             expect(new_person.democrat_affiliation?).to be true
 
+            expect(new_person.address).to eq modified_address
             expect(modified_address.most_supportive_resident).to eq new_person
           end
         end
@@ -167,8 +190,25 @@ describe "Visit API" do
                     street_2: "Additional data"
                   }
                 },
-                { type: "people", id: 10, attributes: { canvas_response: "Leaning for", party_affiliation: "Democrat" } },
-                { type: "people", attributes: { canvas_response: "Strongly for", party_affiliation: "Republican" } }
+                {
+                  type: "people",
+                  id: 10,
+                  attributes: {
+                    first_name: "John",
+                    last_name: "Doe",
+                    canvas_response: "Leaning for",
+                    party_affiliation: "Democrat"
+                  }
+                },
+                {
+                  type: "people",
+                  attributes: {
+                    first_name: "Jane",
+                    last_name: "Doe",
+                    canvas_response: "Strongly for",
+                    party_affiliation: "Republican"
+                  }
+                }
               ]
             }, token
 
@@ -187,13 +227,19 @@ describe "Visit API" do
             expect(modified_address.street_2).to eq "Additional data"
 
             modified_person = Person.find(10)
+            expect(modified_person.first_name).to eq "John"
+            expect(modified_person.last_name).to eq "Doe"
             expect(modified_person.leaning_for?).to be true
             expect(modified_person.democrat_affiliation?).to be true
 
             new_person = Person.last
+            expect(new_person.first_name).to eq "Jane"
+            expect(new_person.last_name).to eq "Doe"
             expect(new_person.strongly_for?).to be true
             expect(new_person.republican_affiliation?).to be true
 
+            expect(modified_person.address).to eq modified_address
+            expect(new_person.address).to eq modified_address
             expect(modified_address.most_supportive_resident).to eq new_person
           end
         end
@@ -218,7 +264,15 @@ describe "Visit API" do
                   street_2: "Additional data"
                 }
               },
-              { type: "people", attributes: { canvas_response: "Leaning for", party_affiliation: "Democrat" } }
+              {
+                type: "people",
+                attributes: {
+                  first_name: "John",
+                  last_name: "Doe",
+                  canvas_response: "Leaning for",
+                  party_affiliation: "Democrat"
+                }
+              }
             ]
           }, token
 
@@ -238,9 +292,12 @@ describe "Visit API" do
           expect(new_address.street_2).to eq "Additional data"
 
           new_person = Person.last
+          expect(new_person.first_name).to eq "John"
+          expect(new_person.last_name).to eq "Doe"
           expect(new_person.leaning_for?).to be true
           expect(new_person.democrat_affiliation?).to be true
 
+          expect(new_person.address).to eq new_address
           expect(new_address.most_supportive_resident).to eq new_person
         end
       end
