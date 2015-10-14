@@ -3,9 +3,10 @@ module GroundGame
     class CreateVisit
       include Geokit::Geocoders
 
-      def initialize(visit_params, included_record_params, current_user)
+      def initialize(visit_params, address_params, people_params, current_user)
         @visit_params = visit_params
-        @included_record_params = included_record_params
+        @address_params = address_params
+        @people_params = people_params
         @current_user = current_user
       end
 
@@ -13,10 +14,10 @@ module GroundGame
         visit = Visit.new(@visit_params)
         visit.user = @current_user
 
-        address = create_or_update_address(@included_record_params[:address]) if @included_record_params[:address]
+        address = create_or_update_address(@address_params)
         visit.address = address
 
-        people = create_or_update_people_for_address(@included_record_params[:people], address) if @included_record_params[:people]
+        people = create_or_update_people_for_address(@people_params, address)
 
         address.most_supportive_resident = people.max{ |person| rate_persons_support(person) }
         address.save!
@@ -29,13 +30,12 @@ module GroundGame
       private
 
       def create_or_update_address(address_params)
-        address_attributes = address_params.fetch(:attributes, {}).permit(:latitude, :longitude, :street_1, :street_2, :city, :state_code, :zip_code)
         address_id = address_params.fetch(:id, nil)
         if address_id
           address = Address.find(address_id)
-          address.update!(address_attributes)
+          address.update!(address_params)
         else
-          address = Address.new(address_attributes)
+          address = Address.new(address_params)
           address.save!
         end
 
@@ -45,13 +45,12 @@ module GroundGame
       def create_or_update_people_for_address(people_params, address)
         people = []
         people_params.each do |person_params|
-          person_attributes = person_params.fetch(:attributes, {})
           person_id = person_params.fetch(:id, nil)
           if person_id
             person = Person.find(person_id)
-            person.update!(person_attributes)
+            person.update!(person_params)
           else
-            person = Person.new(person_attributes)
+            person = Person.new(person_params)
             person.address = address;
             person.save!
           end

@@ -4,8 +4,7 @@ class VisitsController < ApplicationController
   before_action :doorkeeper_authorize!
 
   def create
-    visit = GroundGame::Scenario::CreateVisit.new(create_params, include_params, current_user).call
-
+    visit = GroundGame::Scenario::CreateVisit.new(visit_params, address, people, current_user).call
     if visit.save
       render json: visit
     else
@@ -15,20 +14,25 @@ class VisitsController < ApplicationController
 
   private
 
-  def create_params
+  def visit_params
     record_attributes.permit(:duration_sec)
   end
 
-  def include_params
-    {address: address, people: people}
-  end
-
   def address
-    included_records.select{ |record| record[:type] == "addresses" }.first
+    address_params = included_records.select{ |record| record[:type] == "addresses" }.first
+    address = address_params.fetch(:attributes, {}).permit(:latitude, :longitude, :street_1, :street_2, :city, :state_code, :zip_code)
+    address_id = address_params.fetch(:id, nil)
+    address = address.merge(id: address_id) if address_id
+    address
   end
 
   def people
-    included_records.select{ |record| record[:type] == "people" }
+    people = included_records.select{ |record| record[:type] == "people" }.map{ |person_params|
+      person = person_params.fetch(:attributes, {})
+      person_id  = person_params.fetch(:id, nil)
+      person = person.merge(id: person_id) if person_id
+      person
+    }
   end
 
 end
