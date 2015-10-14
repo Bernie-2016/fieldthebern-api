@@ -10,7 +10,34 @@ module GroundGame
 
         let(:user) { create(:user, email: "josh@cookacademy.com") }
 
-        it "computes and assigns the score"
+        it "computes and assigns the score" do
+          address = create(:address, id: 1)
+          create(:person, id: 10, address: address, canvas_response: :unknown, party_affiliation: :unknown_affiliation)
+
+          visit_params = { duration_sec: 150 }
+
+          address_params = {
+            id: 1,
+            latitude: 2.0,
+            longitude: 3.0,
+            city: "New York",
+            state_code: "NY",
+            zip_code: "12345",
+            street_1: "Test street",
+            street_2: "Additional data"
+          }
+
+          people_params = [{
+            id: 10,
+            first_name: "John",
+            last_name: "Doe",
+            canvas_response: "Leaning for",
+            party_affiliation: "Democrat"
+          }]
+
+          visit = CreateVisit.new(visit_params, address_params, people_params, user).call
+          expect(visit.total_points).not_to be_nil
+        end
 
         context "when the address already exists" do
           context "when the person already exists" do
