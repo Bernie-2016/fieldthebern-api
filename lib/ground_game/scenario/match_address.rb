@@ -33,7 +33,7 @@ module GroundGame
           end
 
         rescue EasyPost::Error => e
-          return false, e.code, e.message, nil
+          return false, e.http_status, e.message.strip, nil
         end
       end
     end

@@ -10,14 +10,8 @@ class AddressesController < ApplicationController
     else
       success, status_code, message, matched_address = GroundGame::Scenario::MatchAddress.new(search_params).call
 
-      case status_code
-      when 200
-        render json: matched_address, include: ['people'], status: status_code
-      when 404
-        render json: {error: message}, status: status_code
-      else
-        render json: {error: message}, status: 400
-      end
+      render json: matched_address, include: ['people'], status: status_code if success
+      render json: { error: message }, status: status_code || 400 if not success
     end
   end
 

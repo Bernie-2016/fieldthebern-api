@@ -1,0 +1,119 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: https://api.easypost.com/v2/addresses/create_and_verify
+    body:
+      encoding: US-ASCII
+      string: address[street1]=5th%20avenue&address[city]=New%20York
+    headers:
+      Accept:
+      - "*/*; q=0.5, application/xml"
+      Accept-Encoding:
+      - gzip, deflate
+      User-Agent:
+      - EasyPost/v2 RubyClient/2.1.7
+      Authorization:
+      - Bearer EASYPOST_API_KEY
+      Content-Type:
+      - application/x-www-form-urlencoded
+      Content-Length:
+      - '54'
+  response:
+    status:
+      code: 400
+      message: Bad Request
+    headers:
+      Date:
+      - Thu, 15 Oct 2015 11:39:26 GMT
+      Status:
+      - 400 Bad Request
+      Connection:
+      - close
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Xss-Protection:
+      - 1; mode=block
+      X-Content-Type-Options:
+      - nosniff
+      Content-Type:
+      - application/json; charset=utf-8
+      Cache-Control:
+      - no-cache
+      X-Request-Id:
+      - 6ccf022b-a178-4cee-8034-06856291b0e0
+      X-Runtime:
+      - '1.016851'
+      X-Node:
+      - web3sj, 1d67f30217
+      X-Backend:
+      - easypost
+      X-Proxied:
+      - lb5sj, 65049c413e
+      Strict-Transport-Security:
+      - max-age=86400
+    body:
+      encoding: UTF-8
+      string: '{"error":{"code":"ADDRESS.VERIFY.FAILURE","message":"Insufficient address
+        data provided. A city and state or a zip must be provided.","errors":[]}}'
+    http_version: 
+  recorded_at: Thu, 15 Oct 2015 11:39:30 GMT
+- request:
+    method: post
+    uri: https://api.easypost.com/v2/addresses/create_and_verify
+    body:
+      encoding: US-ASCII
+      string: address[street1]=&address[city]=New%20York&address[state]=NY
+    headers:
+      Accept:
+      - "*/*; q=0.5, application/xml"
+      Accept-Encoding:
+      - gzip, deflate
+      User-Agent:
+      - EasyPost/v2 RubyClient/2.1.7
+      Authorization:
+      - Bearer EASYPOST_API_KEY
+      Content-Type:
+      - application/x-www-form-urlencoded
+      Content-Length:
+      - '60'
+  response:
+    status:
+      code: 400
+      message: Bad Request
+    headers:
+      Date:
+      - Thu, 15 Oct 2015 11:39:27 GMT
+      Status:
+      - 400 Bad Request
+      Connection:
+      - close
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Xss-Protection:
+      - 1; mode=block
+      X-Content-Type-Options:
+      - nosniff
+      Content-Type:
+      - application/json; charset=utf-8
+      Cache-Control:
+      - no-cache
+      X-Request-Id:
+      - d0280d65-07ff-49b7-8ac8-e53bea6b6b1d
+      X-Runtime:
+      - '0.409419'
+      X-Node:
+      - web5sj, 1d67f30217
+      X-Backend:
+      - easypost
+      X-Proxied:
+      - lb4sj, 65049c413e
+      Strict-Transport-Security:
+      - max-age=86400
+    body:
+      encoding: UTF-8
+      string: '{"error":{"code":"ADDRESS.VERIFY.FAILURE","message":"Insufficient address
+        data provided. A street must be provided.","errors":[]}}'
+    http_version: 
+  recorded_at: Thu, 15 Oct 2015 11:39:31 GMT
+recorded_with: VCR 2.9.3

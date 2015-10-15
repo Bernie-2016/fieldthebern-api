@@ -13,4 +13,6 @@ VCR.configure do |c|
   c.default_cassette_options = { :serialize_with => :psych }
 
   ignore_localhost = true
+
+  c.filter_sensitive_data('EASYPOST_API_KEY') { ENV['EASYPOST_API_KEY'] }
 end

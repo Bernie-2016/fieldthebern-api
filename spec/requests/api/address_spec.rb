@@ -100,9 +100,34 @@ describe "Address API" do
 
           authenticated_get "addresses", get_parameters, token
           expect(last_response.status).to eq 404
+          expect(json.error).to eq "No match for this address"
         end
 
-        it "returns 400 if ?"
+        it "returns 400 if not enough parameters provided", vcr: { cassette_name: "requests/api/addresses/it_returns_400_if_not_enough_parameters" } do
+          authenticated_get "addresses", {
+            street_1: "5th avenue",
+            city: "New York",
+          }, token
+          expect(json.error).to eq "Insufficient address data provided. A city and state or a zip must be provided."
+          expect(last_response.status).to eq 400
+
+          authenticated_get "addresses", {
+            city: "New York",
+            state_code: "NY",
+          }, token
+          expect(json.error).to eq "Insufficient address data provided. A street must be provided."
+          expect(last_response.status).to eq 400
+        end
+
+        it "returns 400 if address not found", vcr: { cassette_name: "requests/api/addresses/it_returns_400_if_address_not_found" } do
+          authenticated_get "addresses", {
+            street_1: "A non existant address to trigger proper error",
+            city: "New York",
+            state_code: "NY",
+          }, token
+          expect(json.error).to eq "Address Not Found."
+          expect(last_response.status).to eq 400
+        end
 
         it "returns an existing address with people included if the address exists" do
           address = create(:address,
