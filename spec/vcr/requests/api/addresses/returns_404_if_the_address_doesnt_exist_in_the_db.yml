@@ -5,7 +5,7 @@ http_interactions:
     uri: https://api.easypost.com/v2/addresses/create_and_verify
     body:
       encoding: US-ASCII
-      string: address[street1]=A%20non%20existant%20address%20to%20trigger%20proper%20error&address[city]=New%20York&address[state]=NY
+      string: address[street1]=5th%20Avenue&address[city]=New%20York&address[state]=NY
     headers:
       Accept:
       - "*/*; q=0.5, application/xml"
@@ -18,16 +18,16 @@ http_interactions:
       Content-Type:
       - application/x-www-form-urlencoded
       Content-Length:
-      - '120'
+      - '72'
   response:
     status:
-      code: 400
-      message: Bad Request
+      code: 200
+      message: OK
     headers:
       Date:
-      - Thu, 15 Oct 2015 11:39:24 GMT
+      - Thu, 15 Oct 2015 11:43:30 GMT
       Status:
-      - 400 Bad Request
+      - 200 OK
       Connection:
       - close
       X-Frame-Options:
@@ -36,16 +36,20 @@ http_interactions:
       - 1; mode=block
       X-Content-Type-Options:
       - nosniff
+      Location:
+      - "/api/v2/addresses/adr_bb9d04df97ef4b89b3f32fe3adbdcc1c"
       Content-Type:
       - application/json; charset=utf-8
+      Etag:
+      - W/"73130d81dd3d110caa410ca37f38f798"
       Cache-Control:
-      - no-cache
+      - max-age=0, private, must-revalidate
       X-Request-Id:
-      - 78ac0eb4-c009-4729-9db5-884ba064f4e8
+      - 217a86fe-1165-41bf-871b-93eceddf765b
       X-Runtime:
-      - '0.452040'
+      - '0.517375'
       X-Node:
-      - web11sj, 1d67f30217
+      - web5sj, 1d67f30217
       X-Backend:
       - easypost
       X-Proxied:
@@ -54,7 +58,8 @@ http_interactions:
       - max-age=86400
     body:
       encoding: UTF-8
-      string: '{"error":{"code":"ADDRESS.VERIFY.FAILURE","message":"Address Not Found.  ","errors":[]}}'
+      string: '{"address":{"id":"adr_bb9d04df97ef4b89b3f32fe3adbdcc1c","object":"Address","created_at":"2015-10-15T11:43:30Z","updated_at":"2015-10-15T11:43:30Z","name":null,"company":null,"street1":"5
+        AVENUE A","street2":"","city":"NEW YORK","state":"NY","zip":"10009-7944","country":"US","phone":null,"email":null,"mode":"test","carrier_facility":null,"residential":false,"federal_tax_id":null}}'
     http_version: 
-  recorded_at: Thu, 15 Oct 2015 11:39:27 GMT
+  recorded_at: Thu, 15 Oct 2015 11:43:34 GMT
 recorded_with: VCR 2.9.3

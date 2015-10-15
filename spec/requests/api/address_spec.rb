@@ -75,35 +75,17 @@ describe "Address API" do
       end
 
       context "when searching by parameters instead of scope" do
-        it "returns 404 if the address doesn't exist" do
-          get_parameters = {
-            street_1: "Test street"
-          }
-
-          expected_easypost_request_parameters = {
-            street1: "Test street",
-            city: nil,
-            state: nil,
-            zip: nil
-          }
-
-          mock_verified_address = double("EasyPost::Address",
-            street1: "Verified test street 1",
-            street2: "Verified bonus data",
-            city: "VerifiedTestTown",
-            state: "VTT",
-            zip: "V12345")
-
-          expect(EasyPost::Address).to receive(:create_and_verify)
-            .with(expected_easypost_request_parameters)
-            .and_return(mock_verified_address)
-
-          authenticated_get "addresses", get_parameters, token
+        it "returns 404 if the address doesn't exist in the db", vcr: { cassette_name: "requests/api/addresses/returns_404_if_the_address_doesnt_exist_in_the_db" } do
+          authenticated_get "addresses", {
+            street_1: "5th Avenue",
+            city: "New York",
+            state_code: "NY"
+          }, token
           expect(last_response.status).to eq 404
           expect(json.error).to eq "No match for this address"
         end
 
-        it "returns 400 if not enough parameters provided", vcr: { cassette_name: "requests/api/addresses/it_returns_400_if_not_enough_parameters" } do
+        it "returns 400 if not enough parameters provided for easypost", vcr: { cassette_name: "requests/api/addresses/it_returns_400_if_not_enough_parameters_provided_for_easypost" } do
           authenticated_get "addresses", {
             street_1: "5th avenue",
             city: "New York",
@@ -119,7 +101,7 @@ describe "Address API" do
           expect(last_response.status).to eq 400
         end
 
-        it "returns 400 if address not found", vcr: { cassette_name: "requests/api/addresses/it_returns_400_if_address_not_found" } do
+        it "returns 400 if address not found by easypost", vcr: { cassette_name: "requests/api/addresses/it_returns_400_if_address_not_found_by_easypostd" } do
           authenticated_get "addresses", {
             street_1: "A non existant address to trigger proper error",
             city: "New York",
@@ -129,20 +111,21 @@ describe "Address API" do
           expect(last_response.status).to eq 400
         end
 
-        it "returns an existing address with people included if the address exists" do
+        it "returns an existing address with people included if the address exists", vcr: { cassette_name: "requests/api/addresses/returns_an_existing_address_with_people_included_if_the_address_exists" } do
           address = create(:address,
             id: 1,
             latitude: 1,
             longitude: 1,
-            street_1: "Test street",
-            street_2: "1",
-            city: "Testtown",
-            zip_code: "12345",
-            usps_verified_street_1: "Verified test street 1",
-            usps_verified_street_2: "Verified bonus data",
-            usps_verified_city: "VerifiedTestTown",
-            usps_verified_state: "VTT",
-            usps_verified_zip: "V12345")
+            street_1: "5th Avenue",
+            street_2: "",
+            city: "New York",
+            zip_code: "",
+            state_code: "NY",
+            usps_verified_street_1: "5 AVENUE A",
+            usps_verified_street_2: "",
+            usps_verified_city: "NEW YORK",
+            usps_verified_state: "NY",
+            usps_verified_zip: "10009-7944")
           person_a = create(:person, id: 5, address: address, canvas_response: :strongly_for)
           person_b = create(:person, id: 6, address: address, canvas_response: :leaning_for)
 
@@ -151,34 +134,12 @@ describe "Address API" do
           address.best_canvas_response = person_a.canvas_response
           address.save!
 
-          get_parameters = {
-            street_1: "Test street",
-            street_2: "1",
-            city: "TestTown",
-            state_code: "TT",
-            zip_code: "12345"
-          }
+          authenticated_get "addresses", {
+            street_1: "5th Avenue",
+            city: "New York",
+            state_code: "NY"
+          }, token
 
-          expected_easypost_request_parameters = {
-            street1: "Test street 1",
-            city: "TestTown",
-            state: "TT",
-            zip: "12345"
-          }
-
-          mock_verified_address = double("EasyPost::Address",
-            street1: "Verified test street 1",
-            street2: "Verified bonus data",
-            city: "VerifiedTestTown",
-            state: "VTT",
-            zip: "V12345")
-
-
-          expect(EasyPost::Address).to receive(:create_and_verify)
-            .with(expected_easypost_request_parameters)
-            .and_return(mock_verified_address)
-
-          authenticated_get "addresses", get_parameters, token
           expect(last_response.status).to eq 200
 
           expect(json.data.length).to eq 1
@@ -187,11 +148,11 @@ describe "Address API" do
           address_attributes = address_json.attributes
           expect(address_attributes.latitude).to eq 1.0
           expect(address_attributes.longitude).to eq 1.0
-          expect(address_attributes.street_1).to eq "Test street"
-          expect(address_attributes.street_2).to eq "1"
-          expect(address_attributes.city).to eq "Testtown"
+          expect(address_attributes.street_1).to eq "5th Avenue"
+          expect(address_attributes.street_2).to eq ""
+          expect(address_attributes.city).to eq "New York"
           expect(address_attributes.state_code).to eq "NY"
-          expect(address_attributes.zip_code).to eq "12345"
+          expect(address_attributes.zip_code).to eq ""
           expect(address_attributes.best_canvas_response).to eq "strongly_for"
 
           address_relationships = address_json.relationships

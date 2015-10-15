@@ -25,7 +25,7 @@ http_interactions:
       message: Bad Request
     headers:
       Date:
-      - Thu, 15 Oct 2015 11:39:26 GMT
+      - Thu, 15 Oct 2015 11:43:25 GMT
       Status:
       - 400 Bad Request
       Connection:
@@ -41,11 +41,11 @@ http_interactions:
       Cache-Control:
       - no-cache
       X-Request-Id:
-      - 6ccf022b-a178-4cee-8034-06856291b0e0
+      - 601c1188-515a-44fd-91c9-8fee3dcfb7aa
       X-Runtime:
-      - '1.016851'
+      - '0.432529'
       X-Node:
-      - web3sj, 1d67f30217
+      - web5sj, 1d67f30217
       X-Backend:
       - easypost
       X-Proxied:
@@ -57,7 +57,7 @@ http_interactions:
       string: '{"error":{"code":"ADDRESS.VERIFY.FAILURE","message":"Insufficient address
         data provided. A city and state or a zip must be provided.","errors":[]}}'
     http_version: 
-  recorded_at: Thu, 15 Oct 2015 11:39:30 GMT
+  recorded_at: Thu, 15 Oct 2015 11:43:29 GMT
 - request:
     method: post
     uri: https://api.easypost.com/v2/addresses/create_and_verify
@@ -83,7 +83,7 @@ http_interactions:
       message: Bad Request
     headers:
       Date:
-      - Thu, 15 Oct 2015 11:39:27 GMT
+      - Thu, 15 Oct 2015 11:43:27 GMT
       Status:
       - 400 Bad Request
       Connection:
@@ -99,11 +99,11 @@ http_interactions:
       Cache-Control:
       - no-cache
       X-Request-Id:
-      - d0280d65-07ff-49b7-8ac8-e53bea6b6b1d
+      - ee81612a-ec2c-4564-bf7e-21f06775ba70
       X-Runtime:
-      - '0.409419'
+      - '0.569249'
       X-Node:
-      - web5sj, 1d67f30217
+      - web11sj, 1d67f30217
       X-Backend:
       - easypost
       X-Proxied:
@@ -115,5 +115,5 @@ http_interactions:
       string: '{"error":{"code":"ADDRESS.VERIFY.FAILURE","message":"Insufficient address
         data provided. A street must be provided.","errors":[]}}'
     http_version: 
-  recorded_at: Thu, 15 Oct 2015 11:39:31 GMT
+  recorded_at: Thu, 15 Oct 2015 11:43:31 GMT
 recorded_with: VCR 2.9.3
