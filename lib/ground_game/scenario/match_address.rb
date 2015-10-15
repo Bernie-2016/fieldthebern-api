@@ -29,7 +29,7 @@ module GroundGame
           if !matched_address.empty?
             return true, 200, nil, matched_address
           else
-            return false, 404, "No match for this address.", nil
+            return false, 404, "No match for this address", nil
           end
 
         rescue EasyPost::Error => e

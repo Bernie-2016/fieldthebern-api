@@ -14,9 +14,9 @@ class AddressesController < ApplicationController
       when 200
         render json: matched_address, include: ['people'], status: status_code
       when 404
-        render json: matched_address, status: status_code
-      when 400
-        render json: matched_address, status: status_code
+        render json: {error: message}, status: status_code
+      else
+        render json: {error: message}, status: 400
       end
     end
   end
