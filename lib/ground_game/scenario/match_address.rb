@@ -6,9 +6,9 @@ module GroundGame
       end
 
       def call
-        street1 = @address_params.fetch(:street_1, nil)
-        street2 = @address_params.fetch(:street_2, nil)
-        street_name = street1 + " " + street2
+        street1 = @address_params.fetch(:street_1, "")
+        street2 = @address_params.fetch(:street_2, "")
+        street_name = [street1, street2].reject(&:empty?).join(" ")
 
         begin
           address = EasyPost::Address.create_and_verify(
