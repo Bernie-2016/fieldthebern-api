@@ -1,3 +1,5 @@
+require "ground_game/scenario/create_score"
+
 module GroundGame
   module Scenario
     class CreateVisit
@@ -19,7 +21,10 @@ module GroundGame
 
         people = create_or_update_people_for_address(@people_params, address)
 
-        address.most_supportive_resident = people.max{ |person| rate_persons_support(person) }
+        most_supportive_resident = people.max{ |person| rate_persons_support(person) }
+
+        address.best_canvas_response = most_supportive_resident.canvas_response
+        address.most_supportive_resident = most_supportive_resident
         address.save!
 
         visit.total_points = CreateScore.new(visit: visit).call

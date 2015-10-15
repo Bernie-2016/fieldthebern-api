@@ -23,6 +23,8 @@ gem 'sidekiq'
 
 gem 'geokit-rails'
 
+gem 'easypost'
+
 group :development, :production do
   gem 'rails_12factor'
 end

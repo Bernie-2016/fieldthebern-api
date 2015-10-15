@@ -8,4 +8,14 @@ class Address < ActiveRecord::Base
                    :lat_column_name => :latitude,
                    :lng_column_name => :longitude
 
+  enum best_canvas_response: {
+    unknown: 'Unknown',
+    strongly_for: 'Strongly for',
+    leaning_for: 'Leaning for',
+    undecided: 'Undecided',
+    leaning_against: 'Leaning against',
+    strongly_against: 'Strongly against',
+    not_yet_visited: 'Not yet visited',
+    not_home: "Not home"
+  }
 end
