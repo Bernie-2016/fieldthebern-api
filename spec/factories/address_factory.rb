@@ -8,6 +8,12 @@ FactoryGirl.define do
     f.longitude 1.0
     f.latitude 1.0
 
+    f.usps_verified_street_1 "Test verified street"
+    f.usps_verified_street_2 ""
+    f.usps_verified_city "Test verified town"
+    f.usps_verified_state "NY"
+    f.usps_verified_zip "12345V"
+
     trait :with_1_person do
       after(:build) do |address, evaluator|
         person = FactoryGirl.build(:person, address: address, canvas_response: :strongly_for)
