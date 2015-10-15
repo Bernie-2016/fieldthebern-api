@@ -19,10 +19,16 @@ class Person < ActiveRecord::Base
   }
 
   def canvas_response_rating
-    0 if strongly_against?
-    1 if leaning_against?
-    2 if undecided? or unknown?
-    3 if leaning_for?
-    4 if strongly_for?
+    if strongly_against? 
+      return 0
+    elsif leaning_against?
+      return 1
+    elsif undecided? || unknown?
+      return 2
+    elsif leaning_for?
+      return 3
+    elsif strongly_for?
+      return 5
+    end
   end
 end
