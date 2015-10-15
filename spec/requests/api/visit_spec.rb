@@ -96,6 +96,7 @@ describe "Visit API" do
 
             expect(modified_person.address).to eq modified_address
             expect(modified_address.most_supportive_resident).to eq modified_person
+            expect(modified_address.best_canvas_response).to eq modified_person.canvas_response
           end
         end
         context "when person does not exist" do
@@ -130,7 +131,7 @@ describe "Visit API" do
                   attributes: {
                     first_name: "John",
                     last_name: "Doe",
-                    canvas_response: "Leaning for",
+                    canvas_response: "leaning_for",
                     party_affiliation: "Democrat"
                   }
                 }
@@ -160,6 +161,7 @@ describe "Visit API" do
 
             expect(new_person.address).to eq modified_address
             expect(modified_address.most_supportive_resident).to eq new_person
+            expect(modified_address.best_canvas_response).to eq new_person.canvas_response
           end
         end
 
@@ -196,7 +198,7 @@ describe "Visit API" do
                   attributes: {
                     first_name: "John",
                     last_name: "Doe",
-                    canvas_response: "Leaning for",
+                    canvas_response: "leaning_for",
                     party_affiliation: "Democrat"
                   }
                 },
@@ -205,7 +207,7 @@ describe "Visit API" do
                   attributes: {
                     first_name: "Jane",
                     last_name: "Doe",
-                    canvas_response: "Strongly for",
+                    canvas_response: "strongly_for",
                     party_affiliation: "Republican"
                   }
                 }
@@ -241,6 +243,7 @@ describe "Visit API" do
             expect(modified_person.address).to eq modified_address
             expect(new_person.address).to eq modified_address
             expect(modified_address.most_supportive_resident).to eq new_person
+            expect(modified_address.best_canvas_response).to eq new_person.canvas_response
           end
         end
       end
@@ -269,7 +272,7 @@ describe "Visit API" do
                 attributes: {
                   first_name: "John",
                   last_name: "Doe",
-                  canvas_response: "Leaning for",
+                  canvas_response: "leaning_for",
                   party_affiliation: "Democrat"
                 }
               }
@@ -299,6 +302,7 @@ describe "Visit API" do
 
           expect(new_person.address).to eq new_address
           expect(new_address.most_supportive_resident).to eq new_person
+          expect(new_address.best_canvas_response).to eq new_person.canvas_response
         end
       end
     end
