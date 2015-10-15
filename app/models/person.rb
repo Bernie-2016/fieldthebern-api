@@ -17,4 +17,12 @@ class Person < ActiveRecord::Base
     undeclared_affiliation: 'Undeclared',
     independent_affiliation: 'Independent'
   }
+
+  def canvas_response_rating
+    0 if strongly_against?
+    1 if leaning_against?
+    2 if undecided? or unknown?
+    3 if leaning_for?
+    4 if strongly_for?
+  end
 end

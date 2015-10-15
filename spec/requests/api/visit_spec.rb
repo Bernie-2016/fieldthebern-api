@@ -67,7 +67,7 @@ describe "Visit API" do
                   attributes: {
                     first_name: "John",
                     last_name: "Doe",
-                    canvas_response: "Leaning for",
+                    canvas_response: "leaning_for",
                     party_affiliation: "Democrat"
                   }
                 }

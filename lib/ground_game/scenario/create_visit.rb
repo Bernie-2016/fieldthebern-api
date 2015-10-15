@@ -21,10 +21,15 @@ module GroundGame
 
         people = create_or_update_people_for_address(@people_params, address)
 
-        most_supportive_resident = people.max{ |person| rate_persons_support(person) }
+        most_supportive_resident = person_with_highest_rated_canvas_response(people)
 
-        address.best_canvas_response = most_supportive_resident.canvas_response
-        address.most_supportive_resident = most_supportive_resident
+        if most_supportive_resident
+          address.best_canvas_response = most_supportive_resident.canvas_response
+          address.most_supportive_resident = most_supportive_resident
+        elsif not address.most_supportive_resident
+          address.best_canvas_response = :not_home
+        end
+
         address.save!
 
         visit.total_points = CreateScore.new(visit: visit).call
@@ -33,6 +38,10 @@ module GroundGame
       end
 
       private
+
+      def person_with_highest_rated_canvas_response(people)
+        people.max{ |person| person.canvas_response_rating }
+      end
 
       def create_or_update_address(address_params)
         address_id = address_params.fetch(:id, nil)
@@ -62,14 +71,6 @@ module GroundGame
           people.push(person)
         end
         people
-      end
-
-      def rate_persons_support(person)
-        0 if person.strongly_against?
-        1 if person.leaning_against?
-        2 if person.undecided? or person.unknown?
-        3 if person.leaning_for?
-        4 if person.strongly_for?
       end
     end
   end

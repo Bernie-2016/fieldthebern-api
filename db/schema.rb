@@ -77,8 +77,8 @@ ActiveRecord::Schema.define(version: 20151014234450) do
   create_table "people", force: :cascade do |t|
     t.string   "first_name"
     t.string   "last_name"
-    t.string   "canvas_response",   default: "Unknown"
-    t.string   "party_affiliation", default: "Unknown"
+    t.string   "canvas_response"
+    t.string   "party_affiliation"
     t.integer  "address_id"
     t.datetime "created_at"
     t.datetime "updated_at"
