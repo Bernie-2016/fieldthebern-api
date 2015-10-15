@@ -165,8 +165,8 @@ describe "Visit API" do
           end
         end
 
-        context "when some people exist, some dont" do
-          it "creates a visit, updates the address, creates people that don\'t exist, updates people that do" do
+        context "when some people exist, some don't" do
+          it "creates a visit, updates the address, creates people that don't exist, updates people that do" do
             address = create(:address, id: 1)
             create(:person, id: 10, address: address, canvas_response: :unknown, party_affiliation: :unknown_affiliation)
 
@@ -234,8 +234,8 @@ describe "Visit API" do
             expect(modified_person.leaning_for?).to be true
             expect(modified_person.democrat_affiliation?).to be true
 
-            new_person = Person.last
-            expect(new_person.first_name).to eq "Jane"
+            new_person = Person.find_by(first_name: "Jane")
+            expect(new_person).to be_persisted
             expect(new_person.last_name).to eq "Doe"
             expect(new_person.strongly_for?).to be true
             expect(new_person.republican_affiliation?).to be true

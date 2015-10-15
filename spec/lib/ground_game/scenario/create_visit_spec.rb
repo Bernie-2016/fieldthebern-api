@@ -109,7 +109,7 @@ module GroundGame
           end
         end
 
-        context "when the address doesn\'t exist" do
+        context "when the address doesn't exist" do
           it "creates the visit, the address and the people" do
             visit_params = { duration_sec: 150 }
 
