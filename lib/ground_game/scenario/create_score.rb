@@ -6,14 +6,12 @@ module GroundGame
       end
 
       def call
-        # TODO: Returns a scalar for now.
-        # Should eventually return a Score record, which includes a total_points property
-        # The formula is arbitrary as well
-        if @visit.duration_sec < 600
-          600 - @visit.duration_sec
-        else
-          0
-        end
+        score = Score.new
+        score.points_for_knock = 5
+        score.points_for_updates = 10 * @visit.people.count
+        score.visit = @visit
+        score.save!
+        score
       end
     end
   end
