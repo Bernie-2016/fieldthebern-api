@@ -3,8 +3,6 @@ require "ground_game/scenario/create_score"
 module GroundGame
   module Scenario
     class CreateVisit
-      include Geokit::Geocoders
-
       def initialize(visit_params, address_params, people_params, current_user)
         @visit_params = visit_params
         @address_params = address_params
@@ -32,7 +30,7 @@ module GroundGame
 
         address.save!
 
-        visit.total_points = CreateScore.new(visit: visit).call.total_points
+        visit.total_points = CreateScore.new(visit: visit, num_of_updated_people: @people_params.count).call.total_points
 
         visit
       end
