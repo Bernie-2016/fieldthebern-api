@@ -30,7 +30,7 @@ module GroundGame
 
         address.save!
 
-        visit.total_points = CreateScore.new(visit: visit, num_of_updated_people: @people_params.count).call.total_points
+        visit.total_points = CreateScore.new(visit: visit, number_of_updated_people: @people_params.count).call.total_points
 
         visit
       end
