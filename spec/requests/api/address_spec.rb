@@ -101,7 +101,7 @@ describe "Address API" do
           expect(last_response.status).to eq 400
         end
 
-        it "returns 400 if address not found by easypost", vcr: { cassette_name: "requests/api/addresses/it_returns_400_if_address_not_found_by_easypostd" } do
+        it "returns 400 if address not found by easypost", vcr: { cassette_name: "requests/api/addresses/it_returns_400_if_address_not_found_by_easypost" } do
           authenticated_get "addresses", {
             street_1: "A non existant address to trigger proper error",
             city: "New York",
