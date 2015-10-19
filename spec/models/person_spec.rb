@@ -43,4 +43,30 @@ describe Person do
     person.independent_affiliation!
     expect(person.independent_affiliation?).to be true
   end
+
+  describe "#canvas_response_rating" do
+    it "works" do
+      person = create(:person)
+
+      expect(person.canvas_response_rating).to eq 2
+
+      person.strongly_for!
+      expect(person.canvas_response_rating).to eq 5
+
+      person.leaning_for!
+      expect(person.canvas_response_rating).to eq 3
+
+      person.undecided!
+      expect(person.canvas_response_rating).to eq 2
+
+      person.leaning_against!
+      expect(person.canvas_response_rating).to eq 1
+
+      person.strongly_against!
+      expect(person.canvas_response_rating).to eq 0
+
+      person.unknown!
+      expect(person.canvas_response_rating).to eq 2
+    end
+  end
 end
