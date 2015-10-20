@@ -9,10 +9,6 @@ describe Visit do
     expect(build(:visit, user: nil)).not_to be_valid
   end
 
-  it "requires an address" do
-    expect(build(:visit, address: nil)).not_to be_valid
-  end
-
   it "supports timestaps" do
     visit = create(:visit)
     expect(visit.created_at).not_to be_nil

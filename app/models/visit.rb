@@ -1,8 +1,10 @@
 class Visit < ActiveRecord::Base
   belongs_to :user
-  belongs_to :address
-  has_many :people, through: :address
 
-  validates :user_id, presence: true
-  validates :address_id, presence: true
+  has_one :address_update
+  has_one :address, through: :address_update
+  has_many :person_updates
+  has_many :people, through: :person_updates
+
+  validates :user, presence: true
 end

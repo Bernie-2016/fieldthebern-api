@@ -11,10 +11,16 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151019091134) do
+ActiveRecord::Schema.define(version: 20151020081540) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "address_updates", force: :cascade do |t|
+    t.integer "address_id"
+    t.integer "visit_id"
+    t.string  "update_type", default: "modify"
+  end
 
   create_table "addresses", force: :cascade do |t|
     t.float    "latitude"
@@ -84,6 +90,16 @@ ActiveRecord::Schema.define(version: 20151019091134) do
     t.datetime "updated_at"
   end
 
+  create_table "person_updates", force: :cascade do |t|
+    t.integer "person_id"
+    t.integer "visit_id"
+    t.string  "update_type",           default: "modify"
+    t.string  "old_canvas_response"
+    t.string  "new_canvas_response"
+    t.string  "old_party_affiliation"
+    t.string  "new_party_affiliation"
+  end
+
   create_table "relationships", force: :cascade do |t|
     t.integer  "follower_id"
     t.integer  "followed_id"
@@ -120,7 +136,6 @@ ActiveRecord::Schema.define(version: 20151019091134) do
     t.float    "total_points"
     t.integer  "duration_sec"
     t.integer  "user_id",      null: false
-    t.integer  "address_id",   null: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end

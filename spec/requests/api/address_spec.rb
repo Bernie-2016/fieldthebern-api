@@ -16,6 +16,8 @@ describe "Address API" do
       end
 
       it "returns a list of addresses within the specified radius of the specified point" do
+        puts "address count: ", Address.count
+
         create(:address, latitude: 1, longitude: 1)
         create(:address, latitude: -1, longitude: -1)
         create(:address, latitude: -1, longitude: 1)
@@ -29,6 +31,7 @@ describe "Address API" do
         }, token
 
         expect(last_response.status).to eq 200
+        pp json
         expect(json.data.length).to eq 4
       end
 
