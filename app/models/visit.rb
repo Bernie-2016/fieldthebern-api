@@ -7,4 +7,8 @@ class Visit < ActiveRecord::Base
   has_many :people, through: :person_updates
 
   validates :user, presence: true
+
+  def number_of_updated_people
+    person_updates.count
+  end
 end

@@ -15,9 +15,39 @@ module GroundGame
         visit.user = @current_user
 
         address = create_or_update_address(@address_params, visit)
-
         people = create_or_update_people_for_address(@people_params, address, visit)
 
+        address = update_most_supportive_resident(address, people)
+        address.save!
+
+        visit.total_points = CreateScore.new(visit).call.total_points
+        visit
+      end
+
+      private
+
+      def create_or_update_address(address_params, visit)
+        address = Address.new_or_existing_from_params(address_params)
+        address.save!
+
+        AddressUpdate.create_for_visit_and_address(visit, address)
+
+        address
+      end
+
+      def create_or_update_people_for_address(people_params, address, visit)
+        people_params.map do |person_params|
+          person = Person.new_or_existing_from_params(person_params)
+          person.address = address
+          person.save!
+
+          PersonUpdate.create_for_visit_and_person(visit, person)
+
+          person
+        end
+      end
+
+      def update_most_supportive_resident(address, people)
         most_supportive_resident = person_with_highest_rated_canvas_response(people)
         if most_supportive_resident
           address.best_canvas_response = most_supportive_resident.canvas_response
@@ -26,64 +56,11 @@ module GroundGame
           address.best_canvas_response = :not_home
         end
 
-        address.save!
-
-        visit.total_points = CreateScore.new(visit: visit, number_of_updated_people: @people_params.count).call.total_points
-
-        visit
-      end
-
-      private
-
-      def person_with_highest_rated_canvas_response(people)
-        people.max{ |person| person.canvas_response_rating }
-      end
-
-      def create_or_update_address(address_params, visit)
-        address_id = address_params.fetch(:id, nil)
-
-        if address_id
-          address = Address.find(address_id)
-          address_update = AddressUpdate.create(address: address, visit: visit, update_type: :modify)
-          address.update!(address_params)
-        else
-          address = Address.create(address_params)
-          address_update = AddressUpdate.create(address: address, visit: visit, update_type: :create)
-        end
-
         address
       end
 
-      def create_or_update_people_for_address(people_params, address, visit)
-        people_params.map do |person_params|
-          person_id = person_params.fetch(:id, nil)
-
-          if person_id
-            person = Person.find(person_id)
-
-            PersonUpdate.create(
-              person: person,
-              visit: visit,
-              old_canvas_response: person.canvas_response,
-              old_party_affiliation: person.party_affiliation,
-              new_canvas_response: person_params[:canvas_response],
-              new_party_affiliation: person_params[:party_affiliation])
-
-            person.update!(person_params)
-          else
-            person = Person.new(person_params.merge(address: address))
-
-            PersonUpdate.create(
-              person: person,
-              visit: visit,
-              new_canvas_response: person.canvas_response,
-              new_party_affiliation: person.party_affiliation)
-
-            person.save!
-          end
-
-          person
-        end
+      def person_with_highest_rated_canvas_response(people)
+        people.max{ |person| person.canvas_response_rating }
       end
     end
   end
