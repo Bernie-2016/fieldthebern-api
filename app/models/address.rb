@@ -18,4 +18,17 @@ class Address < ActiveRecord::Base
     not_yet_visited: "Not yet visited",
     not_home: "Not home"
   }
+
+  def self.new_or_existing_from_params(params)
+    address_id = params.fetch(:id, nil)
+
+    if address_id
+      address = Address.find(address_id)
+      address.assign_attributes(params)
+    else
+      address = Address.new(params)
+    end
+
+    address
+  end
 end

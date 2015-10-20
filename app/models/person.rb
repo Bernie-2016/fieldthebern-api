@@ -19,7 +19,7 @@ class Person < ActiveRecord::Base
   }
 
   def canvas_response_rating
-    if strongly_against? 
+    if strongly_against?
       return 0
     elsif leaning_against?
       return 1
@@ -30,5 +30,17 @@ class Person < ActiveRecord::Base
     elsif strongly_for?
       return 5
     end
+  end
+
+
+  def self.new_or_existing_from_params(params)
+    person_id = params.fetch(:id, nil)
+    if person_id
+      person = Person.find(person_id)
+      person.assign_attributes(params)
+    else
+      person = Person.new(params)
+    end
+    person
   end
 end
