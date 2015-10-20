@@ -4,6 +4,7 @@ FactoryGirl.define do
     f.duration_sec 300
 
     f.user
+    f.score
 
     transient do
       people_count 2
