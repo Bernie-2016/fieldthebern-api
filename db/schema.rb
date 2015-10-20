@@ -19,7 +19,7 @@ ActiveRecord::Schema.define(version: 20151020081540) do
   create_table "address_updates", force: :cascade do |t|
     t.integer "address_id"
     t.integer "visit_id"
-    t.string  "update_type", default: "modify"
+    t.string  "update_type", default: "created"
   end
 
   create_table "addresses", force: :cascade do |t|
@@ -93,7 +93,7 @@ ActiveRecord::Schema.define(version: 20151020081540) do
   create_table "person_updates", force: :cascade do |t|
     t.integer "person_id"
     t.integer "visit_id"
-    t.string  "update_type",           default: "modify"
+    t.string  "update_type",           default: "created"
     t.string  "old_canvas_response"
     t.string  "new_canvas_response"
     t.string  "old_party_affiliation"

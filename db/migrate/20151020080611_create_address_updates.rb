@@ -4,7 +4,7 @@ class CreateAddressUpdates < ActiveRecord::Migration
       t.belongs_to :address
       t.belongs_to :visit
 
-      t.string :update_type, default: "modify"
+      t.string :update_type, nullable: false, default: "created"
     end
   end
 end

@@ -4,7 +4,7 @@ class CreatePersonUpdates < ActiveRecord::Migration
       t.belongs_to :person
       t.belongs_to :visit
 
-      t.string :update_type, default: "modify"
+      t.string :update_type, nullable: false, default: "created"
 
       t.string :old_canvas_response, nullable: true
       t.string :new_canvas_response, nullable: false
