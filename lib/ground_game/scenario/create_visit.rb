@@ -15,6 +15,7 @@ module GroundGame
         visit.user = @current_user
 
         address = create_or_update_address(@address_params, visit)
+
         people = create_or_update_people_for_address(@people_params, address, visit)
 
         address = update_most_supportive_resident(address, people)
@@ -28,30 +29,42 @@ module GroundGame
 
       def create_or_update_address(address_params, visit)
         address = Address.new_or_existing_from_params(address_params)
-        address.save!
 
+        # I do not like that this is here, but I couldn't think of a better way.
+        # AddressUpdate absolutely needs to be created after initializing/fetching
+        # and updating, but before saving the address due to it needing access to
+        # old and new address attributes.
         AddressUpdate.create_for_visit_and_address(visit, address)
 
+        address.save!
         address
       end
 
       def create_or_update_people_for_address(people_params, address, visit)
         people_params.map do |person_params|
-          person = Person.new_or_existing_from_params(person_params)
-          person.address = address
-          person.save!
-
-          PersonUpdate.create_for_visit_and_person(visit, person)
-
-          person
+          create_or_update_person_for_address(person_params, address, visit)
         end
+      end
+
+      def create_or_update_person_for_address(person_params, address, visit)
+        person = Person.new_or_existing_from_params(person_params)
+        person.address = address
+
+        # I do not like that this is here, but I couldn't think of a better way.
+        # PersonUpdate absolutely needs to be created after initializing/fetching
+        # and updating, but before saving the person due to it needing access to
+        # old and new address attributes.
+        PersonUpdate.create_for_visit_and_person(visit, person)
+
+        person.save!
+        person
       end
 
       def update_most_supportive_resident(address, people)
         most_supportive_resident = person_with_highest_rated_canvas_response(people)
+
         if most_supportive_resident
-          address.best_canvas_response = most_supportive_resident.canvas_response
-          address.most_supportive_resident = most_supportive_resident
+          address.assign_most_supportive_resident(most_supportive_resident)
         elsif not address.most_supportive_resident
           address.best_canvas_response = :not_home
         end

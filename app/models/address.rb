@@ -22,6 +22,12 @@ class Address < ActiveRecord::Base
     not_home: "Not home"
   }
 
+
+  def assign_most_supportive_resident(person)
+    self.most_supportive_resident = person
+    self.best_canvas_response = person.canvas_response
+  end
+
   def self.new_or_existing_from_params(params)
     address_id = params.fetch(:id, nil)
 
