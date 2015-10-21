@@ -272,7 +272,7 @@ describe "Visit API" do
       end
 
       context "when address doesn\'t already exist" do
-        it "creates a visit as well as an address and the person" do
+        it "creates the visit, the address and the people", vcr: { cassette_name: "requests/api/visits/create_visit/creates_the_visit_the_addres_and_the_people" }  do
           authenticated_post "visits", {
             data: {
               attributes: { duration_sec: 200 }
@@ -281,13 +281,11 @@ describe "Visit API" do
               {
                 type: "addresses",
                 attributes: {
-                  latitude: 2.0,
-                  longitude: 3.0,
+                  latitude: 40.771913,
+                  longitude: -73.9673735,
+                  street_1: "5th Avenue",
                   city: "New York",
-                  state_code: "NY",
-                  zip_code: "12345",
-                  street_1: "Test street",
-                  street_2: "Additional data"
+                  state_code: "NY"
                 }
               },
               {
@@ -309,13 +307,19 @@ describe "Visit API" do
 
 
           new_address = Address.last
-          expect(new_address.latitude).to eq 2.0
-          expect(new_address.longitude).to eq 3.0
+          # basic fields
+          expect(new_address.latitude).to eq 40.771913
+          expect(new_address.longitude).to eq -73.9673735
+          expect(new_address.street_1)
           expect(new_address.city).to eq "New York"
+          expect(new_address.street_1).to eq "5th Avenue"
           expect(new_address.state_code).to eq "NY"
-          expect(new_address.zip_code).to eq "12345"
-          expect(new_address.street_1).to eq "Test street"
-          expect(new_address.street_2).to eq "Additional data"
+          # USPS verified fields
+          expect(new_address.usps_verified_street_1).to eq "5 AVENUE A"
+          expect(new_address.usps_verified_street_2).to eq ""
+          expect(new_address.usps_verified_city).to eq "NEW YORK"
+          expect(new_address.usps_verified_state).to eq "NY"
+          expect(new_address.usps_verified_zip).to eq "10009-7944"
 
           new_person = Person.last
           expect(new_person.first_name).to eq "John"

@@ -1,3 +1,5 @@
+require "ground_game/easypost_helper"
+
 class Address < ActiveRecord::Base
   has_many :people
   belongs_to :most_supportive_resident, class_name: "Person"
@@ -23,12 +25,24 @@ class Address < ActiveRecord::Base
     address_id = params.fetch(:id, nil)
 
     if address_id
-      address = Address.find(address_id)
-      address.assign_attributes(params)
+      address = existing_with_params(address_id, params)
     else
-      address = Address.new(params)
+      address = new_from_params(params)
     end
 
+    address
+  end
+
+  private
+
+  def self.new_from_params(params)
+    params = GroundGame::EasyPostHelper.extend_address_params_with_usps(params)
+    Address.new(params)
+  end
+
+  def self.existing_with_params(id, params)
+    address = Address.find(id)
+    address.assign_attributes(params)
     address
   end
 end
