@@ -56,8 +56,10 @@ describe "Visit API" do
         expect(@user.reload.total_points).to eq 5
       end
 
-      context "when address already exists" do
+      context "when address exists" do
+
         context "when person already exists" do
+
           it "creates a visit, updates the address and the person" do
             address = create(:address, id: 1)
             create(:person, id: 10, address: address, canvas_response: :unknown, party_affiliation: :unknown_affiliation)
@@ -122,7 +124,9 @@ describe "Visit API" do
             expect(modified_address.best_canvas_response).to eq modified_person.canvas_response
           end
         end
+
         context "when person does not exist" do
+
           it "creates a visit, updates the address, creates the person" do
 
             address = create(:address, id: 1)
@@ -189,6 +193,7 @@ describe "Visit API" do
         end
 
         context "when some people exist, some don't" do
+
           it "creates a visit, updates the address, creates people that don't exist, updates people that do" do
             address = create(:address, id: 1)
             create(:person, id: 10, address: address, canvas_response: :unknown, party_affiliation: :unknown_affiliation)
@@ -271,7 +276,8 @@ describe "Visit API" do
         end
       end
 
-      context "when address doesn\'t already exist" do
+      context "when address doesn\'t exist" do
+
         it "creates the visit, the address and the people", vcr: { cassette_name: "requests/api/visits/create_visit/creates_the_visit_the_addres_and_the_people" }  do
           authenticated_post "visits", {
             data: {
