@@ -23,7 +23,11 @@ gem 'sidekiq'
 
 gem 'geokit-rails'
 
-gem 'rails_12factor'
+gem 'easypost'
+
+group :development, :production do
+  gem 'rails_12factor'
+end
 
 group :development, :test do
   gem 'dotenv-rails'

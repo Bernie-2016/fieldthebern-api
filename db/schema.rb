@@ -11,10 +11,16 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151001131808) do
+ActiveRecord::Schema.define(version: 20151020215745) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "address_updates", force: :cascade do |t|
+    t.integer "address_id"
+    t.integer "visit_id"
+    t.string  "update_type", default: "created"
+  end
 
   create_table "addresses", force: :cascade do |t|
     t.float    "latitude"
@@ -25,7 +31,13 @@ ActiveRecord::Schema.define(version: 20151001131808) do
     t.string   "state_code"
     t.string   "zip_code"
     t.datetime "visited_at"
-    t.integer  "result",     default: 0
+    t.integer  "most_supportive_resident_id"
+    t.string   "usps_verified_street_1"
+    t.string   "usps_verified_street_2"
+    t.string   "usps_verified_city"
+    t.string   "usps_verified_state"
+    t.string   "usps_verified_zip"
+    t.string   "best_canvas_response",        default: "Not yet visited"
   end
 
   create_table "oauth_access_grants", force: :cascade do |t|
@@ -68,6 +80,26 @@ ActiveRecord::Schema.define(version: 20151001131808) do
 
   add_index "oauth_applications", ["uid"], name: "index_oauth_applications_on_uid", unique: true, using: :btree
 
+  create_table "people", force: :cascade do |t|
+    t.string   "first_name"
+    t.string   "last_name"
+    t.string   "canvas_response",   default: "Unknown"
+    t.string   "party_affiliation", default: "Unknown"
+    t.integer  "address_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "person_updates", force: :cascade do |t|
+    t.integer "person_id"
+    t.integer "visit_id"
+    t.string  "update_type",           default: "created"
+    t.string  "old_canvas_response"
+    t.string  "new_canvas_response"
+    t.string  "old_party_affiliation"
+    t.string  "new_party_affiliation"
+  end
+
   create_table "relationships", force: :cascade do |t|
     t.integer  "follower_id"
     t.integer  "followed_id"
@@ -79,19 +111,34 @@ ActiveRecord::Schema.define(version: 20151001131808) do
   add_index "relationships", ["follower_id", "followed_id"], name: "index_relationships_on_follower_id_and_followed_id", unique: true, using: :btree
   add_index "relationships", ["follower_id"], name: "index_relationships_on_follower_id", using: :btree
 
+  create_table "scores", force: :cascade do |t|
+    t.integer "points_for_updates", default: 0
+    t.integer "points_for_knock",   default: 0
+    t.integer "visit_id"
+  end
+
   create_table "users", force: :cascade do |t|
-    t.string "first_name"
-    t.string "last_name"
-    t.string "email"
-    t.string "encrypted_password",    limit: 128
-    t.string "confirmation_token",    limit: 128
-    t.string "remember_token",        limit: 128
-    t.string "facebook_id"
-    t.text   "facebook_access_token"
-    t.string "home_state"
+    t.string  "first_name"
+    t.string  "last_name"
+    t.string  "email"
+    t.string  "encrypted_password",    limit: 128
+    t.string  "confirmation_token",    limit: 128
+    t.string  "remember_token",        limit: 128
+    t.string  "facebook_id"
+    t.text    "facebook_access_token"
+    t.string  "home_state"
+    t.integer "total_points",                      default: 0
   end
 
   add_index "users", ["email"], name: "index_users_on_email", using: :btree
   add_index "users", ["remember_token"], name: "index_users_on_remember_token", using: :btree
+
+  create_table "visits", force: :cascade do |t|
+    t.float    "total_points"
+    t.integer  "duration_sec"
+    t.integer  "user_id",      null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
 end

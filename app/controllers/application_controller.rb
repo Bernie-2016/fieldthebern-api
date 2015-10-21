@@ -17,6 +17,14 @@ class ApplicationController < ActionController::API
     params.require(:data).fetch(:attributes, {})
   end
 
+  def record_relationships
+    params.require(:data).fetch(:relationships, {})
+  end
+
+  def included_records
+    params.fetch(:included, [])
+  end
+
   def render_validation_errors errors
     render json: {errors: errors.to_h}, status: 422
   end

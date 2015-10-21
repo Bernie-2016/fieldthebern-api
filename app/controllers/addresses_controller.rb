@@ -1,18 +1,17 @@
+require 'ground_game/scenario/match_address'
+
 class AddressesController < ApplicationController
   before_action :doorkeeper_authorize!
 
   def index
-    addresses = Address.within(index_params[:radius], origin: [index_params[:latitude], index_params[:longitude]])
-    render json: addresses
-  end
-
-  def create
-    address = Address.new(create_params)
-
-    if address.save
-      render json: address
+    if params[:radius]
+      addresses = Address.within(index_params[:radius], origin: [index_params[:latitude], index_params[:longitude]])
+      render json: addresses
     else
-      render_validation_errors address.errors
+      success, status_code, message, matched_address = GroundGame::Scenario::MatchAddress.new(search_params).call
+
+      render json: matched_address, include: ['people'], status: status_code if success
+      render json: { error: message }, status: status_code || 400 if not success
     end
   end
 
@@ -23,8 +22,8 @@ class AddressesController < ApplicationController
     { latitude: latitude, longitude: longitude, radius: radius }
   end
 
-  def create_params
-    params.permit(:latitude, :longitude, :street_1, :street_2, :city, :state_code, :zip_code, :visited_at, :result)
+  def search_params
+    params.permit(:latitude, :longitude, :street_1, :street_2, :city, :state_code, :zip_code)
   end
 
   def update_params

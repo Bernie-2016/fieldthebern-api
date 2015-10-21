@@ -8,7 +8,9 @@ Rails.application.routes.draw do
     get 'ping', to: 'ping#index'
 
     resources :users, only: [:create]
-    resources :addresses, only: [:index, :create]
+    resources :addresses, only: [:index]
+
+    resources :visits, only: [:create]
   end
 
 end
