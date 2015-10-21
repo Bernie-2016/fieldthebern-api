@@ -11,6 +11,7 @@ class Address < ActiveRecord::Base
                    :lng_column_name => :longitude
 
   enum best_canvas_response: {
+    asked_to_leave: "Asked to leave",
     unknown: "Unknown",
     strongly_for: "Strongly for",
     leaning_for: "Leaning for",

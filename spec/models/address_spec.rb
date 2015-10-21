@@ -41,5 +41,8 @@ describe Address do
 
     address.strongly_against!
     expect(address.strongly_against?).to be true
+
+    address.asked_to_leave!
+    expect(address.asked_to_leave?).to be true
   end
 end

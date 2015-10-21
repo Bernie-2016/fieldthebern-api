@@ -24,6 +24,9 @@ describe Person do
 
     person.strongly_against!
     expect(person.strongly_against?).to be true
+
+    person.asked_to_leave!
+    expect(person.asked_to_leave?).to be true
   end
 
   it "has a working party_affiliation enum" do
@@ -67,6 +70,9 @@ describe Person do
 
       person.unknown!
       expect(person.canvas_response_rating).to eq 2
+
+      person.asked_to_leave!
+      expect(person.canvas_response_rating).to eq -1
     end
   end
 end

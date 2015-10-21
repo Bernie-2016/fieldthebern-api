@@ -7,7 +7,8 @@ class Person < ActiveRecord::Base
     leaning_for: "Leaning for",
     undecided: "Undecided",
     leaning_against: "Leaning against",
-    strongly_against: "Strongly against"
+    strongly_against: "Strongly against",
+    asked_to_leave: "Asked to leave"
   }
 
   enum party_affiliation: {
@@ -19,7 +20,9 @@ class Person < ActiveRecord::Base
   }
 
   def canvas_response_rating
-    if strongly_against?
+    if asked_to_leave?
+      return -1
+    elsif strongly_against?
       return 0
     elsif leaning_against?
       return 1
