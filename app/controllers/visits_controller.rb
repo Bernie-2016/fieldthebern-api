@@ -6,12 +6,8 @@ class VisitsController < ApplicationController
 
   def create
     visit = GroundGame::Scenario::CreateVisit.new(visit_params, address, people, current_user).call
-    if visit.save
-      GroundGame::Scenario::UpdateUsersTotalScore.new(visit.user).call
-      render json: visit, include: ['score']
-    else
-      render_validation_errors visit.errors
-    end
+    GroundGame::Scenario::UpdateUsersTotalScore.new(visit.user).call
+    render json: visit, include: ['score']
   end
 
   private

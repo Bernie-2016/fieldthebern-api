@@ -11,18 +11,22 @@ module GroundGame
       end
 
       def call
-        visit = Visit.new(@visit_params)
-        visit.user = @current_user
+        Visit.transaction do
+          visit = Visit.new(@visit_params)
+          visit.user = @current_user
 
-        address = create_or_update_address(@address_params, visit)
+          address = create_or_update_address(@address_params, visit)
 
-        people = create_or_update_people_for_address(@people_params, address, visit)
+          people = create_or_update_people_for_address(@people_params, address, visit)
 
-        address = update_most_supportive_resident(address, people)
-        address.save!
+          address = update_most_supportive_resident(address, people)
+          address.save!
 
-        visit.total_points = CreateScore.new(visit).call.total_points
-        visit
+          visit.total_points = CreateScore.new(visit).call.total_points
+          visit.save!
+
+          visit
+        end
       end
 
       private

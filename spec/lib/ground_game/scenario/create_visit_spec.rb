@@ -270,6 +270,84 @@ module GroundGame
             expect(visit.people.first.first_name).to eq "John"
           end
         end
+
+        context "when it fails" do
+
+          it "cleans up everything when address update fails" do
+            create(:address, id: 1, latitude: 1, longitude: 2)
+            visit_params = { duration_sec: 150 }
+
+            address_params = { id: 1, latitude: 1, longitude: 3, best_canvas_response: "invalid_value" }
+            people_params = []
+
+            expect { CreateVisit.new(visit_params, address_params, people_params, user).call }.to raise_error ArgumentError
+            expect(Visit.count).to eq 0
+            expect(Address.count).to eq 1
+            expect(Address.first.longitude).to eq 2
+            expect(Person.count).to eq 0
+            expect(Score.count).to eq 0
+          end
+
+          it "cleans up everything when address creation fails", vcr: { cassette_name: "lib/ground_game/scenario/create_visit/cleans_up_everything_when_address_update_fails" } do
+            visit_params = { duration_sec: 150 }
+            address_params = { best_canvas_response: "invalid_value" }
+            people_params = []
+            expect { CreateVisit.new(visit_params, address_params, people_params, user).call }.to raise_error ArgumentError
+            expect(Visit.count).to eq 0
+            expect(Address.count).to eq 0
+            expect(Person.count).to eq 0
+            expect(Score.count).to eq 0
+          end
+
+          it "cleans up everything when person update fails" do
+            address = create(:address, id: 1, latitude: 1, longitude: 2)
+            create(:person, id: 2, first_name: "John", last_name: "Doe", address: address)
+
+            visit_params = { duration_sec: 150 }
+            address_params = { id: 1, latitude: 1, longitude: 3 }
+            people_params = [{ id: 2, first_name: "Jake", last_name: "Doe", canvas_response: "invalid_value" }]
+
+            expect { CreateVisit.new(visit_params, address_params, people_params, user).call }.to raise_error ArgumentError
+
+            expect(Visit.count).to eq 0
+
+            expect(Address.count).to eq 1
+
+            address = Address.last
+            expect(address.longitude).to eq 2
+
+            expect(Person.count).to eq 1
+            expect(Person.last.first_name).to eq "John"
+
+            expect(Score.count).to eq 0
+          end
+
+          it "cleans up everything when person creation fails" do
+            address = create(:address, id: 1, latitude: 1, longitude: 2)
+            create(:person, id: 2, first_name: "John", last_name: "Doe", address: address)
+
+            visit_params = { duration_sec: 150 }
+            address_params = { id: 1, latitude: 1, longitude: 3 }
+            people_params = [
+              { id: 2, first_name: "Jake", last_name: "Doe" },
+              { first_name: "John", last_name: "Smith", canvas_response: "invalid_value" }
+            ]
+
+            expect { CreateVisit.new(visit_params, address_params, people_params, user).call }.to raise_error ArgumentError
+
+            expect(Visit.count).to eq 0
+
+            expect(Address.count).to eq 1
+
+            address = Address.last
+            expect(address.longitude).to eq 2
+
+            expect(Person.count).to eq 1
+            expect(Person.last.first_name).to eq "John"
+
+            expect(Score.count).to eq 0
+          end
+        end
       end
     end
   end
