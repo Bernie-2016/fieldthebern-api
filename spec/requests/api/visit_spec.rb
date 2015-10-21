@@ -11,10 +11,10 @@ describe "Visit API" do
       let(:token) { authenticate(email: "test-user@mail.com", password: "password") }
 
       before do
-        create(:user, id: 11, email: "test-user@mail.com", password: "password")
+        @user = create(:user, id: 11, email: "test-user@mail.com", password: "password")
       end
 
-      it "should return the created visit" do
+      it "should return the created visit, with score included" do
         create(:address, id: 1)
 
         authenticated_post "visits", {
@@ -31,6 +31,29 @@ describe "Visit API" do
 
         expect(visit_json.duration_sec).to eq 200
         expect(visit_json.total_points).not_to be_nil
+
+        included_json = json.included
+        scores_json = included_json.select { |include| include.type == "scores" }
+        expect(scores_json.length).to eq 1
+        score_json = scores_json.first.attributes
+        expect(score_json.points_for_updates).to eq 0
+        expect(score_json.points_for_knock).to eq 5
+      end
+
+      it "should update the user's total score" do
+        create(:address, id: 1)
+
+        expect(@user.total_points).to eq 0
+
+        authenticated_post "visits", {
+          data: {
+            attributes: { duration_sec: 200 },
+            relationships: { address: { data: { id: 1, type: "addresses" } } }
+          },
+          included: [ { id: 1, type: "addresses" } ]
+        }, token
+
+        expect(@user.reload.total_points).to eq 5
       end
 
       context "when address already exists" do

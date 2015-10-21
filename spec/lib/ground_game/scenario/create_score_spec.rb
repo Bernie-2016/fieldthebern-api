@@ -19,6 +19,7 @@ module GroundGame
           score = CreateScore.new(visit).call
           expect(score.total_points).to eq 5
         end
+
         it "gives 10 points per updated or added person" do
           visit_with_1_person = build(:visit, people_count: 1)
           score = CreateScore.new(visit_with_1_person).call
