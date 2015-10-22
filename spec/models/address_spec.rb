@@ -46,6 +46,18 @@ describe Address do
     expect(address.asked_to_leave?).to be true
   end
 
+  describe "#assign_most_supportive_resident" do
+    it "assigns person as most supportive resident and persons canvas_response as best_canvas_response" do
+      address = create(:address)
+      person = create(:person, canvas_response: :strongly_for)
+
+      address.assign_most_supportive_resident(person)
+
+      expect(address.most_supportive_resident).to eq person
+      expect(address.best_canvas_response).to eq person.canvas_response
+    end
+  end
+
   describe ".new_or_existing_from_params" do
     it "initializes a new address if the params do not contain an id", vcr: { cassette_name: "models/address/creates_a_new_address_if_the_params_do_not_contain_an_id" } do
       expect(Address.count).to eq 0
