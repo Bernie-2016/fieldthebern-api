@@ -75,4 +75,29 @@ describe Person do
       expect(person.canvas_response_rating).to eq -1
     end
   end
+
+  describe ".new_or_existing_from_params" do
+    it "initializes a new person if the params do not contain an id" do
+      expect(Person.count).to eq 0
+      params = {
+        first_name: "John",
+        last_name: "Doe"
+      }
+      person = Person.new_or_existing_from_params(params)
+      expect(person.persisted?).to be false
+    end
+    it "fetches and updates (without save) an existing person if the params do contain an id" do
+      create(:person, id: 1, first_name: "Jake", last_name: "Smith")
+      params = {
+        id: 1,
+        first_name: "John",
+        last_name: "Doe"
+      }
+      person = Person.new_or_existing_from_params(params)
+      expect(Person.count).to eq 1
+      expect(person.changed?).to be true
+      expect(person.first_name).to eq "John"
+      expect(person.last_name).to eq "Doe"
+    end
+  end
 end
