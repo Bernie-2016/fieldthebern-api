@@ -137,6 +137,8 @@ GEM
       addressable
       faraday
       multi_json
+    leaderboard (3.10.0)
+      redis
     loofah (2.0.3)
       nokogiri (>= 1.5.9)
     mail (2.6.3)
@@ -271,6 +273,7 @@ DEPENDENCIES
   geokit-rails
   hashie
   koala
+  leaderboard
   oauth2
   pg
   pry
