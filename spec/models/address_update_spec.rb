@@ -25,7 +25,7 @@ describe AddressUpdate do
     expect(address_update.created?).to be true
   end
 
-  context "#create_for_visit_and_address" do
+  context ".create_for_visit_and_address" do
     it "creates an update with 'created' type if address is a new record" do
       visit = create(:visit)
       address = build(:address)

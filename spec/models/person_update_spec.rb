@@ -39,7 +39,7 @@ describe PersonUpdate do
     expect(person_update.created?).to be true
   end
 
-  context "#create_for_visit_and_person" do
+  context ".create_for_visit_and_person" do
     it "creates an update with 'created' type if person is a new record" do
       visit = create(:visit)
       person = build(:person)

@@ -45,4 +45,29 @@ describe Address do
     address.asked_to_leave!
     expect(address.asked_to_leave?).to be true
   end
+
+  context ".new_or_existing_from_params" do
+    it "initializes a new address if the params do not contain an id", vcr: { cassette_name: "models/address/creates_a_new_address_if_the_params_do_not_contain_an_id" } do
+      expect(Address.count).to eq 0
+      params = {
+        latitude: 1,
+        longitude: 1
+      }
+      address = Address.new_or_existing_from_params(params)
+      expect(address.persisted?).to be false
+    end
+    it "fetches and updates (without save) an existing address if the params do contain an id" do
+      create(:address, id: 1, latitude: 0, longitude: 0)
+      params = {
+        id: 1,
+        latitude: 1,
+        longitude: 1
+      }
+      address = Address.new_or_existing_from_params(params)
+      expect(Address.count).to eq 1
+      expect(address.changed?).to be true
+      expect(address.latitude).to eq 1
+      expect(address.longitude).to eq 1
+    end
+  end
 end
