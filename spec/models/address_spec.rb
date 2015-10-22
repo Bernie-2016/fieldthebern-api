@@ -46,7 +46,7 @@ describe Address do
     expect(address.asked_to_leave?).to be true
   end
 
-  context ".new_or_existing_from_params" do
+  describe ".new_or_existing_from_params" do
     it "initializes a new address if the params do not contain an id", vcr: { cassette_name: "models/address/creates_a_new_address_if_the_params_do_not_contain_an_id" } do
       expect(Address.count).to eq 0
       params = {
