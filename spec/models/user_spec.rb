@@ -75,4 +75,10 @@ describe User do
 
     expect(user.reload.total_points_this_week).to eq 50
   end
+
+  it { should have_attached_file(:photo) }
+  it { should validate_attachment_content_type(:photo)
+      .allowing('image/png', 'image/gif')
+      .rejecting('text/plain', 'text/xml') }
+
 end

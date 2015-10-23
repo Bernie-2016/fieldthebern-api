@@ -130,6 +130,10 @@ ActiveRecord::Schema.define(version: 20151023193646) do
     t.integer "total_points",                      default: 0
     t.string  "state_code"
     t.integer "visits_count",                      default: 0
+    t.string   "photo_file_name"
+    t.string   "photo_content_type"
+    t.integer  "photo_file_size"
+    t.datetime "photo_updated_at"
   end
 
   add_index "users", ["email"], name: "index_users_on_email", using: :btree
