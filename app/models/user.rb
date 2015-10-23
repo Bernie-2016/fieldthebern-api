@@ -31,4 +31,8 @@ class User < ActiveRecord::Base
   def following?(other_user)
     following.include?(other_user)
   end
+
+  def total_points_this_week
+    return visits.this_week.sum(:total_points)
+  end
 end

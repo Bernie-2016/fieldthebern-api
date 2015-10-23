@@ -67,4 +67,12 @@ describe User do
     user.unfollow(other_user)
     expect(user.following? other_user).to be false
   end
+
+  it "has a working 'total_points_this_week'" do
+    user = create(:user)
+    visits_this_week = create_list(:visit, 5, user: user, total_points: 10, created_at: Date.today)
+    visits_last_week = create_list(:visit, 5, user: user, total_points: 1, created_at: Date.today - 8.days)
+
+    expect(user.reload.total_points_this_week).to eq 50
+  end
 end
