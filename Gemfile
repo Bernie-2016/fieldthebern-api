@@ -25,6 +25,8 @@ gem 'geokit-rails'
 
 gem 'easypost'
 
+gem 'unicorn'
+
 group :development, :production do
   gem 'rails_12factor'
 end
