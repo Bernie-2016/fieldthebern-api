@@ -7,7 +7,7 @@ module GroundGame
       end
 
       def call
-        @friends_leaderboard.rank_user(@user)
+        friends_leaderboard.rank_user(@user)
       end
 
       private
