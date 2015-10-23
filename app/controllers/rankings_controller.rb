@@ -16,11 +16,5 @@ class RankingsController < ApplicationController
 
     render json: {data: rankings}
   end
-
-  # def index_params
-  #   latitude = params.require(:latitude)
-  #   longitude = params.require(:longitude)
-  #   radius = params.require(:radius)
-  #   { latitude: latitude, longitude: longitude, radius: radius }
-  # end
+  
 end
