@@ -1,7 +1,6 @@
 require 'rails_helper'
 
 describe UserSerializer, :type => :serializer do
-
   context 'individual resource representation' do
     let(:resource) { build(:user) }
 
@@ -10,7 +9,7 @@ describe UserSerializer, :type => :serializer do
 
     context 'root' do
       subject do
-        JSON.parse(serialization.to_json)["data"]
+        JSON.parse(serialization.to_json)['data']
       end
 
       it 'has an attributes object' do
@@ -27,11 +26,9 @@ describe UserSerializer, :type => :serializer do
     end
 
     context 'attributes' do
-
       subject do
-        JSON.parse(serialization.to_json)["data"]['attributes']
+        JSON.parse(serialization.to_json)['data']['attributes']
       end
-
 
       it 'has a first_name' do
         expect(subject['first_name']).to eql(resource.first_name)
@@ -45,6 +42,13 @@ describe UserSerializer, :type => :serializer do
         expect(subject['email']).to eql(resource.email)
       end
 
+      it 'has a thumbnail photo url' do
+        expect(subject['photo_thumb_url']).to eql(resource.photo.url(:thumb))
+      end
+
+      it 'has a large photo url' do
+        expect(subject['photo_large_url']).to eql(resource.photo.url(:large))
+      end
     end
 
     context "included" do

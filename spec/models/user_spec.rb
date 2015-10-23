@@ -63,4 +63,9 @@ describe User do
     user.unfollow(other_user)
     expect(user.following? other_user).to be false
   end
+
+  it { should have_attached_file(:photo) }
+  it { should validate_attachment_content_type(:photo)
+      .allowing('image/png', 'image/gif')
+      .rejecting('text/plain', 'text/xml') }
 end

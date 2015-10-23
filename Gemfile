@@ -25,6 +25,11 @@ gem 'geokit-rails'
 
 gem 'easypost'
 
+# paperclip master currently doesn't work with new version of AWS SDK
+gem 'paperclip', :git=> 'https://github.com/thoughtbot/paperclip', :ref => '523bd46c768226893f23889079a7aa9c73b57d68'
+
+gem 'aws-sdk'
+
 gem 'unicorn'
 
 group :development, :production do
@@ -40,24 +45,13 @@ group :development, :test do
   gem 'pry-nav'
 end
 
+group :development do
+  gem 'faker'
+end
+
 group :test do
   gem 'factory_girl_rails'
   gem 'oauth2'
   gem 'vcr'
   gem 'webmock'
 end
-
-# To use ActiveModel has_secure_password
-# gem 'bcrypt', '~> 3.1.7'
-
-# To use Jbuilder templates for JSON
-# gem 'jbuilder'
-
-# Use unicorn as the app server
-# gem 'unicorn'
-
-# Deploy with Capistrano
-# gem 'capistrano', :group => :development
-
-# To use debugger
-# gem 'ruby-debug19', :require => 'ruby-debug'

@@ -4,6 +4,7 @@ require File.expand_path("../../config/environment", __FILE__)
 
 require 'rspec/rails'
 require 'sidekiq/testing'
+require 'paperclip/matchers'
 
 # require everything in spec/support/*
 Dir[Rails.root.join("spec/support/**/*.rb")].each { |f| require f }
@@ -77,6 +78,11 @@ RSpec.configure do |config|
   config.order = :random
 
   config.include FactoryGirl::Syntax::Methods
+  config.include Paperclip::Shoulda::Matchers
+
+  config.after(:suite) do
+    FileUtils.rm_rf(Dir["#{Rails.root}/spec/test_files/"])
+  end
 
   def host
     "http://api.lvh.me:3000"
