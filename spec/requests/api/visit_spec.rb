@@ -56,6 +56,9 @@ describe "Visit API" do
         expect(@user.reload.total_points).to eq 5
       end
 
+      it "should update leaderboards"
+      it "should update friends leaderboards"
+
       context "when address exists" do
 
         context "when person already exists" do
