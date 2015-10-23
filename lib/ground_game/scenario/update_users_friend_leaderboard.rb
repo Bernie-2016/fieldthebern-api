@@ -3,13 +3,11 @@ module GroundGame
     class UpdateUsersFriendLeaderboard
       def initialize(friend, user)
         @user = user
-        user_friends_leaderboard = "user_#{friend.id}_friends"
-        @friends = Leaderboard.new(user_friends_leaderboard, DEFAULT_OPTIONS, redis_options)
-        @user_id_string = user.id.to_s
+        @friend = friend
       end
 
       def call
-        @friends.rank_member(@user_id_string, user_score, user_data_json)
+        @friends_leaderboard.rank_member(user_id_string, user_score, user_data_json)
       end
 
       private
@@ -24,8 +22,20 @@ module GroundGame
         }.to_json
       end
 
+      def user_id_string
+        @user_id_string ||= @user.id.to_s
+      end
+
+      def friends_leaderboard_id
+        @friends_leaderboard_id ||= "user_#{@friend.id}_friends"
+      end
+
       def redis_options
         @redis_options ||= {redis_connection: $redis}
+      end
+
+      def friends_leaderboard
+        @friends_leaderboard ||= Leaderboard.new(friends_leaderboard_id, DEFAULT_OPTIONS, redis_options)
       end
 
       DEFAULT_OPTIONS = {
