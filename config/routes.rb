@@ -11,6 +11,8 @@ Rails.application.routes.draw do
     resources :addresses, only: [:index]
 
     resources :visits, only: [:create]
+
+    resources :rankings, only: [:index]
   end
 
 end

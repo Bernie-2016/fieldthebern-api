@@ -10,10 +10,8 @@ module GroundGame
       end
 
       def call
-        binding.pry
         everyone.rank_member(@user_id_string, user_score, user_data_json)
       end
-
 
       private
 
