@@ -52,6 +52,7 @@ class TokensController < Doorkeeper::TokensController
   end
 
   def update_users_leaderboards(user)
+    return unless user
     UpdateUsersLeaderboardsWorker.perform_async(user.id)
   end
 
