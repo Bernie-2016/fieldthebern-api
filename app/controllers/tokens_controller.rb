@@ -15,6 +15,7 @@ class TokensController < Doorkeeper::TokensController
       end
 
       AddFacebookFriendsWorker.perform_async(user.id)
+      AddFacebookProfilePicture.perform_async(user.id)
 
       doorkeeper_access_token = Doorkeeper::AccessToken.create!(application_id: nil, resource_owner_id: user.id, expires_in: 7200)
 

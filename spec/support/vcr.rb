@@ -6,6 +6,8 @@ VCR.configure do |c|
   # Uncomment for debugging VCR
   # c.debug_logger = File.open('log/test.log', 'w')
 
+  c.allow_http_connections_when_no_cassette = true
+
   c.ignore_request do |request|
     URI(request.uri).host == '127.0.0.1'
   end
