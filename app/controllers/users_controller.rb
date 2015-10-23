@@ -12,7 +12,7 @@ class UsersController < ApplicationController
   private
 
   def create_params
-    record_attributes.permit(:email, :password, :first_name, :last_name)
+    record_attributes.permit(:email, :password, :first_name, :last_name, :state_code)
   end
 
   def render_validation_errors errors

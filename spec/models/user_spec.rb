@@ -25,6 +25,10 @@ describe User do
     expect(build(:user, last_name: nil)).to be_valid
   end
 
+  it "is valid without a state_code" do
+    expect(build(:user, state_code: nil)).to be_valid
+  end
+
   it "can have followers" do
     user = create(:user)
     other_user_1 = create(:user)
