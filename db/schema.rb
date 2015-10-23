@@ -37,7 +37,7 @@ ActiveRecord::Schema.define(version: 20151023075327) do
     t.string   "usps_verified_city"
     t.string   "usps_verified_state"
     t.string   "usps_verified_zip"
-    t.string   "best_canvas_response",        default: "Not yet home"
+    t.string   "best_canvas_response",        default: "Not yet visited"
   end
 
   create_table "oauth_access_grants", force: :cascade do |t|
