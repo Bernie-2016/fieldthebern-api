@@ -1,6 +1,6 @@
 class User < ActiveRecord::Base
-  DEFAULT_LARGE_PHOTO_URL = 'http://placehold.it/500x500'
-  DEFAULT_THUMB_PHOTO_URL = 'http://placehold.it/150x150'
+  DEFAULT_PHOTO_LARGE_URL = 'http://placehold.it/500x500'
+  DEFAULT_PHOTO_THUMB_URL = 'http://placehold.it/150x150'
 
   include Clearance::User
   attr_accessor :base_64_photo_data
