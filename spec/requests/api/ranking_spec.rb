@@ -14,25 +14,25 @@ describe "Rankings API" do
       before do
         user = create(:user, email: "test-user@mail.com", password: "password", state_code: "NY")
 
-        everyone = Leaderboard.new("everyone", Leaderboard::DEFAULT_OPTIONS, $leaderboard_redis_options)
+        everyone = ScoreLeaderboard.for_everyone
         3.times do |n|
           everyone.rank_member(n.to_s, n)
         end
         everyone.rank_member(user.id.to_s, user.id)
 
-        state_ny = Leaderboard.new("NY", Leaderboard::DEFAULT_OPTIONS, $leaderboard_redis_options)
+        state_ny = ScoreLeaderboard.for_state("NY")
         2.times do |n|
           state_ny.rank_member(n.to_s, n)
         end
         state_ny.rank_member(user.id.to_s, user.id)
 
-        state_other = Leaderboard.new("OT", Leaderboard::DEFAULT_OPTIONS, $leaderboard_redis_options)
+        state_other = ScoreLeaderboard.for_state("OT")
         4.times do |n|
           state_other.rank_member(n.to_s, n)
         end
         state_other.rank_member(user.id.to_s, user.id)
 
-        friends = Leaderboard.new("user_#{user.id}_friends", Leaderboard::DEFAULT_OPTIONS, $leaderboard_redis_options)
+        friends = ScoreLeaderboard.for_friend_list_of_user(user)
         6.times do |n|
           friends.rank_member(n.to_s, n)
         end
