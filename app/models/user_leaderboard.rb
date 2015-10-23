@@ -1,4 +1,4 @@
-class ScoreLeaderboard < Leaderboard
+class UserLeaderboard < Leaderboard
 
   def self.for_everyone
     self.leaderboard(board_id: "everyone")

@@ -13,7 +13,7 @@ module GroundGame
       private
 
       def friends_leaderboard
-        @friends_leaderboard ||= ScoreLeaderboard.for_friend_list_of_user(@friend)
+        @friends_leaderboard ||= UserLeaderboard.for_friend_list_of_user(@friend)
       end
     end
   end

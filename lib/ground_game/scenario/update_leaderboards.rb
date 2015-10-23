@@ -14,15 +14,15 @@ module GroundGame
       private
 
       def everyone_leaderboard
-        @everyone_leaderboard ||= ScoreLeaderboard.for_everyone
+        @everyone_leaderboard ||= UserLeaderboard.for_everyone
       end
 
       def friends_leaderboard
-        @friends_leaderboard ||= ScoreLeaderboard.for_friend_list_of_user(@user)
+        @friends_leaderboard ||= UserLeaderboard.for_friend_list_of_user(@user)
       end
 
       def state_leaderboard
-        @state_leaderboard ||= ScoreLeaderboard.for_state(@user.state_code)
+        @state_leaderboard ||= UserLeaderboard.for_state(@user.state_code)
       end
     end
   end
