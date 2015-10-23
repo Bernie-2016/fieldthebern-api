@@ -12,6 +12,14 @@ class User < ActiveRecord::Base
   has_many :following, through: :active_relationships, source: :followed
   has_many :followers, through: :passive_relationships, source: :follower
 
+  has_attached_file :photo, styles: {
+    thumb: '150x150>',
+    large: '500x500>'
+  }
+
+  validates_attachment_content_type :photo,
+                                    content_type: %r{^image\/(png|gif|jpeg)}
+
   def self.friendly_token
     # Borrowed from Devise.friendly_token
     SecureRandom.urlsafe_base64(15).tr('lIO0', 'sxyz').first(12)
