@@ -7,7 +7,7 @@ Rails.application.routes.draw do
   constraints subdomain: 'api' do
     get 'ping', to: 'ping#index'
 
-    resources :users, only: [:create, :get]
+    resources :users, only: [:create]
     resources :addresses, only: [:index]
 
     resources :visits, only: [:create]
