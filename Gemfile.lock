@@ -118,6 +118,8 @@ GEM
     factory_girl_rails (4.5.0)
       factory_girl (~> 4.5.0)
       railties (>= 3.0.0)
+    fakeredis (0.5.0)
+      redis (~> 3.0)
     faraday (0.9.1)
       multipart-post (>= 1.2, < 3)
     geokit (1.10.0)
@@ -270,6 +272,7 @@ DEPENDENCIES
   dotenv-rails
   easypost
   factory_girl_rails
+  fakeredis
   geokit-rails
   hashie
   koala
@@ -288,3 +291,6 @@ DEPENDENCIES
   spring
   vcr
   webmock
+
+BUNDLED WITH
+   1.10.6

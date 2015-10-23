@@ -45,6 +45,7 @@ group :test do
   gem 'oauth2'
   gem 'vcr'
   gem 'webmock'
+  gem 'fakeredis', :require => "fakeredis/rspec"
 end
 
 # To use ActiveModel has_secure_password
