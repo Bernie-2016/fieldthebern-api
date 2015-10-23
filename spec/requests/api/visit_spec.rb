@@ -11,7 +11,7 @@ describe "Visit API" do
       let(:token) { authenticate(email: "test-user@mail.com", password: "password") }
 
       before do
-        @user = create(:user, id: 11, email: "test-user@mail.com", password: "password")
+        @user = create(:user, id: 11, email: "test-user@mail.com", password: "password", state_code: "NY")
       end
 
       it "should return the created visit, with score included" do
@@ -56,8 +56,62 @@ describe "Visit API" do
         expect(@user.reload.total_points).to eq 5
       end
 
-      it "should update leaderboards"
-      it "should update friends leaderboards"
+      it "should update the 'everyone' leaderboard" do
+        create(:address, id: 1)
+
+        expect(@user.total_points).to eq 0
+
+        authenticated_post "visits", {
+          data: {
+            attributes: { duration_sec: 200 },
+            relationships: { address: { data: { id: 1, type: "addresses" } } }
+          },
+          included: [ { id: 1, type: "addresses" } ]
+        }, token
+
+        rankings = Ranking.for_everyone(id: @user.id)
+        expect(rankings.length).to eq 1
+        expect(rankings.first[:member]).to eq "11" # user id
+        expect(rankings.first[:score]).to eq 5.0 # user score
+      end
+
+      it "should update the 'state' leaderboard" do
+        create(:address, id: 1)
+
+        expect(@user.total_points).to eq 0
+
+        authenticated_post "visits", {
+          data: {
+            attributes: { duration_sec: 200 },
+            relationships: { address: { data: { id: 1, type: "addresses" } } }
+          },
+          included: [ { id: 1, type: "addresses" } ]
+        }, token
+
+        rankings = Ranking.for_state(id: @user.id, state_code: "NY")
+        expect(rankings.length).to eq 1
+        expect(rankings.first[:member]).to eq "11" # user id
+        expect(rankings.first[:score]).to eq 5.0 # user score
+      end
+
+      it "should update the 'friends' leaderboard" do
+        create(:address, id: 1)
+
+        expect(@user.total_points).to eq 0
+
+        authenticated_post "visits", {
+          data: {
+            attributes: { duration_sec: 200 },
+            relationships: { address: { data: { id: 1, type: "addresses" } } }
+          },
+          included: [ { id: 1, type: "addresses" } ]
+        }, token
+
+        rankings = Ranking.for_user_in_users_friend_list(user: @user)
+        expect(rankings.length).to eq 1
+        expect(rankings.first[:member]).to eq "11" # user id
+        expect(rankings.first[:score]).to eq 5.0 # user score
+      end
 
       context "when address exists" do
 
