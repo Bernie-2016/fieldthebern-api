@@ -7,7 +7,7 @@ module GroundGame
     describe UpdateFriendsLeaderboards do
 
       describe "#call" do
-        it "tests for something (remove when we have actual tests)"
+        it "updates each of the user's friend's 'friends' leaderboard"
       end
     end
   end
