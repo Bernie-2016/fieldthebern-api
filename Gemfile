@@ -27,6 +27,8 @@ gem 'easypost'
 
 gem 'leaderboard'
 
+gem 'unicorn'
+
 group :development, :production do
   gem 'rails_12factor'
 end
