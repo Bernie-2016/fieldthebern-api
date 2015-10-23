@@ -3,7 +3,7 @@ module GroundGame
     class UpdateLeaderboards
       def initialize(user)
         @user = user
-        # @state = Leaderboard.new(user.state_code, Leaderboard::DEFAULT_OPTIONS, redis_options)
+        # @state = Leaderboard.new(user.state_code, DEFAULT_OPTIONS, redis_options)
         user_friends_leaderboard = "user_#{user.id}_friends"
         @friends = Leaderboard.new(user_friends_leaderboard, DEFAULT_OPTIONS, redis_options)
         @user_id_string = user.id.to_s
@@ -11,6 +11,7 @@ module GroundGame
 
       def call
         everyone.rank_member(@user_id_string, user_score, user_data_json)
+        @friends.rank_member(@user_id_string, user_score, user_data_json)
       end
 
       private
