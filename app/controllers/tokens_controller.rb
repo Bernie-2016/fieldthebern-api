@@ -25,6 +25,8 @@ class TokensController < Doorkeeper::TokensController
         user_id: user.id.to_s,
       }
 
+      update_users_leaderboards(user)
+
       render json: token_data.to_json, status: :ok
     else
       response = strategy.authorize
@@ -33,6 +35,7 @@ class TokensController < Doorkeeper::TokensController
       if user_id
         user = User.find(user_id)
       end
+      update_users_leaderboards(user)
       self.headers.merge! response.headers
       self.response_body = body.to_json
       self.status = response.status
@@ -41,8 +44,14 @@ class TokensController < Doorkeeper::TokensController
     handle_token_exception e
   end
 
+  private
+
   def facebook_oauth
     @facebook_oauth ||= Koala::Facebook::OAuth.new(ENV["FACEBOOK_APP_ID"], ENV["FACEBOOK_APP_SECRET"], ENV["FACEBOOK_REDIRECT_URL"])
+  end
+
+  def update_users_leaderboards(user)
+    UpdateUsersLeaderboardsWorker.perform_async(user.id)
   end
 
 end

@@ -9,6 +9,15 @@ class UsersController < ApplicationController
     end
   end
 
+  def show
+    user = User.find(params[:id])
+    render json: user
+  end
+
+  def me
+    render json: current_user
+  end
+
   private
 
   def create_params
