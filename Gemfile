@@ -25,6 +25,9 @@ gem 'geokit-rails'
 
 gem 'easypost'
 
+gem 'paperclip'
+gem 'aws-sdk'
+
 group :development, :production do
   gem 'rails_12factor'
 end
