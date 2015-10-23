@@ -36,9 +36,21 @@ class User < ActiveRecord::Base
     return visits.this_week.sum(:total_points)
   end
 
+  def full_name
+    "#{first_name} #{last_name}"
+  end
+
+  def ranking_name
+    if !full_name.strip.empty?
+      full_name
+    else
+      email[/[^@]+/]
+    end
+  end
+
   def ranking_data_json
     return {
-      name: first_name
+      name: ranking_name
     }.to_json
   end
 end

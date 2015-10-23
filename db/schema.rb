@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151023075327) do
+ActiveRecord::Schema.define(version: 20151023193646) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -37,7 +37,7 @@ ActiveRecord::Schema.define(version: 20151023075327) do
     t.string   "usps_verified_city"
     t.string   "usps_verified_state"
     t.string   "usps_verified_zip"
-    t.string   "best_canvas_response",        default: "Not yet visited"
+    t.string   "best_canvas_response",        default: "Not yet home"
   end
 
   create_table "oauth_access_grants", force: :cascade do |t|
@@ -129,6 +129,7 @@ ActiveRecord::Schema.define(version: 20151023075327) do
     t.string  "home_state"
     t.integer "total_points",                      default: 0
     t.string  "state_code"
+    t.integer "visits_count",                      default: 0
   end
 
   add_index "users", ["email"], name: "index_users_on_email", using: :btree
