@@ -1,4 +1,4 @@
-class ScoreLeaderboard
+class ScoreLeaderboard < Leaderboard
 
   def self.for_everyone
     self.leaderboard(board_id: "everyone")
@@ -13,7 +13,11 @@ class ScoreLeaderboard
   end
 
   def self.leaderboard(board_id:)
-    Leaderboard.new(board_id, LEADERBOARD_OPTIONS, REDIS_OPTIONS)
+    new(board_id, LEADERBOARD_OPTIONS, REDIS_OPTIONS)
+  end
+
+  def rank_user(user)
+    rank_member(user.id.to_s, user.total_points_this_week, user.ranking_data_json)
   end
 
   private

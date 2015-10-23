@@ -6,26 +6,12 @@ module GroundGame
       end
 
       def call
-        everyone_leaderboard.rank_member(user_id_string, user_score, user_data_json)
-        friends_leaderboard.rank_member(user_id_string, user_score, user_data_json)
-        state_leaderboard.rank_member(user_id_string, user_score, user_data_json)
+        everyone_leaderboard.rank_user(@user)
+        friends_leaderboard.rank_user(@user)
+        state_leaderboard.rank_user(@user)
       end
 
       private
-
-      def user_score
-        @user.total_points_this_week
-      end
-
-      def user_data_json
-        {
-          'name' => @user.first_name
-        }.to_json
-      end
-
-      def user_id_string
-        @user_id_string ||= @user.id.to_s
-      end
 
       def everyone_leaderboard
         @everyone_leaderboard ||= ScoreLeaderboard.for_everyone

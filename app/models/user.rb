@@ -35,4 +35,10 @@ class User < ActiveRecord::Base
   def total_points_this_week
     return visits.this_week.sum(:total_points)
   end
+
+  def ranking_data_json
+    return {
+      name: first_name
+    }.to_json
+  end
 end
