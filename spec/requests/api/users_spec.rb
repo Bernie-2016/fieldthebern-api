@@ -2,26 +2,12 @@ require "rails_helper"
 
 describe "Users API" do
 
-<<<<<<< HEAD
-  context "POST /users" do
-
-    it "creates a valid user" do
-      post "#{host}/users", {
-        data: {
-          attributes: {
-            email: "joshdotsmith@gmail.com",
-            password: "password",
-            first_name: "John",
-            last_name: "Doe",
-            state_code: "NY"
-          }
-        }
-=======
   context 'POST /users' do
     email = 'jane_doe@gmail.com'
     password = 'password'
     first_name = 'Jane'
     last_name = 'Doe'
+    state_code = 'NY'
 
     it 'creates a valid user without a photo image' do
       post "#{host}/users", {
@@ -29,29 +15,17 @@ describe "Users API" do
           email: email,
           password: password,
           first_name: first_name,
-          last_name: last_name
+          last_name: last_name,
+          state_code: state_code
         } }
->>>>>>> development
       }
       expect(last_response.status).to eq 200
 
-<<<<<<< HEAD
-      expect(json.data.attributes.email).to eq "joshdotsmith@gmail.com"
-      expect(json.data.attributes.first_name).to eq "John"
-      expect(json.data.attributes.last_name).to eq "Doe"
-      expect(json.data.attributes.state_code).to eq "NY"
-
-      user = User.last
-      expect(user.persisted?).to be true
-      expect(user.email).to eq "joshdotsmith@gmail.com"
-      expect(user.first_name).to eq "John"
-      expect(user.last_name).to eq "Doe"
-      expect(user.state_code).to eq "NY"
-=======
       response_data = json.data.attributes
       expect(response_data.email).to eq email
       expect(response_data.first_name).to eq first_name
       expect(response_data.last_name).to eq last_name
+      expect(response_data.state_code).to eq state_code
       expect(response_data.photo_thumb_url).to include User::ASSET_HOST_FOR_DEFAULT_PHOTO
       expect(response_data.photo_large_url).to include User::ASSET_HOST_FOR_DEFAULT_PHOTO
 
@@ -82,7 +56,6 @@ describe "Users API" do
       user_photo_file = File.open(user.photo.path, 'r')
       base_64_saved_image = Base64.encode64(open(user_photo_file) { |io| io.read })
       expect(base_64_saved_image).to include base_64_image
->>>>>>> development
     end
 
     context "with invalid data" do
