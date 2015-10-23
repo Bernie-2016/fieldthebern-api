@@ -3,10 +3,10 @@ class UserSerializer < ActiveModel::Serializer
              :large_photo_url
 
   def thumb_photo_url
-    object.photo.path(:thumb) || User::DEFAULT_THUMB_PHOTO_URL
+    object.photo.path ? object.photo.url(:thumb) : User::DEFAULT_THUMB_PHOTO_URL
   end
 
   def large_photo_url
-    object.photo.path(:large) || User::DEFAULT_LARGE_PHOTO_URL
+    object.photo.path ? object.photo.url(:large) : User::DEFAULT_LARGE_PHOTO_URL
   end
 end
