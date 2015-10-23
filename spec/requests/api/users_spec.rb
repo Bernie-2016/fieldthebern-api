@@ -23,8 +23,8 @@ describe "Users API" do
       expect(response_data.email).to eq email
       expect(response_data.first_name).to eq first_name
       expect(response_data.last_name).to eq last_name
-      expect(response_data.photo_thumb_url).to eq User::DEFAULT_PHOTO_THUMB_URL
-      expect(response_data.photo_large_url).to eq User::DEFAULT_PHOTO_LARGE_URL
+      expect(response_data.photo_thumb_url).to include User::ASSET_HOST_FOR_DEFAULT_PHOTO
+      expect(response_data.photo_large_url).to include User::ASSET_HOST_FOR_DEFAULT_PHOTO
 
       user = User.last
       expect(user.persisted?).to be true

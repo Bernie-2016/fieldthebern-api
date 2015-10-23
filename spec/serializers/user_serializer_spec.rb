@@ -43,15 +43,12 @@ describe UserSerializer, :type => :serializer do
       end
 
       it 'has a thumbnail photo url' do
-        path = (resource.photo.path(:thumb) || User::DEFAULT_PHOTO_THUMB_URL)
-        expect(subject['photo_thumb_url']).to eql(path)
+        expect(subject['photo_thumb_url']).to eql(resource.photo.url(:thumb))
       end
 
       it 'has a large photo url' do
-        path = (resource.photo.path(:thumb) || User::DEFAULT_PHOTO_LARGE_URL)
-        expect(subject['photo_large_url']).to eql(path)
+        expect(subject['photo_large_url']).to eql(resource.photo.url(:large))
       end
-
     end
 
     context "included" do
