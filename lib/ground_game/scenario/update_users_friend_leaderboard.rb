@@ -15,13 +15,7 @@ module GroundGame
       private
 
       def user_score
-        @user.visits.where(
-          created_at: today.at_beginning_of_week..today.at_end_of_week
-        ).sum(:total_points)
-      end
-
-      def today
-        Date.today
+        @user.total_points_this_week
       end
 
       def user_data_json
