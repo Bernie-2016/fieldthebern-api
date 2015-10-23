@@ -10,7 +10,7 @@ module GroundGame
 
       def call
         @followers.each do |friend|
-          GroundGame::Scenario::UpdateUsersFriendLeaderboard.new(friend, @user).call
+          GroundGame::Scenario::UpdateUsersFriendLeaderboard.new(friend, user).call
         end
       end
     end
