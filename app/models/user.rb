@@ -1,5 +1,11 @@
 class User < ActiveRecord::Base
+  DEFAULT_LARGE_PHOTO_URL = 'http://placehold.it/500x500'
+  DEFAULT_THUMB_PHOTO_URL = 'http://placehold.it/150x150'
+
   include Clearance::User
+  attr_accessor :base_64_photo_data
+
+  before_save :decode_image_data
 
   has_many :visits
 
@@ -12,11 +18,7 @@ class User < ActiveRecord::Base
   has_many :following, through: :active_relationships, source: :followed
   has_many :followers, through: :passive_relationships, source: :follower
 
-  has_attached_file :photo, styles: {
-    thumb: '150x150>',
-    large: '500x500>',
-    default_url: '/images/default_:style.png'
-  }
+  has_attached_file :photo, styles: { thumb: '150x150>', large: '500x500>' }
 
   validates_attachment_content_type :photo,
                                     content_type: %r{^image\/(png|gif|jpeg)}
@@ -39,5 +41,14 @@ class User < ActiveRecord::Base
   # Returns true if the current user is following the other user.
   def following?(other_user)
     following.include?(other_user)
+  end
+
+  def decode_image_data
+    return unless base_64_photo_data.present?
+    data = StringIO.new(Base64.decode64(base_64_photo_data))
+    data.class.class_eval { attr_accessor :original_filename, :content_type }
+    data.original_filename = SecureRandom.hex + '.png'
+    data.content_type = 'image/png'
+    self.photo = data
   end
 end

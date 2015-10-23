@@ -12,7 +12,8 @@ class UsersController < ApplicationController
   private
 
   def create_params
-    record_attributes.permit(:email, :password, :first_name, :last_name)
+    record_attributes.permit(:email, :password, :first_name,
+                             :last_name, :base_64_photo_data)
   end
 
   def render_validation_errors errors
