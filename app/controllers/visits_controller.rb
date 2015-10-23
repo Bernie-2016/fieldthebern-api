@@ -1,5 +1,7 @@
 require 'ground_game/scenario/create_visit'
 require 'ground_game/scenario/update_users_total_score'
+require 'ground_game/scenario/update_leaderboards'
+require 'ground_game/scenario/update_friends_leaderboards'
 
 class VisitsController < ApplicationController
   before_action :doorkeeper_authorize!
@@ -7,6 +9,8 @@ class VisitsController < ApplicationController
   def create
     visit = GroundGame::Scenario::CreateVisit.new(visit_params, address, people, current_user).call
     GroundGame::Scenario::UpdateUsersTotalScore.new(visit.user).call
+    GroundGame::Scenario::UpdateLeaderboards.new(visit.user).call
+    GroundGame::Scenario::UpdateFriendsLeaderboards.new(visit.user).call
     render json: visit, include: ['score']
   end
 
