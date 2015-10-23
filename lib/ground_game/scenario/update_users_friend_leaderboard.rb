@@ -26,28 +26,9 @@ module GroundGame
         @user_id_string ||= @user.id.to_s
       end
 
-      def friends_leaderboard_id
-        @friends_leaderboard_id ||= "user_#{@friend.id}_friends"
-      end
-
-      def redis_options
-        @redis_options ||= {redis_connection: $redis}
-      end
-
       def friends_leaderboard
-        @friends_leaderboard ||= Leaderboard.new(friends_leaderboard_id, DEFAULT_OPTIONS, redis_options)
+        @friends_leaderboard ||= ScoreLeaderboard.for_friend_list_of_user(@friend)
       end
-
-      DEFAULT_OPTIONS = {
-        :page_size => 11,
-        :reverse => false,
-        :member_key => :member,
-        :rank_key => :rank,
-        :score_key => :score,
-        :member_data_key => :member_data,
-        :member_data_namespace => 'member_data',
-        :global_member_data => false
-      }
     end
   end
 end
