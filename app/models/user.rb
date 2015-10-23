@@ -14,7 +14,8 @@ class User < ActiveRecord::Base
 
   has_attached_file :photo, styles: {
     thumb: '150x150>',
-    large: '500x500>'
+    large: '500x500>',
+    default_url: '/images/default_:style.png'
   }
 
   validates_attachment_content_type :photo,
