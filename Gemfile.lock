@@ -19,6 +19,13 @@ GIT
       mime-types
       mimemagic (= 0.3.0)
 
+GIT
+  remote: https://github.com/thoughtbot/shoulda-matchers.git
+  revision: 9a8e71f75bd2eeb901bfc381641641a4f9ecbea3
+  specs:
+    shoulda-matchers (3.0.1)
+      activesupport (>= 4.0.0)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -322,8 +329,12 @@ DEPENDENCIES
   rails-api
   rails_12factor
   rspec-rails
+  shoulda-matchers!
   sidekiq
   spring
   unicorn
   vcr
   webmock
+
+BUNDLED WITH
+   1.10.6
