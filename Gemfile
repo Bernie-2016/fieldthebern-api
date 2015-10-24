@@ -57,4 +57,5 @@ group :test do
   gem 'vcr'
   gem 'webmock'
   gem 'fakeredis', :require => "fakeredis/rspec"
+  gem 'shoulda-matchers', git: 'https://github.com/thoughtbot/shoulda-matchers.git'
 end
