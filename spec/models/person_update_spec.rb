@@ -38,4 +38,20 @@ describe PersonUpdate do
     person_update.created!
     expect(person_update.created?).to be true
   end
+
+  describe ".create_for_visit_and_person" do
+    it "creates an update with 'created' type if person is a new record" do
+      visit = create(:visit)
+      person = build(:person)
+      person_update = PersonUpdate.create_for_visit_and_person(visit, person)
+      expect(person_update.created?).to be true
+    end
+
+    it "creates an update with 'modified' type if person is an existing record" do
+      visit = create(:visit)
+      person = create(:person)
+      person_update = PersonUpdate.create_for_visit_and_person(visit, person)
+      expect(person_update.modified?).to be true
+    end
+  end
 end

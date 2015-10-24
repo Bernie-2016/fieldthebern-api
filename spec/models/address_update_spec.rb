@@ -24,4 +24,20 @@ describe AddressUpdate do
     address_update.created!
     expect(address_update.created?).to be true
   end
+
+  describe ".create_for_visit_and_address" do
+    it "creates an update with 'created' type if address is a new record" do
+      visit = create(:visit)
+      address = build(:address)
+      address_update = AddressUpdate.create_for_visit_and_address(visit, address)
+      expect(address_update.created?).to be true
+    end
+
+    it "creates an update with 'modified' type if address is an existing record" do
+      visit = create(:visit)
+      address = create(:address)
+      address_update = AddressUpdate.create_for_visit_and_address(visit, address)
+      expect(address_update.modified?).to be true
+    end
+  end
 end
