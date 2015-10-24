@@ -8,6 +8,7 @@ Rails.application.routes.draw do
     get 'ping', to: 'ping#index'
 
     get 'users/me', to: 'users#me'
+    post 'users/me', to: 'users#edit_me'
     resources :users, only: [:create, :show]
     
     resources :addresses, only: [:index]

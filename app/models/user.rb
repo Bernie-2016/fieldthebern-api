@@ -2,9 +2,6 @@ class User < ActiveRecord::Base
   ASSET_HOST_FOR_DEFAULT_PHOTO = 'http://www.example.com'
 
   include Clearance::User
-  attr_accessor :base_64_photo_data
-
-  before_save :decode_image_data
 
   has_many :visits
 
