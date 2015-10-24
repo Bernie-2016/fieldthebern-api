@@ -26,7 +26,11 @@ class TokensController < Doorkeeper::TokensController
     graph = Koala::Facebook::API.new(facebook_access_token, ENV['FACEBOOK_APP_SECRET'])
     facebook_user = graph.get_object('me', fields: 'email, name')
 
+    new_user = false
+
     user = User.where('facebook_id = ? OR email = ?', facebook_user['id'], facebook_user['email']).first_or_create.tap do |u|
+      new_user = u.new_record?
+
       u.email = facebook_user['email'] unless u.email.present?
       u.facebook_id = facebook_user['id']
       u.facebook_access_token = facebook_access_token
@@ -35,7 +39,7 @@ class TokensController < Doorkeeper::TokensController
     end
 
     AddFacebookFriendsWorker.perform_async(user.id)
-    AddFacebookProfilePicture.perform_async(user.id)
+    AddFacebookProfilePicture.perform_async(user.id) if new_user
 
     doorkeeper_access_token =
     Doorkeeper::AccessToken.create!(application_id: nil,
