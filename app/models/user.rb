@@ -61,7 +61,8 @@ class User < ActiveRecord::Base
 
   def ranking_data_json
     return {
-      name: ranking_name
+      name: ranking_name,
+      photo_thumb_url: photo.url(:thumb)
     }.to_json
   end
   
