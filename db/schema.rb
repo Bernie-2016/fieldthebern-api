@@ -118,22 +118,22 @@ ActiveRecord::Schema.define(version: 20151023193646) do
   end
 
   create_table "users", force: :cascade do |t|
-    t.string  "first_name"
-    t.string  "last_name"
-    t.string  "email"
-    t.string  "encrypted_password",    limit: 128
-    t.string  "confirmation_token",    limit: 128
-    t.string  "remember_token",        limit: 128
-    t.string  "facebook_id"
-    t.text    "facebook_access_token"
-    t.string  "home_state"
-    t.integer "total_points",                      default: 0
-    t.string  "state_code"
-    t.integer "visits_count",                      default: 0
+    t.string   "first_name"
+    t.string   "last_name"
+    t.string   "email"
+    t.string   "encrypted_password",    limit: 128
+    t.string   "confirmation_token",    limit: 128
+    t.string   "remember_token",        limit: 128
+    t.string   "facebook_id"
+    t.text     "facebook_access_token"
+    t.string   "home_state"
+    t.integer  "total_points",                      default: 0
+    t.string   "state_code"
     t.string   "photo_file_name"
     t.string   "photo_content_type"
     t.integer  "photo_file_size"
     t.datetime "photo_updated_at"
+    t.integer  "visits_count",                      default: 0
   end
 
   add_index "users", ["email"], name: "index_users_on_email", using: :btree
