@@ -1,5 +1,5 @@
 class Visit < ActiveRecord::Base
-  belongs_to :user
+  belongs_to :user, counter_cache: true
 
   has_one :score
 
@@ -11,7 +11,10 @@ class Visit < ActiveRecord::Base
 
   validates :user, presence: true
 
+  scope :this_week, -> { where(created_at: Date.today.at_beginning_of_week..Date.today.at_end_of_week) }
+
   def number_of_updated_people
     person_updates.count
   end
+
 end

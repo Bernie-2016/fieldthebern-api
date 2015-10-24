@@ -9,11 +9,20 @@ class UsersController < ApplicationController
     end
   end
 
+  def show
+    user = User.find(params[:id])
+    render json: user
+  end
+
+  def me
+    render json: current_user
+  end
+
   private
 
   def create_params
     record_attributes.permit(:email, :password, :first_name,
-                             :last_name, :base_64_photo_data)
+                             :last_name, :state_code, :base_64_photo_data)
   end
 
   def render_validation_errors errors

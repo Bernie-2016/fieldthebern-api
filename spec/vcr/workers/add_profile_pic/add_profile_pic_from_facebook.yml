@@ -25,9 +25,9 @@ http_interactions:
       Content-Type:
       - text/plain; charset=UTF-8
       X-Fb-Trace-Id:
-      - Husz+uhFIqD
+      - DELe4BolIAZ
       X-Fb-Rev:
-      - '2006209'
+      - '2007171'
       Pragma:
       - no-cache
       Cache-Control:
@@ -40,9 +40,9 @@ http_interactions:
       - ": V3"
       - ": api"
       X-Fb-Debug:
-      - pnNAAuRMjphiS7cJChUBToAj1zim9yFMfxhoTVmW0HoIH83BiwJ0K4ffzLlOfyOWCSMtemIlv1fn7oYKs8q8bw==
+      - 3hgNzZPColH3MNvX9eClfUGKmuNi2bgiw188DKCAqTFquwe6B8REyHh6PjW0a5ATA9K59Up/loglT3WfW449Qg==
       Date:
-      - Fri, 23 Oct 2015 20:02:51 GMT
+      - Sat, 24 Oct 2015 00:13:06 GMT
       Connection:
       - keep-alive
       Content-Length:
@@ -51,7 +51,7 @@ http_interactions:
       encoding: UTF-8
       string: access_token=823950097719547|oS3DYF56aL2V4qHXWiBZweVqK44
     http_version: 
-  recorded_at: Fri, 23 Oct 2015 20:02:49 GMT
+  recorded_at: Sat, 24 Oct 2015 00:13:06 GMT
 - request:
     method: post
     uri: https://graph.facebook.com/823950097719547/accounts/test-users
@@ -77,9 +77,9 @@ http_interactions:
       Content-Type:
       - application/json; charset=UTF-8
       X-Fb-Trace-Id:
-      - EX1zn1MUgIF
+      - EngTrrLMqH9
       X-Fb-Rev:
-      - '2006209'
+      - '2007171'
       Pragma:
       - no-cache
       Cache-Control:
@@ -92,21 +92,21 @@ http_interactions:
       - ": V3"
       - ": api"
       X-Fb-Debug:
-      - D5WrUiETKYG/D/oVAv3tSJh0HMnsTaV/pzKX0vFqsNkYE46MWubOQjLVn473bsRK/lKi5B14DBb4XTaY9sFzTA==
+      - bYDmyJgMQscgB+QUimckoPqU7bht6f3vC83TpDQun4fM0JMwY+tkzCHg+BEBhbjkDl0M5a6ik5pQYYg7DiIfyA==
       Date:
-      - Fri, 23 Oct 2015 20:02:55 GMT
+      - Sat, 24 Oct 2015 00:13:07 GMT
       Connection:
       - keep-alive
       Content-Length:
-      - '410'
+      - '411'
     body:
       encoding: UTF-8
-      string: '{"id":"120396938319275","access_token":"CAALtYNTjIPsBAOzIgS5dPicJe6uSgDg08jt8asfrVPCyJYUnZCel6dj2mg5Vy3MpQrGabge1pWCS5DAPVaZAoeSsELF0Fz9leNIyHjMpwzVC1YyFQFIBZBvRZBv4FONy0gUlZCALTFG8FqBv1xencubNPmhYGL44ZAe252ZAIPJohghvC2xxVZBWei9gn49UUeoZD","login_url":"https:\/\/developers.facebook.com\/checkpoint\/test-user-login\/120396938319275\/","email":"rmbxjmw_liberg_1445630571\u0040tfbnw.net","password":"388218867"}'
+      string: '{"id":"126179481073262","access_token":"CAALtYNTjIPsBAGFpY83auZC84risPH2COjuXp3EZAOkEypsYQbIN1FWzv7sVhIm02QQicN9hWmNwGZCajmfQsU0nlReEZApY4VnTMpxX8gMyZAuQ9xgnDCu58ykUIRsKfWb3gab1DmtqvdFHANC2k5nGgWKJM6kWy4517m274KF9Hez9M6Y5ZCbPvMP11yd7QZD","login_url":"https:\/\/developers.facebook.com\/checkpoint\/test-user-login\/126179481073262\/","email":"giddmjo_zuckerberg_1445645587\u0040tfbnw.net","password":"76087161"}'
     http_version: 
-  recorded_at: Fri, 23 Oct 2015 20:02:54 GMT
+  recorded_at: Sat, 24 Oct 2015 00:13:08 GMT
 - request:
     method: get
-    uri: https://graph.facebook.com/me?access_token=CAALtYNTjIPsBAOzIgS5dPicJe6uSgDg08jt8asfrVPCyJYUnZCel6dj2mg5Vy3MpQrGabge1pWCS5DAPVaZAoeSsELF0Fz9leNIyHjMpwzVC1YyFQFIBZBvRZBv4FONy0gUlZCALTFG8FqBv1xencubNPmhYGL44ZAe252ZAIPJohghvC2xxVZBWei9gn49UUeoZD&appsecret_proof=410d7c7a4be44234359a0d326a338cd911b84f695a701283a08d87aaec6983f8&fields=picture
+    uri: https://graph.facebook.com/me/picture?access_token=CAALtYNTjIPsBAGFpY83auZC84risPH2COjuXp3EZAOkEypsYQbIN1FWzv7sVhIm02QQicN9hWmNwGZCajmfQsU0nlReEZApY4VnTMpxX8gMyZAuQ9xgnDCu58ykUIRsKfWb3gab1DmtqvdFHANC2k5nGgWKJM6kWy4517m274KF9Hez9M6Y5ZCbPvMP11yd7QZD&appsecret_proof=ef098b8c2325e6ebf56ff306fbc2f8c54679080e8835a356be49231d60b9cbb2&type=large
     body:
       encoding: US-ASCII
       string: ''
@@ -119,21 +119,21 @@ http_interactions:
       - "*/*"
   response:
     status:
-      code: 200
-      message: OK
+      code: 302
+      message: Found
     headers:
       Access-Control-Allow-Origin:
       - "*"
       Content-Type:
-      - application/json; charset=UTF-8
+      - image/jpeg
       X-Fb-Trace-Id:
-      - FJdRmPfQX0/
+      - EWqNnzETaHu
       X-Fb-Rev:
-      - '2006209'
-      Etag:
-      - '"fd86a681ce59796ccf8fa26cf500ec98f5b39ca0"'
+      - '2007171'
       Pragma:
       - no-cache
+      Location:
+      - https://fbcdn-profile-a.akamaihd.net/hprofile-ak-xpa1/v/t1.0-1/s200x200/10354686_10150004552801856_220367501106153455_n.jpg?oh=72142e015f254a712753f4d7c45685d5&oe=56C0D950&__gda__=1456515666_08c29db85f1dd51097fe7f9f99d2d751
       Cache-Control:
       - private, no-cache, no-store, must-revalidate
       Facebook-Api-Version:
@@ -141,24 +141,24 @@ http_interactions:
       Expires:
       - Sat, 01 Jan 2000 00:00:00 GMT
       X-Fb-Stats-Contexts:
-      - ": Unknown"
+      - ": V3"
       - ": api"
       X-Fb-Debug:
-      - 4yT8qXjs/wao6SCEtnJjjsy5s+hkBwFmR4P/AxlR2iyAHSlguMywL0wLeKWJy//KwZU/GxjoB747ERZv2gF/Dw==
+      - VcTcIe4I5YwPHaAg1LrI8P+wPdCirTwf8RSydkrB4AbD9ZGbYfvNz5u40al3+G39VKWWtMcOd2XUtCWLqRPRmA==
       Date:
-      - Fri, 23 Oct 2015 20:02:56 GMT
+      - Sat, 24 Oct 2015 00:13:08 GMT
       Connection:
       - keep-alive
       Content-Length:
-      - '316'
+      - '0'
     body:
       encoding: UTF-8
-      string: '{"picture":{"data":{"is_silhouette":true,"url":"https:\/\/fbcdn-profile-a.akamaihd.net\/hprofile-ak-xpa1\/v\/t1.0-1\/c15.0.50.50\/p50x50\/10354686_10150004552801856_220367501106153455_n.jpg?oh=fe2e0991b842e507edf0e522a13c7316&oe=56C0112F&__gda__=1455160035_2801ba278ce3a6f0e055973ae87f888b"}},"id":"120396938319275"}'
+      string: ''
     http_version: 
-  recorded_at: Fri, 23 Oct 2015 20:02:55 GMT
+  recorded_at: Sat, 24 Oct 2015 00:13:08 GMT
 - request:
     method: get
-    uri: https://fbcdn-profile-a.akamaihd.net/hprofile-ak-xpa1/v/t1.0-1/c15.0.50.50/p50x50/10354686_10150004552801856_220367501106153455_n.jpg?__gda__=1455160035_2801ba278ce3a6f0e055973ae87f888b&oe=56C0112F&oh=fe2e0991b842e507edf0e522a13c7316
+    uri: https://fbcdn-profile-a.akamaihd.net/hprofile-ak-xpa1/v/t1.0-1/s200x200/10354686_10150004552801856_220367501106153455_n.jpg?__gda__=1456515666_08c29db85f1dd51097fe7f9f99d2d751&oe=56C0D950&oh=72142e015f254a712753f4d7c45685d5
     body:
       encoding: US-ASCII
       string: ''
@@ -183,13 +183,13 @@ http_interactions:
       Access-Control-Allow-Origin:
       - "*"
       Content-Length:
-      - '1030'
+      - '2120'
       Cache-Control:
       - no-transform, max-age=1209600
       Expires:
-      - Fri, 06 Nov 2015 20:02:56 GMT
+      - Sat, 07 Nov 2015 00:13:09 GMT
       Date:
-      - Fri, 23 Oct 2015 20:02:56 GMT
+      - Sat, 24 Oct 2015 00:13:09 GMT
       Connection:
       - keep-alive
     body:
@@ -197,27 +197,52 @@ http_interactions:
       string: !binary |-
         /9j/4AAQSkZJRgABAgAAAQABAAD/7QCcUGhvdG9zaG9wIDMuMAA4QklNBAQA
         AAAAAIAcAmcAFEtrbFNnM2tISGpYcUlCSGZySWxGHAIoAGJGQk1EMDEwMDBh
-        OTkwMTAwMDBmMTAxMDAwMDNmMDIwMDAwNjAwMjAwMDA4YTAyMDAwMGNlMDIw
-        MDAwMTUwMzAwMDA0ODAzMDAwMDZmMDMwMDAwYTIwMzAwMDAwNjA0MDAwMP/b
-        AEMABgQFBgUEBgYFBgcHBggKEAoKCQkKFA4PDBAXFBgYFxQWFhodJR8aGyMc
-        FhYgLCAjJicpKikZHy0wLSgwJSgpKP/bAEMBBwcHCggKEwoKEygaFhooKCgo
+        YjcwMzAwMDA5MzA0MDAwMDIyMDUwMDAwNDMwNTAwMDA3NDA1MDAwMGRhMDUw
+        MDAwNmUwNjAwMDBlNTA2MDAwMDFhMDcwMDAwNjMwNzAwMDA0ODA4MDAwMP/i
+        AhxJQ0NfUFJPRklMRQABAQAAAgxsY21zAhAAAG1udHJSR0IgWFlaIAfcAAEA
+        GQADACkAOWFjc3BBUFBMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD21gAB
+        AAAAANMtbGNtcwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+        AAAAAAAAAAAAAAAACmRlc2MAAAD8AAAAXmNwcnQAAAFcAAAAC3d0cHQAAAFo
+        AAAAFGJrcHQAAAF8AAAAFHJYWVoAAAGQAAAAFGdYWVoAAAGkAAAAFGJYWVoA
+        AAG4AAAAFHJUUkMAAAHMAAAAQGdUUkMAAAHMAAAAQGJUUkMAAAHMAAAAQGRl
+        c2MAAAAAAAAAA2MyAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+        AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+        AAAAAHRleHQAAAAARkIAAFhZWiAAAAAAAAD21gABAAAAANMtWFlaIAAAAAAA
+        AAMWAAADMwAAAqRYWVogAAAAAAAAb6IAADj1AAADkFhZWiAAAAAAAABimQAA
+        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
-        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
+        KCgo/8IAEQgAfQDIAwAiAAERAQIRAf/EABoAAQEBAQEBAQAAAAAAAAAAAAAB
+        BAUDAgb/xAAVAQEBAAAAAAAAAAAAAAAAAAAAAf/EABUBAQEAAAAAAAAAAAAA
+        AAAAAAAB/9oADAMAAAERAhEAAAH9yiyoKgqCoKbDG6PwYXp5FQVBUFQVBQAA
+        APXy2G6koE5XWyJzxQAAABBUFQVBduHabxKAxbeamZFVBUFQVAURRFEUTrcr
+        omoSgMurCYVWRRFEURQAAAA+vkdtn0SgOL0ebYAAAAAAAAAB0Nfn6SgZOf1+
+        RYAAAAAQVBUFe28xbvVKAA8vUczP2/GzlPbwKgqCoKgqC6cvYPQSgAAAAOb0
+        vM5CLKgqD//EACUQAAECBQMEAwAAAAAAAAAAAAIBAwAEESBAEjAyECEiMRMz
+        UP/aAAgBAAABBQL8NO8CxHwDCsQQKOI2OokSli90cHQWFLe7ZhPHClrpgsOW
+        92zHPCZ+u2Y4YUuvjbMrhitCtXuuGwVR6vlQMSW49ZnjiNppDq4OoMIGlKAB
+        BuMEKDaUd8G1KAbQdo20KDbUdxkNW88GnbbSgbriVC3/xAAUEQEAAAAAAAAA
+        AAAAAAAAAABg/9oACAECEQE/AVH/xAAUEQEAAAAAAAAAAAAAAAAAAABg/9oA
+        CAEBEQE/AVH/xAAkEAABAwMDBAMAAAAAAAAAAAABACBAESEwMVFhAhIiQVBx
+        gf/aAAgBAAAGPwL4Oy8ivasVeJRWZdUhl1YfU7thl35DEmmzgIYMr6ZTeKWC
+        KAwiHsFZ11uM/C5xcrjJU6ZqjTGMxd//xAAhEAABAgYDAQEAAAAAAAAAAAAB
+        ESEAIDFAQVEwYYGhUP/aAAgBAAABPyH8MCSApghFDoR2QDl9g21t2iWVKmAA
+        gACQAgCgx1rFmD/Uyw6Gzq8TJAIq62fxzU7MABQKiYA7K2a57JnfWz64MpKA
+        k4glCc2jGaskaHS1B7ZkB7RtA5aFwrmRIK4gsXsnY+kUc+zNRz7EOw8Oelts
+        YoYXY8VTCbCK2+w5FeB95leR840mNcyTOpv/2gAMAwAAARECEQAAEDjjjjih
+        BjjjjjgggghvPLwggggjjjjivPPzjjjjssssoPPOsssssggggktPAQgggggg
+        gggtPIQggggjjjhnvPPDRjjjjjmPPPPPPOjjjv/EABkRAAMBAQEAAAAAAAAA
+        AAAAAAEgMBEQAP/aAAgBAhEBPxBsmOmQ6ZDpqamOexMcOU//xAAaEQEAAgMB
+        AAAAAAAAAAAAAAABIDAQETEA/9oACAEBEQE/EI79srclTzJ2pydtK3BSvtwG
+        bMh//8QAKRABAAECBQMEAQUAAAAAAAAAAREAISAxQFGBMEFxYaHB8JFQsdHh
+        8f/aAAgBAAABPxD9DEoSwBRR/JH81/rn8VEtHYTWUDsFx0l/ETgoMEdgjAqI
+        CEaRLl3fpo/EgYi7lFw6P23yxKDkD5aN2/Q++JSWw/d0YwpkWLriv8LQMX0c
+        it/YcUgnK/4+dGxigEw5lDJJgLLAlpUUqm+kW+91udsDd4d2x30sH2IYJPsU
+        0gQAqsAGdLlAT5OBM4CfIoKARGETLRQQ+tmeKu8nnOK7weM1JD62Y4691H2r
+        b1DPIT/XSlngJ53q6j2rzt1DQ70RuoAICAyOogkJI5lGB3ojd0w2geW/WDeh
+        5L4v/9k=
     http_version: 
-  recorded_at: Fri, 23 Oct 2015 20:02:55 GMT
+  recorded_at: Sat, 24 Oct 2015 00:13:09 GMT
 recorded_with: VCR 2.9.3

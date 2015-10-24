@@ -1,4 +1,4 @@
-require 'rails_helper'
+require "rails_helper"
 
 describe "Users API" do
 
@@ -7,6 +7,7 @@ describe "Users API" do
     password = 'password'
     first_name = 'Jane'
     last_name = 'Doe'
+    state_code = 'NY'
 
     it 'creates a valid user without a photo image' do
       post "#{host}/users", {
@@ -14,7 +15,8 @@ describe "Users API" do
           email: email,
           password: password,
           first_name: first_name,
-          last_name: last_name
+          last_name: last_name,
+          state_code: state_code
         } }
       }
       expect(last_response.status).to eq 200
@@ -23,6 +25,7 @@ describe "Users API" do
       expect(response_data.email).to eq email
       expect(response_data.first_name).to eq first_name
       expect(response_data.last_name).to eq last_name
+      expect(response_data.state_code).to eq state_code
       expect(response_data.photo_thumb_url).to include User::ASSET_HOST_FOR_DEFAULT_PHOTO
       expect(response_data.photo_large_url).to include User::ASSET_HOST_FOR_DEFAULT_PHOTO
 
@@ -55,9 +58,9 @@ describe "Users API" do
       expect(base_64_saved_image).to include base_64_image
     end
 
-    context 'with invalid data' do
+    context "with invalid data" do
 
-      it 'fails on a blank password' do
+      it "fails on a blank password" do
         post "#{host}/users", {
           data: { attributes: {
             email: "joshdotsmith@gmail.com",
@@ -71,12 +74,12 @@ describe "Users API" do
       end
     end
 
-    context 'when user accounts are taken' do
+    context "when user accounts are taken" do
       before do
         create(:user, email: "joshdotsmith@gmail.com", password: "password")
       end
 
-      it 'fails when the email is taken' do
+      it "fails when the email is taken" do
         post "#{host}/users", {
           data: { attributes: {
             email: "joshdotsmith@gmail.com",

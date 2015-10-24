@@ -25,6 +25,10 @@ describe User do
     expect(build(:user, last_name: nil)).to be_valid
   end
 
+  it "is valid without a state_code" do
+    expect(build(:user, state_code: nil)).to be_valid
+  end
+
   it "can have followers" do
     user = create(:user)
     other_user_1 = create(:user)
@@ -64,8 +68,17 @@ describe User do
     expect(user.following? other_user).to be false
   end
 
+  it "has a working 'total_points_this_week'" do
+    user = create(:user)
+    visits_this_week = create_list(:visit, 5, user: user, total_points: 10, created_at: Date.today)
+    visits_last_week = create_list(:visit, 5, user: user, total_points: 1, created_at: Date.today - 8.days)
+
+    expect(user.reload.total_points_this_week).to eq 50
+  end
+
   it { should have_attached_file(:photo) }
   it { should validate_attachment_content_type(:photo)
       .allowing('image/png', 'image/gif')
       .rejecting('text/plain', 'text/xml') }
+
 end
