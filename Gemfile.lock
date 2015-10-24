@@ -335,6 +335,3 @@ DEPENDENCIES
   unicorn
   vcr
   webmock
-
-BUNDLED WITH
-   1.10.6
