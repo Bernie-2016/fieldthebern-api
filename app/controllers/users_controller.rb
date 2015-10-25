@@ -18,8 +18,13 @@ class UsersController < ApplicationController
     render json: current_user
   end
 
-  def edit_me
-    user = current_user
+  def update
+    if signed_in?
+      user = current_user
+    else
+      user = User.find(params[:id])
+    end
+
     user.update(user_params)
     
     if user.save
