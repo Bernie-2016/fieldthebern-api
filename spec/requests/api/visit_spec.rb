@@ -96,7 +96,6 @@ describe "Visit API" do
           rankings = Ranking.for_state(id: @user.id, state_code: "NY")
           expect(rankings.length).to eq 1
           expect(rankings.first[:member]).to eq "11" # user id
-          binding.pry
           expect(rankings.first[:score]).to eq 5.0 # user score
         end
       end
