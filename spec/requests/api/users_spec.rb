@@ -37,25 +37,28 @@ describe "Users API" do
     end
 
     it 'creates a valid user with a photo image' do
-      file = File.open("#{Rails.root}/spec/sample_data/default-avatar.png", 'r')
-      base_64_image = Base64.encode64(open(file) { |io| io.read })
+      Sidekiq::Testing.inline! do
+        file = File.open("#{Rails.root}/spec/sample_data/default-avatar.png", 'r')
+        base_64_image = Base64.encode64(open(file) { |io| io.read })
 
-      post "#{host}/users", {
-        data: { attributes: {
-          email: email,
-          password: password,
-          first_name: first_name,
-          last_name: last_name,
-          base_64_photo_data: base_64_image
-        } }
-      }
-      expect(last_response.status).to eq 200
-      user = User.last
-      expect(user.photo.path).to_not be_nil
-      # expect photo saved from create action to be identical to our test photo
-      user_photo_file = File.open(user.photo.path, 'r')
-      base_64_saved_image = Base64.encode64(open(user_photo_file) { |io| io.read })
-      expect(base_64_saved_image).to include base_64_image
+        post "#{host}/users", {
+          data: { attributes: {
+            email: email,
+            password: password,
+            first_name: first_name,
+            last_name: last_name,
+            base_64_photo_data: base_64_image
+          } }
+        }
+        expect(last_response.status).to eq 200
+        user = User.last
+        expect(user.base_64_photo_data).to be_nil
+        expect(user.photo.path).to_not be_nil
+        # expect photo saved from create action to be identical to our test photo
+        user_photo_file = File.open(user.photo.path, 'r')
+        base_64_saved_image = Base64.encode64(open(user_photo_file) { |io| io.read })
+        expect(base_64_saved_image).to include base_64_image
+      end
     end
 
     context "with invalid data" do

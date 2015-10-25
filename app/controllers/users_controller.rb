@@ -3,6 +3,10 @@ class UsersController < ApplicationController
   def create
     user = User.new(user_params)
     if user.save
+      if user_params[:base_64_photo_data].present?
+        UpdateProfilePictureWorker.perform_async(user.id)
+      end
+      
       render json: user
     else
       render_validation_errors user.errors
