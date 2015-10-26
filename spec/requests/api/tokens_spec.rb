@@ -1,4 +1,5 @@
 require 'rails_helper'
+require 'ground_game/scenario/update_user_attributes_from_facebook'
 
 describe "Tokens API" do
 
@@ -78,7 +79,7 @@ describe "Tokens API" do
       end
     end
 
-    context "with a facebook_auth_code", sidekiq: :fake do
+    context "with a facebook_auth_code", sidekiq: :fake, vcr: { cassette_name: 'requests/api/tokens/creates a user' } do
 
       before do
         oauth = Koala::Facebook::OAuth.new(ENV["FACEBOOK_APP_ID"], ENV["FACEBOOK_APP_SECRET"], ENV["FACEBOOK_REDIRECT_URL"])
@@ -96,7 +97,9 @@ describe "Tokens API" do
       end
 
       context "when the user does not already exist" do
-        it 'creates a user from Facebook and returns a token', vcr: { cassette_name: 'requests/api/tokens/creates a user' } do
+
+        it 'creates a user from Facebook and returns a token', vcr: { cassette_name: "requests/api/tokens/with_facebook/when_the_user_does_not_already_exist/creates a user" } do
+          expect_any_instance_of(GroundGame::Scenario::UpdateUserAttributesFromFacebook).to receive(:call).and_call_original
 
           post "#{host}/oauth/token", {
             username: "facebook",
@@ -111,45 +114,30 @@ describe "Tokens API" do
           expect(AddFacebookFriendsWorker.jobs.size).to eq 1
         end
 
-        describe "automatic leaderboard update" do
-          before do
-            @valid_attributes = { username: "facebook", password: @facebook_access_token }
-          end
+        it "fills in missing information from facebook data" do
+         expect_any_instance_of(Koala::Facebook::API).to receive(:get_object)
+            .and_return("first_name" => "Charlie", "last_name" => "Smith", "email" => "new@mail.com", "id" => "TEST")
 
-          it "should update the 'everyone' leaderboard", vcr: { cassette_name: "requests/api/tokens/with_facebook/when_the_user_doesnt_exist/update_the_everyone_leaderboard" } do
-            Sidekiq::Testing.inline! do
-              post "#{host}/oauth/token", @valid_attributes
+          post "#{host}/oauth/token", {
+            username: "facebook",
+            password: @facebook_access_token
+          }
 
-              rankings = Ranking.for_everyone(id: json.user_id)
-              expect(rankings.length).to eq 1
-              expect(rankings.first[:member]).to eq json.user_id
-            end
-          end
-
-          it "should update the 'friends' leaderboard", vcr: { cassette_name: "requests/api/tokens/with_facebook/when_the_user_doesnt_exist/update_the_friends_leaderboard" } do
-            Sidekiq::Testing.inline! do
-              post "#{host}/oauth/token", @valid_attributes
-
-              rankings = Ranking.for_user_in_users_friend_list(user: User.find(json.user_id))
-              expect(rankings.length).to eq 1
-              expect(rankings.first[:member]).to eq json.user_id
-            end
-          end
-
-          it "should not update a 'state' leaderboard", vcr: { cassette_name: "requests/api/tokens/with_facebook/when_the_user_doesnt_exist/not_update_the_state_leaderboard" } do
-            Sidekiq::Testing.inline! do
-              expect(UserLeaderboard).not_to receive(:for_state)
-              post "#{host}/oauth/token", @valid_attributes
-            end
-          end
+          user = User.last
+          expect(user.email).to eq "new@mail.com"
+          expect(user.first_name).to eq "Charlie"
+          expect(user.last_name).to eq "Smith"
+          expect(user.facebook_id).to eq "TEST"
         end
       end
 
       context "when the user already exists" do
 
         context "with just the same email" do
-          it 'updates the user from Facebook and returns a token', vcr: { cassette_name: 'requests/api/tokens/creates a user' } do
+          it 'updates the user from Facebook and returns a token', vcr: { cassette_name: "requests/api/tokens/with_facebook/when_the_user_exists/with just the same email/updates the user" } do
             user = create(:user, email: @facebook_user["email"], facebook_id: nil)
+
+            expect_any_instance_of(GroundGame::Scenario::UpdateUserAttributesFromFacebook).to receive(:call).and_call_original
 
             post "#{host}/oauth/token", {
               username: "facebook",
@@ -166,8 +154,10 @@ describe "Tokens API" do
         end
 
         context "with just the same facebook_id" do
-          it 'updates the user from Facebook and returns a token', vcr: { cassette_name: 'requests/api/tokens/creates a user' } do
+          it 'updates the user from Facebook and returns a token', vcr: { cassette_name: "requests/api/tokens/with_facebook/when_the_user_exists/with just the same facebook_id/updates the user" } do
             user = create(:user, email: "different@email.com", facebook_id: @facebook_user["id"])
+
+            expect_any_instance_of(GroundGame::Scenario::UpdateUserAttributesFromFacebook).to receive(:call).and_call_original
 
             post "#{host}/oauth/token", {
               username: "facebook",
@@ -181,6 +171,23 @@ describe "Tokens API" do
             expect(json.expires_in).to eq 7200
             expect(json.token_type).to eq "bearer"
           end
+        end
+
+        it "fills in missing information from facebook data" do
+          user = create(:user, email: "existing@mail.com", facebook_id: "TEST", first_name: nil, last_name: nil)
+          expect_any_instance_of(Koala::Facebook::API).to receive(:get_object)
+            .and_return("first_name" => "Charlie", "last_name" => "Smith", "email" => "new@mail.com", "id" => "TEST")
+
+          post "#{host}/oauth/token", {
+            username: "facebook",
+            password: @facebook_access_token
+          }
+
+          user = User.last
+          expect(user.email).to eq "existing@mail.com"
+          expect(user.first_name).to eq "Charlie"
+          expect(user.last_name).to eq "Smith"
+          expect(user.facebook_id).to eq "TEST"
         end
 
         describe "automatic leaderboard update" do
