@@ -182,6 +182,43 @@ describe "Tokens API" do
             expect(json.token_type).to eq "bearer"
           end
         end
+
+        describe "automatic leaderboard update" do
+          before do
+            @user = create(:user, id: 10, email: "mail@email.com", facebook_id: @facebook_user["id"], state_code: "NY")
+            @valid_attributes = { username: "facebook", password: @facebook_access_token }
+          end
+
+          it "should update the 'everyone' leaderboard", vcr: { cassette_name: "requests/api/tokens/with_facebook/when_the_user_exists/update_the_everyone_leaderboard" } do
+            Sidekiq::Testing.inline! do
+              post "#{host}/oauth/token", @valid_attributes
+
+              rankings = Ranking.for_everyone(id: 10)
+              expect(rankings.length).to eq 1
+              expect(rankings.first[:member]).to eq "10"
+            end
+          end
+
+          it "should update the 'friends' leaderboard", vcr: { cassette_name: "requests/api/tokens/with_facebook/when_the_user_exists/update_the_friends_leaderboard" } do
+            Sidekiq::Testing.inline! do
+              post "#{host}/oauth/token", @valid_attributes
+
+              rankings = Ranking.for_user_in_users_friend_list(user: @user)
+              expect(rankings.length).to eq 1
+              expect(rankings.first[:member]).to eq "10"
+            end
+          end
+
+          it "should update the 'state' leaderboard", vcr: { cassette_name: "requests/api/tokens/with_facebook/when_the_user_exists/update_the_state_leaderboard" } do
+            Sidekiq::Testing.inline! do
+              post "#{host}/oauth/token", @valid_attributes
+
+              rankings = Ranking.for_state(id: 10, state_code: "NY")
+              expect(rankings.length).to eq 1
+              expect(rankings.first[:member]).to eq "10"
+            end
+          end
+        end
       end
     end
 
