@@ -29,11 +29,6 @@ describe UpdateProfilePictureWorker do
       @user = create(:user)
     end
 
-    it "does not update leaderboards" do
-      expect_any_instance_of(GroundGame::Scenario::UpdateMemberDataInLeaderboards).not_to receive(:call)
-      UpdateProfilePictureWorker.new.perform(@user.id)
-    end
-
     it "doesn't touch photo" do
       UpdateProfilePictureWorker.new.perform(@user.id)
 
