@@ -8,7 +8,7 @@ module GroundGame
       def call
         everyone_leaderboard.rank_user(@user)
         friends_leaderboard.rank_user(@user)
-        state_leaderboard.rank_user(@user)
+        state_leaderboard.rank_user(@user) if @user.state_code
       end
 
       private

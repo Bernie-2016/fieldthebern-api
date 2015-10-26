@@ -1,14 +1,14 @@
 require "rails_helper"
-require "ground_game/scenario/update_leaderboards"
+require "ground_game/scenario/update_member_data_in_leaderboards"
 
 module GroundGame
   module Scenario
 
-    describe UpdateLeaderboards do
+    describe UpdateMemberDataInLeaderboards do
 
       describe "#call" do
-        context "when the user has all the required information" do
 
+        context "when the user has all the required information" do
           before do
             @user = create(:user, id: 10, email: "test-user@mail.com", password: "password", state_code: "NY")
 
@@ -25,21 +25,21 @@ module GroundGame
           end
 
           it "updates the 'everyone' leaderboard" do
-            UpdateLeaderboards.new(@user).call
+            UpdateMemberDataInLeaderboards.new(@user).call
 
             everyone_rankings = Ranking.for_everyone(id: 10)
             expect(everyone_rankings.length).to eq 4
           end
 
           it "updates the user's 'state' leaderboard" do
-            UpdateLeaderboards.new(@user).call
+            UpdateMemberDataInLeaderboards.new(@user).call
 
             ny_rankings = Ranking.for_state(id: 10, state_code: "NY")
             expect(ny_rankings.length).to eq 3
           end
 
           it "updates the user's 'friends' leaderboard" do
-            UpdateLeaderboards.new(@user).call
+            UpdateMemberDataInLeaderboards.new(@user).call
 
             friend_rankings = Ranking.for_user_in_users_friend_list(user: @user)
             expect(friend_rankings.length).to eq 6
@@ -53,7 +53,7 @@ module GroundGame
 
           it "should not update any 'state' leaderboard" do
             expect(UserLeaderboard).not_to receive(:for_state)
-            UpdateLeaderboards.new(@user_without_state).call
+            UpdateMemberDataInLeaderboards.new(@user_without_state).call
           end
         end
       end
