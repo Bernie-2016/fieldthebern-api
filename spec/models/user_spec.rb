@@ -112,4 +112,9 @@ describe User do
       expect(@user.ranking_data_json).to include @user.photo.url(:thumb)
     end
   end
+
+  it 'has a counter cache from visits' do
+    @user = create(:user)
+    expect { @user.visits.create }.to change { @user.visits_count }.by(1)
+  end
 end
