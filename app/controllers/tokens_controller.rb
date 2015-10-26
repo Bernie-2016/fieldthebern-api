@@ -39,14 +39,18 @@ class TokensController < Doorkeeper::TokensController
     AddFacebookFriendsWorker.perform_async(user.id)
     AddFacebookProfilePicture.perform_async(user.id)
 
-    doorkeeper_access_token = Doorkeeper::AccessToken.create!(application_id: nil, resource_owner_id: user.id, expires_in: 7200)
-
+    doorkeeper_access_token =
+    Doorkeeper::AccessToken.create!(application_id: nil,
+                                    resource_owner_id: user.id,
+                                    expires_in: 7200)
     token_data = {
       access_token: doorkeeper_access_token.token,
-      token_type: "bearer",
+      token_type: 'bearer',
       expires_in: doorkeeper_access_token.expires_in,
-      user_id: user.id.to_s,
+      user_id: user.id.to_s
     }
+
+    update_users_leaderboards(user.id)
 
     render json: token_data.to_json, status: :ok
   end
