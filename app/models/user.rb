@@ -20,7 +20,8 @@ class User < ActiveRecord::Base
   validates_attachment_content_type :photo,
                                     content_type: %r{^image\/(png|gif|jpeg)}
 
-  validates_uniqueness_of :email
+  validates_uniqueness_of :email, case_sensitive: false
+  validates_uniqueness_of :facebook_id, allow_nil: true
 
   def self.friendly_token
     # Borrowed from Devise.friendly_token
@@ -64,7 +65,7 @@ class User < ActiveRecord::Base
       photo_thumb_url: photo.url(:thumb)
     }.to_json
   end
-  
+
   def decode_image_data
     return unless base_64_photo_data.present?
     data = StringIO.new(Base64.decode64(base_64_photo_data))
