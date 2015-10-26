@@ -4,10 +4,9 @@ class UsersController < ApplicationController
   def create
     user = User.new(user_params)
     if user.save
-      UpdateProfilePictureWorker.perform_async(user.id)
-      render json: user
+      update_leaderboards_and_render_json(user)
     else
-      render_validation_errors user.errors
+      render_validation_errors(user.errors)
     end
   end
 
@@ -26,18 +25,27 @@ class UsersController < ApplicationController
     user.update(user_params)
 
     if user.save
-      UpdateProfilePictureWorker.perform_async(user.id)
-      render json: user
+      update_leaderboards_and_render_json(user)
     else
-      render_validation_errors user.errors
+      render_validation_errors(user.errors)
     end
   end
 
   private
 
+  def update_leaderboards_and_render_json(user)
+    UpdateProfilePictureWorker.perform_async(user.id) if photo_param?
+    UpdateUsersLeaderboardsWorker.perform_async(user.id)
+    render json: user
+  end
+
   def user_params
     record_attributes.permit(:email, :password, :first_name,
                              :last_name, :state_code, :base_64_photo_data)
+  end
+
+  def photo_param?
+    user_params[:base_64_photo_data].present?
   end
 
   def render_validation_errors errors

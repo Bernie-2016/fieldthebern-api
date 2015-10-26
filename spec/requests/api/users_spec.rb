@@ -162,24 +162,33 @@ describe "Users API" do
           }
         end
 
-        it "should not update the 'everyone' leaderboard" do
+        it "should update the 'everyone' leaderboard" do
           Sidekiq::Testing.inline! do
-            expect(UserLeaderboard).not_to receive(:for_everyone)
             post "#{host}/users", @user_attributes
+
+            rankings = Ranking.for_everyone(id: User.last.id)
+            expect(rankings.length).to eq 1
+            expect(rankings.first[:member]).to eq User.last.id.to_s
           end
         end
 
-        it "should not update the 'state' leaderboard" do
+        it "should update the 'state' leaderboard" do
           Sidekiq::Testing.inline! do
-            expect(UserLeaderboard).not_to receive(:for_state)
             post "#{host}/users", @user_attributes
+
+            rankings = Ranking.for_state(id: User.last.id, state_code: "NY")
+            expect(rankings.length).to eq 1
+            expect(rankings.first[:member]).to eq User.last.id.to_s
           end
         end
 
-        it "should not update the 'friends' leaderboard" do
+        it "should update the 'friends' leaderboard" do
           Sidekiq::Testing.inline! do
-            expect(UserLeaderboard).not_to receive(:for_friend_list_of_user)
             post "#{host}/users", @user_attributes
+
+            rankings = Ranking.for_user_in_users_friend_list(user: User.last)
+            expect(rankings.length).to eq 1
+            expect(rankings.first[:member]).to eq User.last.id.to_s
           end
         end
       end
@@ -284,24 +293,33 @@ describe "Users API" do
           @user_attributes = { data: { attributes: { email: "new@mail.com" } } }
         end
 
-        it "should not update the 'everyone' leaderboard" do
+        it "should update the 'everyone' leaderboard" do
           Sidekiq::Testing.inline! do
-            expect(UserLeaderboard).not_to receive(:for_everyone)
-            authenticated_post "users/me", @user_attributes, @token
+            authenticated_post "users/me", @user_attributes, token
+
+            rankings = Ranking.for_everyone(id: User.last.id)
+            expect(rankings.length).to eq 1
+            expect(rankings.first[:member]).to eq User.last.id.to_s
           end
         end
 
-        it "should not update the 'state' leaderboard" do
+        it "should update the 'state' leaderboard" do
           Sidekiq::Testing.inline! do
-            expect(UserLeaderboard).not_to receive(:for_state)
-            authenticated_post "users/me", @user_attributes, @token
+            authenticated_post "users/me", @user_attributes, token
+
+            rankings = Ranking.for_state(id: User.last.id, state_code: "NY")
+            expect(rankings.length).to eq 1
+            expect(rankings.first[:member]).to eq User.last.id.to_s
           end
         end
 
-        it "should not update the 'friends' leaderboard" do
+        it "should update the 'friends' leaderboard" do
           Sidekiq::Testing.inline! do
-            expect(UserLeaderboard).not_to receive(:for_friend_list_of_user)
-            authenticated_post "users/me", @user_attributes, @token
+            authenticated_post "users/me", @user_attributes, token
+
+            rankings = Ranking.for_user_in_users_friend_list(user: User.last)
+            expect(rankings.length).to eq 1
+            expect(rankings.first[:member]).to eq User.last.id.to_s
           end
         end
       end

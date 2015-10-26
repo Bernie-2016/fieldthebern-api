@@ -32,7 +32,6 @@ class TokensController < Doorkeeper::TokensController
       u = GroundGame::Scenario::UpdateUserAttributesFromFacebook.new(u, facebook_user).call
       u.facebook_access_token = facebook_access_token
       u.password = User.friendly_token unless u.encrypted_password.present?
-
       u.save!
     end
 
