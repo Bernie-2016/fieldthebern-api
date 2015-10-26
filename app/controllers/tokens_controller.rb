@@ -26,7 +26,7 @@ class TokensController < Doorkeeper::TokensController
   def find_or_create_user_from_facebook_information
     facebook_access_token = params[:password]
     graph = Koala::Facebook::API.new(facebook_access_token, ENV["FACEBOOK_APP_SECRET"])
-    facebook_user = graph.get_object("me", { fields: 'email, name'})
+    facebook_user = graph.get_object("me", { fields: ['email', 'first_name', 'last_name']})
 
     user = User.where("facebook_id = ? OR email = ?", facebook_user["id"], facebook_user["email"]).first_or_create.tap do |u|
       u = GroundGame::Scenario::UpdateUserAttributesFromFacebook.new(u, facebook_user).call

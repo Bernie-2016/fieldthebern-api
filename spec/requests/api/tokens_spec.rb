@@ -98,7 +98,7 @@ describe "Tokens API" do
 
       context "when the user does not already exist" do
 
-        it 'creates a user from Facebook and returns a token' do
+        it 'creates a user from Facebook and returns a token', vcr: { cassette_name: "requests/api/tokens/with_facebook/when_the_user_does_not_already_exist/creates a user" } do
           expect_any_instance_of(GroundGame::Scenario::UpdateUserAttributesFromFacebook).to receive(:call).and_call_original
 
           post "#{host}/oauth/token", {
@@ -116,7 +116,7 @@ describe "Tokens API" do
 
         it "fills in missing information from facebook data" do
          expect_any_instance_of(Koala::Facebook::API).to receive(:get_object)
-            .and_return("name" => "Charlie Smith", "email" => "new@mail.com", "id" => "TEST")
+            .and_return("first_name" => "Charlie", "last_name" => "Smith", "email" => "new@mail.com", "id" => "TEST")
 
           post "#{host}/oauth/token", {
             username: "facebook",
@@ -134,7 +134,7 @@ describe "Tokens API" do
       context "when the user already exists" do
 
         context "with just the same email" do
-          it 'updates the user from Facebook and returns a token' do
+          it 'updates the user from Facebook and returns a token', vcr: { cassette_name: "requests/api/tokens/with_facebook/when_the_user_exists/with just the same email/updates the user" } do
             user = create(:user, email: @facebook_user["email"], facebook_id: nil)
 
             expect_any_instance_of(GroundGame::Scenario::UpdateUserAttributesFromFacebook).to receive(:call).and_call_original
@@ -154,7 +154,7 @@ describe "Tokens API" do
         end
 
         context "with just the same facebook_id" do
-          it 'updates the user from Facebook and returns a token', vcr: { cassette_name: 'requests/api/tokens/creates a user' } do
+          it 'updates the user from Facebook and returns a token', vcr: { cassette_name: "requests/api/tokens/with_facebook/when_the_user_exists/with just the same facebook_id/updates the user" } do
             user = create(:user, email: "different@email.com", facebook_id: @facebook_user["id"])
 
             expect_any_instance_of(GroundGame::Scenario::UpdateUserAttributesFromFacebook).to receive(:call).and_call_original
@@ -176,7 +176,7 @@ describe "Tokens API" do
         it "fills in missing information from facebook data" do
           user = create(:user, email: "existing@mail.com", facebook_id: "TEST", first_name: nil, last_name: nil)
           expect_any_instance_of(Koala::Facebook::API).to receive(:get_object)
-            .and_return("name" => "Charlie Smith", "email" => "new@mail.com", "id" => "TEST")
+            .and_return("first_name" => "Charlie", "last_name" => "Smith", "email" => "new@mail.com", "id" => "TEST")
 
           post "#{host}/oauth/token", {
             username: "facebook",
