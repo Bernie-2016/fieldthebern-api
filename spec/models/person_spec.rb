@@ -5,6 +5,20 @@ describe Person do
     expect(build(:person)).to be_valid
   end
 
+  context 'schema' do
+    it { should have_db_column(:first_name).of_type(:string) }
+    it { should have_db_column(:last_name).of_type(:string) }
+    it { should have_db_column(:canvas_response).of_type(:string) }
+    it { should have_db_column(:party_affiliation).of_type(:string) }
+    it { should have_db_column(:address_id).of_type(:integer) }
+    it { should have_db_column(:created_at).of_type(:datetime) }
+    it { should have_db_column(:updated_at).of_type(:datetime) }
+  end
+
+  context 'associations' do
+    it { should belong_to(:address) }
+  end
+
   it "has a working canvas_response enum" do
     person = create(:person)
 
