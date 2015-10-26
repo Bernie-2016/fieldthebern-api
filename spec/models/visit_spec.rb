@@ -16,8 +16,8 @@ describe Visit do
 
   it "has a working 'this_week' scope" do
     user = create(:user)
-    visits_this_week = create_list(:visit, 7, user: user, total_points: 10, created_at: Date.today)
-    visits_last_week = create_list(:visit, 5, user: user, total_points: 1, created_at: Date.today - 8.days)
+    visits_this_week = create_list(:visit, 7, user: user, total_points: 10, created_at: Time.now)
+    visits_last_week = create_list(:visit, 5, user: user, total_points: 1, created_at: Time.now - 8.days)
 
     expect(Visit.this_week.count).to eq 7
   end

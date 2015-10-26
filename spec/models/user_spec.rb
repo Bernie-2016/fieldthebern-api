@@ -82,8 +82,8 @@ describe User do
       @user = create(:user)
     end
     it "has a working 'total_points_this_week'" do
-      visits_this_week = create_list(:visit, 5, user: @user, total_points: 10, created_at: Date.today)
-      visits_last_week = create_list(:visit, 5, user: @user, total_points: 1, created_at: Date.today - 8.days)
+      visits_this_week = create_list(:visit, 5, user: @user, total_points: 10, created_at: Time.now)
+      visits_last_week = create_list(:visit, 5, user: @user, total_points: 1, created_at: Time.now - 8.days)
 
       expect(@user.reload.total_points_this_week).to eq 50
     end
