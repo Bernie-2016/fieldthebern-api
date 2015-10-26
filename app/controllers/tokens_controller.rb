@@ -1,3 +1,5 @@
+require "ground_game/scenario/update_user_attributes_from_facebook"
+
 class TokensController < Doorkeeper::TokensController
 
   def create
@@ -7,10 +9,10 @@ class TokensController < Doorkeeper::TokensController
       facebook_user = graph.get_object("me", { fields: 'email, name'})
 
       user = User.where("facebook_id = ? OR email = ?", facebook_user["id"], facebook_user["email"]).first_or_create.tap do |u|
-        u.email = facebook_user["email"] unless u.email.present?
-        u.facebook_id = facebook_user["id"]
+        user = GroundGame::Scenario::UpdateUserAttributesFromFacebook.new(u, facebook_user).call
         u.facebook_access_token = facebook_access_token
         u.password = User.friendly_token unless u.encrypted_password.present?
+
         u.save!
       end
 
