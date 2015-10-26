@@ -61,55 +61,6 @@ describe "Users API" do
       end
     end
 
-    describe "automatic leaderboard update" do
-      before do
-        file = File.open("#{Rails.root}/spec/sample_data/default-avatar.png", 'r')
-        base_64_image = Base64.encode64(open(file) { |io| io.read })
-        @user_attributes = {
-          data: {
-            attributes: {
-              email: email,
-              password: password,
-              first_name: first_name,
-              last_name: last_name,
-              state_code: "NY",
-              base_64_photo_data: base_64_image
-            }
-          }
-        }
-      end
-
-      it "should update the 'everyone' leaderboard" do
-        Sidekiq::Testing.inline! do
-          post "#{host}/users", @user_attributes
-
-          rankings = Ranking.for_everyone(id: User.last.id)
-          expect(rankings.length).to eq 1
-          expect(rankings.first[:member]).to eq User.last.id.to_s
-        end
-      end
-
-      it "should update the 'state' leaderboard" do
-        Sidekiq::Testing.inline! do
-          post "#{host}/users", @user_attributes
-
-          rankings = Ranking.for_state(id: User.last.id, state_code: "NY")
-          expect(rankings.length).to eq 1
-          expect(rankings.first[:member]).to eq User.last.id.to_s
-        end
-      end
-
-      it "should update the 'friends' leaderboard" do
-        Sidekiq::Testing.inline! do
-          post "#{host}/users", @user_attributes
-
-          rankings = Ranking.for_user_in_users_friend_list(user: User.last)
-          expect(rankings.length).to eq 1
-          expect(rankings.first[:member]).to eq User.last.id.to_s
-        end
-      end
-    end
-
     context "with invalid data" do
 
       it "fails on a blank password" do
@@ -142,6 +93,95 @@ describe "Users API" do
         expect(last_response.status).to eq 422
 
         expect(json.errors.email).to eq "has already been taken"
+      end
+    end
+
+    describe "automatic leaderboard update" do
+
+      context "when the user is being created with a photo" do
+        before do
+          file = File.open("#{Rails.root}/spec/sample_data/default-avatar.png", 'r')
+          base_64_image = Base64.encode64(open(file) { |io| io.read })
+          @user_attributes = {
+            data: {
+              attributes: {
+                email: email,
+                password: password,
+                first_name: first_name,
+                last_name: last_name,
+                state_code: "NY",
+                base_64_photo_data: base_64_image
+              }
+            }
+          }
+        end
+
+        it "should update the 'everyone' leaderboard" do
+          Sidekiq::Testing.inline! do
+            post "#{host}/users", @user_attributes
+
+            rankings = Ranking.for_everyone(id: User.last.id)
+            expect(rankings.length).to eq 1
+            expect(rankings.first[:member]).to eq User.last.id.to_s
+          end
+        end
+
+        it "should update the 'state' leaderboard" do
+          Sidekiq::Testing.inline! do
+            post "#{host}/users", @user_attributes
+
+            rankings = Ranking.for_state(id: User.last.id, state_code: "NY")
+            expect(rankings.length).to eq 1
+            expect(rankings.first[:member]).to eq User.last.id.to_s
+          end
+        end
+
+        it "should update the 'friends' leaderboard" do
+          Sidekiq::Testing.inline! do
+            post "#{host}/users", @user_attributes
+
+            rankings = Ranking.for_user_in_users_friend_list(user: User.last)
+            expect(rankings.length).to eq 1
+            expect(rankings.first[:member]).to eq User.last.id.to_s
+          end
+        end
+      end
+
+      context "when the user is being created without a photo" do
+        before do
+          @user_attributes = {
+            data: {
+              attributes: {
+                email: email,
+                password: password,
+                first_name: first_name,
+                last_name: last_name,
+                state_code: "NY"
+              }
+            }
+          }
+        end
+
+        it "should not update the 'everyone' leaderboard" do
+          Sidekiq::Testing.inline! do
+            expect(UserLeaderboard).not_to receive(:for_everyone)
+            post "#{host}/users", @user_attributes
+          end
+        end
+
+        it "should not update the 'state' leaderboard" do
+          Sidekiq::Testing.inline! do
+            expect(UserLeaderboard).not_to receive(:for_state)
+            post "#{host}/users", @user_attributes
+          end
+        end
+
+        it "should not update the 'friends' leaderboard" do
+          Sidekiq::Testing.inline! do
+            expect(UserLeaderboard).not_to receive(:for_friend_list_of_user)
+            post "#{host}/users", @user_attributes
+          end
+        end
       end
     end
 
@@ -199,51 +239,73 @@ describe "Users API" do
     end
 
     describe "automatic leaderboard update" do
-      before do
-        file = File.open("#{Rails.root}/spec/sample_data/default-avatar.png", 'r')
-        base_64_image = Base64.encode64(open(file) { |io| io.read })
-        @user_attributes = {
-          data: {
-            attributes: {
-              email: "new@mail.com",
-              base_64_photo_data: base_64_image
-            }
-          }
-        }
-      end
 
-      it "should update the 'everyone' leaderboard" do
-        Sidekiq::Testing.inline! do
-          authenticated_post "users/me", @user_attributes, token
+      context "when the user is having their photo updated" do
+        before do
+          file = File.open("#{Rails.root}/spec/sample_data/default-avatar.png", 'r')
+          base_64_image = Base64.encode64(open(file) { |io| io.read })
+          @user_attributes = { data: { attributes: { email: "new@mail.com", base_64_photo_data: base_64_image } } }
+        end
 
-          rankings = Ranking.for_everyone(id: User.last.id)
-          expect(rankings.length).to eq 1
-          expect(rankings.first[:member]).to eq User.last.id.to_s
+        it "should update the 'everyone' leaderboard" do
+          Sidekiq::Testing.inline! do
+            authenticated_post "users/me", @user_attributes, token
+
+            rankings = Ranking.for_everyone(id: User.last.id)
+            expect(rankings.length).to eq 1
+            expect(rankings.first[:member]).to eq User.last.id.to_s
+          end
+        end
+
+        it "should update the 'state' leaderboard" do
+          Sidekiq::Testing.inline! do
+            authenticated_post "users/me", @user_attributes, token
+
+            rankings = Ranking.for_state(id: User.last.id, state_code: "NY")
+            expect(rankings.length).to eq 1
+            expect(rankings.first[:member]).to eq User.last.id.to_s
+          end
+        end
+
+        it "should update the 'friends' leaderboard" do
+          Sidekiq::Testing.inline! do
+            authenticated_post "users/me", @user_attributes, token
+
+            rankings = Ranking.for_user_in_users_friend_list(user: User.last)
+            expect(rankings.length).to eq 1
+            expect(rankings.first[:member]).to eq User.last.id.to_s
+          end
         end
       end
 
-      it "should update the 'state' leaderboard" do
-        Sidekiq::Testing.inline! do
-          authenticated_post "users/me", @user_attributes, token
-
-          rankings = Ranking.for_state(id: User.last.id, state_code: "NY")
-          expect(rankings.length).to eq 1
-          expect(rankings.first[:member]).to eq User.last.id.to_s
+      context "when the user is not having their photo updated" do
+        before do
+          @token = token  # need to evaluate token ahead of time
+          @user_attributes = { data: { attributes: { email: "new@mail.com" } } }
         end
-      end
 
-      it "should update the 'friends' leaderboard" do
-        Sidekiq::Testing.inline! do
-          authenticated_post "users/me", @user_attributes, token
+        it "should not update the 'everyone' leaderboard" do
+          Sidekiq::Testing.inline! do
+            expect(UserLeaderboard).not_to receive(:for_everyone)
+            authenticated_post "users/me", @user_attributes, @token
+          end
+        end
 
-          rankings = Ranking.for_user_in_users_friend_list(user: User.last)
-          expect(rankings.length).to eq 1
-          expect(rankings.first[:member]).to eq User.last.id.to_s
+        it "should not update the 'state' leaderboard" do
+          Sidekiq::Testing.inline! do
+            expect(UserLeaderboard).not_to receive(:for_state)
+            authenticated_post "users/me", @user_attributes, @token
+          end
+        end
+
+        it "should not update the 'friends' leaderboard" do
+          Sidekiq::Testing.inline! do
+            expect(UserLeaderboard).not_to receive(:for_friend_list_of_user)
+            authenticated_post "users/me", @user_attributes, @token
+          end
         end
       end
     end
-
-
   end
 
   context 'GET users/me' do
