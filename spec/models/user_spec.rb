@@ -25,6 +25,11 @@ describe User do
     expect(build(:user, last_name: nil)).to be_valid
   end
 
+  it "is invalid with a duplicate email" do
+    create(:user, email: "existing-email@mail.com")
+    expect(build(:user, email: "existing-email@mail.com")).not_to be_valid
+  end
+
   it "can have followers" do
     user = create(:user)
     other_user_1 = create(:user)

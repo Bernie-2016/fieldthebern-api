@@ -23,6 +23,8 @@ class User < ActiveRecord::Base
   validates_attachment_content_type :photo,
                                     content_type: %r{^image\/(png|gif|jpeg)}
 
+  validates_uniqueness_of :email
+
   def self.friendly_token
     # Borrowed from Devise.friendly_token
     SecureRandom.urlsafe_base64(15).tr('lIO0', 'sxyz').first(12)
