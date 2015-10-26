@@ -3,10 +3,7 @@ class UsersController < ApplicationController
   def create
     user = User.new(user_params)
     if user.save
-      if user_params[:base_64_photo_data].present?
-        UpdateProfilePictureWorker.perform_async(user.id)
-      end
-      
+      UpdateProfilePictureWorker.perform_async(user.id)
       render json: user
     else
       render_validation_errors user.errors
@@ -26,16 +23,13 @@ class UsersController < ApplicationController
     if signed_in?
       user = current_user
     else
-      user = User.find(params[:id])
+      render json: {}, status: :unauthorised
     end
 
     user.update(user_params)
-    
-    if user.save
-      if user_params[:base_64_photo_data].present?
-        UpdateProfilePictureWorker.perform_async(user.id)
-      end
 
+    if user.save
+      UpdateProfilePictureWorker.perform_async(user.id)
       render json: user
     else
       render_validation_errors user.errors
