@@ -1,3 +1,5 @@
+require "ground_game/scenario/update_user_attributes_from_facebook"
+
 class TokensController < Doorkeeper::TokensController
   def create
     if params[:username] == 'facebook'
@@ -23,21 +25,19 @@ class TokensController < Doorkeeper::TokensController
 
   def find_or_create_user_from_facebook_information
     facebook_access_token = params[:password]
-    graph = Koala::Facebook::API.new(facebook_access_token, ENV['FACEBOOK_APP_SECRET'])
-    facebook_user = graph.get_object('me', fields: 'email, name')
+    graph = Koala::Facebook::API.new(facebook_access_token, ENV["FACEBOOK_APP_SECRET"])
+    facebook_user = graph.get_object("me", { fields: ['email', 'first_name', 'last_name']})
 
-    user = User.where('facebook_id = ? OR email = ?', facebook_user['id'], facebook_user['email']).first_or_create.tap do |u|
-      new_user = u.new_record?
-
-      u.email = facebook_user['email'] unless u.email.present?
-      u.facebook_id = facebook_user['id']
+    user = User.where("facebook_id = ? OR email = ?", facebook_user["id"], facebook_user["email"]).first_or_create.tap do |u|
+      u = GroundGame::Scenario::UpdateUserAttributesFromFacebook.new(u, facebook_user).call
       u.facebook_access_token = facebook_access_token
       u.password = User.friendly_token unless u.encrypted_password.present?
+
       u.save!
     end
 
     AddFacebookFriendsWorker.perform_async(user.id)
-    AddFacebookProfilePicture.perform_async(user.id) unless user.photo.present?
+    AddFacebookProfilePicture.perform_async(user.id)
 
     doorkeeper_access_token =
     Doorkeeper::AccessToken.create!(application_id: nil,
