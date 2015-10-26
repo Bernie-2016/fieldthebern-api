@@ -1,4 +1,5 @@
 class UsersController < ApplicationController
+  before_filter :require_login, only: [:update, :me]
 
   def create
     user = User.new(user_params)
@@ -20,11 +21,7 @@ class UsersController < ApplicationController
   end
 
   def update
-    if signed_in?
-      user = current_user
-    else
-      render json: {}, status: :unauthorised
-    end
+    user = current_user
 
     user.update(user_params)
 
