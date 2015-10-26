@@ -9,8 +9,9 @@ Rails.application.routes.draw do
 
     get 'users/me', to: 'users#me'
     post 'users/me', to: 'users#update'
-    resources :users, only: [:create, :show]
     
+    resources :users, only: [:create, :show]
+
     resources :addresses, only: [:index]
 
     resources :visits, only: [:create]
