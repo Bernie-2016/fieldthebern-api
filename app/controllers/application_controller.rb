@@ -1,5 +1,8 @@
 class ApplicationController < ActionController::API
   include Clearance::Controller
+  include ActionController::MimeResponds
+
+  before_action :set_default_response_format
 
   def signed_in?
     current_user.present?
@@ -33,5 +36,9 @@ class ApplicationController < ActionController::API
 
   def current_resource_owner
     User.find(doorkeeper_token.resource_owner_id) if doorkeeper_token
+  end
+
+  def set_default_response_format
+    request.format = :json unless params[:format]
   end
 end

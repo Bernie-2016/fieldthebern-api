@@ -128,10 +128,13 @@ ActiveRecord::Schema.define(version: 20151026130704) do
     t.text     "facebook_access_token"
     t.string   "home_state"
     t.integer  "total_points",                      default: 0
+    t.string   "state_code"
     t.string   "photo_file_name"
     t.string   "photo_content_type"
     t.integer  "photo_file_size"
     t.datetime "photo_updated_at"
+    t.integer  "visits_count",                      default: 0
+    t.text     "base_64_photo_data"
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree

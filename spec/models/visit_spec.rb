@@ -5,12 +5,39 @@ describe Visit do
     expect(build(:visit)).to be_valid
   end
 
-  it "requires a user" do
-    expect(build(:visit, user: nil)).not_to be_valid
+  context 'schema' do
+    it {should have_db_column(:total_points).of_type(:float) }
+    it {should have_db_column(:duration_sec).of_type(:integer) }
+    it {should have_db_column(:user_id).of_type(:integer) }
+    it {should have_db_column(:created_at).of_type(:datetime) }
+    it {should have_db_column(:updated_at).of_type(:datetime) }
   end
 
-  it "supports timestaps" do
-    visit = create(:visit)
-    expect(visit.created_at).not_to be_nil
+  context 'associations' do
+    it { should have_one(:score) }
+    it { should have_one(:address_update) }
+    it { should have_many(:person_updates) }
+    it { should have_one(:address) }
+    it { should have_many(:people) }
+  end
+
+  context 'validations' do
+    it { should validate_presence_of(:user) }
+  end
+
+  context 'scopes' do
+    it "has a working 'this_week' scope" do
+      user = create(:user)
+      create_list(:visit, 7, user: user, total_points: 10, created_at: Time.now)
+      create_list(:visit, 5, user: user, total_points: 1, created_at: Time.now - 8.days)
+      expect(Visit.this_week.count).to eq 7
+    end
+  end
+
+  context 'instance methods' do
+    it 'should count the number of people updated with #number_of_updated_people' do
+      visit = build(:visit)
+      expect(visit.number_of_updated_people).to eq 2 # why 2?
+    end
   end
 end
