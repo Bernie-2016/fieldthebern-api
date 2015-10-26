@@ -1,5 +1,5 @@
 class User < ActiveRecord::Base
-  ASSET_HOST_FOR_DEFAULT_PHOTO = 'http://www.example.com'
+  ASSET_HOST_FOR_DEFAULT_PHOTO = 'https://s3.amazonaws.com/ground-game/icons'
 
   include Clearance::User
 
@@ -15,7 +15,7 @@ class User < ActiveRecord::Base
   has_many :followers, through: :passive_relationships, source: :follower
 
   has_attached_file :photo, styles: { thumb: '150x150#', large: '500x500#'},
-                    :default_url => ASSET_HOST_FOR_DEFAULT_PHOTO + '/default_:style.png  '
+                    :default_url => ASSET_HOST_FOR_DEFAULT_PHOTO + '/default_:style.png'
 
   validates_attachment_content_type :photo,
                                     content_type: %r{^image\/(png|gif|jpeg)}
