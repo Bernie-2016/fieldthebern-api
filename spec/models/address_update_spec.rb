@@ -1,16 +1,24 @@
 require 'rails_helper'
 
 describe AddressUpdate do
-  it "has a valid factory" do
+  it 'has a valid factory' do
     expect(build(:address_update)).to be_valid
   end
 
-  it "requires an 'address'" do
-    expect(build(:address_update, address: nil)).not_to be_valid
+  context 'schema' do
+    it {should have_db_column(:address_id).of_type(:integer) }
+    it {should have_db_column(:visit_id).of_type(:integer) }
+    it {should have_db_column(:update_type).of_type(:string).with_options(default: 'created') }
   end
 
-  it "requires a 'visit'" do
-    expect(build(:address_update, visit: nil)).not_to be_valid
+  context 'associations' do
+    it { should belong_to(:address) }
+    it { should belong_to(:visit) }
+  end
+
+  context 'validations' do
+    it { should validate_presence_of(:address) }
+    it { should validate_presence_of(:visit) }
   end
 
   it "has a working 'update_type' enum" do

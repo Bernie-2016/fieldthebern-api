@@ -5,15 +5,38 @@ describe Address do
     expect(build(:address)).to be_valid
   end
 
-  it "has a working 'within' scope" do
-    first_address_in_radius = create(:address, latitude: 1, longitude: 1)
-    second_address_in_radius = create(:address, latitude: -1, longitude: -1)
-    third_address_outside_radius = create(:address, latitude: 20, longitude: 20)
+  context 'schema' do
+    it {should have_db_column(:latitude).of_type(:float) }
+    it {should have_db_column(:longitude).of_type(:float) }
+    it {should have_db_column(:street_1).of_type(:string) }
+    it {should have_db_column(:street_2).of_type(:string) }
+    it {should have_db_column(:city).of_type(:string) }
+    it {should have_db_column(:state_code).of_type(:string) }
+    it {should have_db_column(:zip_code).of_type(:string) }
+    it {should have_db_column(:visited_at).of_type(:datetime) }
+    it {should have_db_column(:most_supportive_resident_id).of_type(:integer) }
+    it {should have_db_column(:usps_verified_street_1).of_type(:string) }
+    it {should have_db_column(:usps_verified_city).of_type(:string) }
+    it {should have_db_column(:usps_verified_zip).of_type(:string) }
+    it {should have_db_column(:best_canvas_response).of_type(:string) }
+  end
 
-    addresses_in_radius = Address.within(400 * 1000, origin: [0, 0]) # 400 km distance
-    expect(addresses_in_radius).to include(first_address_in_radius)
-    expect(addresses_in_radius).to include(second_address_in_radius)
-    expect(addresses_in_radius).not_to include(third_address_outside_radius)
+  context 'associations' do
+    it { should have_many(:people) }
+    it { should belong_to(:most_supportive_resident) }
+  end
+
+  context 'scopes' do
+    it "has a working 'within' scope" do
+      first_address_in_radius = create(:address, latitude: 1, longitude: 1)
+      second_address_in_radius = create(:address, latitude: -1, longitude: -1)
+      third_address_outside_radius = create(:address, latitude: 20, longitude: 20)
+
+      addresses_in_radius = Address.within(400 * 1000, origin: [0, 0]) # 400 km distance
+      expect(addresses_in_radius).to include(first_address_in_radius)
+      expect(addresses_in_radius).to include(second_address_in_radius)
+      expect(addresses_in_radius).not_to include(third_address_outside_radius)
+    end
   end
 
   it "has a working 'best_canvas_response' enum" do
