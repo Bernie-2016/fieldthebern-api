@@ -10,6 +10,12 @@ before_fork do |server, worker|
 
   defined?(ActiveRecord::Base) and
     ActiveRecord::Base.connection.disconnect!
+
+  if $redis
+    $redis.quit
+    $redis = nil
+    Rails.logger.info('Disconnected from Redis')
+  end
 end
 
 after_fork do |server, worker|
@@ -24,5 +30,10 @@ after_fork do |server, worker|
                 Rails.application.config.database_configuration[Rails.env]
     config['reaping_frequency'] = ENV['DB_REAP_FREQ'] || 10 # seconds
     config['pool']            =   ENV['DB_POOL'] || 2
+  end
+
+  if !$redis
+    $redis = Redis.new(:url => ENV["REDISCLOUD_URL"])
+    Rails.logger.info('Connected to Redis')
   end
 end
