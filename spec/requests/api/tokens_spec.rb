@@ -87,7 +87,7 @@ describe "Tokens API" do
           it 'updates the user from Facebook and returns a token', vcr: { cassette_name: 'requests/api/tokens/creates a user' } do
             user = create(:user, email: @facebook_user["email"], facebook_id: nil)
 
-            expect_any_instance_of(GroundGame::Scenario::UpdateUserAttributesFromFacebook).to receive(:call)
+            expect_any_instance_of(GroundGame::Scenario::UpdateUserAttributesFromFacebook).to receive(:call).and_call_original
 
             post "#{host}/oauth/token", {
               username: "facebook",
@@ -107,7 +107,7 @@ describe "Tokens API" do
           it 'updates the user from Facebook and returns a token', vcr: { cassette_name: 'requests/api/tokens/creates a user' } do
             user = create(:user, email: "different@email.com", facebook_id: @facebook_user["id"])
 
-            expect_any_instance_of(GroundGame::Scenario::UpdateUserAttributesFromFacebook).to receive(:call)
+            expect_any_instance_of(GroundGame::Scenario::UpdateUserAttributesFromFacebook).to receive(:call).and_call_original
 
             post "#{host}/oauth/token", {
               username: "facebook",

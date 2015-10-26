@@ -14,7 +14,6 @@ module GroundGame
         @user.last_name = last_name unless @user.last_name.present?
 
         @user.facebook_id = @facebook_user["id"]
-
         @user
       end
 
