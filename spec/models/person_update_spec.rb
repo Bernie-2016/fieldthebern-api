@@ -5,26 +5,24 @@ describe PersonUpdate do
     expect(build(:person_update)).to be_valid
   end
 
-  it "requires a 'person'" do
-    expect(build(:person_update, person: nil)).not_to be_valid
+  context 'schema' do
+    it {should have_db_column(:person_id).of_type(:integer) }
+    it {should have_db_column(:visit_id).of_type(:integer) }
+    it {should have_db_column(:update_type).of_type(:string).with_options(default: 'created') }
   end
 
-  it "requires a 'visit'" do
-    expect(build(:person_update, visit: nil)).not_to be_valid
+  context 'associations' do
+    it { should belong_to(:person) }
+    it { should belong_to(:visit) }
   end
 
-  it "requires a 'new_canvas_response'" do
-    expect(build(:person_update, new_canvas_response: nil)).not_to be_valid
-  end
-  it "requires a 'new_party_affiliation'" do
-    expect(build(:person_update, new_party_affiliation: nil)).not_to be_valid
-  end
-
-  it "does not require an 'old_canvas_response'" do
-    expect(build(:person_update, old_canvas_response: nil)).to be_valid
-  end
-  it "does not require an 'old_party_affiliation'" do
-    expect(build(:person_update, old_party_affiliation: nil)).to be_valid
+  context 'validations' do
+    it { should validate_presence_of(:person) }
+    it { should validate_presence_of(:visit) }
+    it { should validate_presence_of(:new_canvas_response) }
+    it { should validate_presence_of(:new_party_affiliation) }
+    it { should_not validate_presence_of(:old_canvas_response) }
+    it { should_not validate_presence_of(:old_party_affiliation) }
   end
 
   it "has a working 'update_type' enum" do

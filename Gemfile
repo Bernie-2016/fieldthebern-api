@@ -25,6 +25,8 @@ gem 'geokit-rails'
 
 gem 'easypost'
 
+gem 'leaderboard'
+
 # paperclip master currently doesn't work with new version of AWS SDK
 gem 'paperclip', :git=> 'https://github.com/thoughtbot/paperclip', :ref => '523bd46c768226893f23889079a7aa9c73b57d68'
 
@@ -54,4 +56,6 @@ group :test do
   gem 'oauth2'
   gem 'vcr'
   gem 'webmock'
+  gem 'fakeredis', :require => "fakeredis/rspec"
+  gem 'shoulda-matchers', git: 'https://github.com/thoughtbot/shoulda-matchers.git'
 end

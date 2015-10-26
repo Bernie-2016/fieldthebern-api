@@ -1,10 +1,7 @@
 class User < ActiveRecord::Base
-  ASSET_HOST_FOR_DEFAULT_PHOTO = 'http://www.example.com'
+  ASSET_HOST_FOR_DEFAULT_PHOTO = 'https://s3.amazonaws.com/ground-game/icons'
 
   include Clearance::User
-  attr_accessor :base_64_photo_data
-
-  before_save :decode_image_data
 
   has_many :visits
 
@@ -17,8 +14,8 @@ class User < ActiveRecord::Base
   has_many :following, through: :active_relationships, source: :followed
   has_many :followers, through: :passive_relationships, source: :follower
 
-  has_attached_file :photo, styles: { thumb: '150x150>', large: '500x500>'},
-                    :default_url => ASSET_HOST_FOR_DEFAULT_PHOTO + '/default_:style.png  '
+  has_attached_file :photo, styles: { thumb: '150x150#', large: '500x500#'},
+                    :default_url => ASSET_HOST_FOR_DEFAULT_PHOTO + '/default_:style.png'
 
   validates_attachment_content_type :photo,
                                     content_type: %r{^image\/(png|gif|jpeg)}
@@ -43,6 +40,29 @@ class User < ActiveRecord::Base
     following.include?(other_user)
   end
 
+  def total_points_this_week
+    return visits.this_week.sum(:total_points)
+  end
+
+  def full_name
+    "#{first_name} #{last_name}"
+  end
+
+  def ranking_name
+    if !full_name.strip.empty?
+      full_name
+    else
+      email[/[^@]+/]
+    end
+  end
+
+  def ranking_data_json
+    return {
+      name: ranking_name,
+      photo_thumb_url: photo.url(:thumb)
+    }.to_json
+  end
+  
   def decode_image_data
     return unless base_64_photo_data.present?
     data = StringIO.new(Base64.decode64(base_64_photo_data))
