@@ -1,4 +1,5 @@
 require 'rails_helper'
+require 'ground_game/scenario/update_user_attributes_from_facebook'
 
 describe "Tokens API" do
 
@@ -63,6 +64,8 @@ describe "Tokens API" do
 
         it 'creates a user from Facebook and returns a token', vcr: { cassette_name: 'requests/api/tokens/creates a user' } do
 
+          expect_any_instance_of(GroundGame::Scenario::UpdateUserAttributesFromFacebook).to receive(:call).and_call_original
+
           post "#{host}/oauth/token", {
             username: "facebook",
             password: @facebook_access_token
@@ -84,6 +87,8 @@ describe "Tokens API" do
           it 'updates the user from Facebook and returns a token', vcr: { cassette_name: 'requests/api/tokens/creates a user' } do
             user = create(:user, email: @facebook_user["email"], facebook_id: nil)
 
+            expect_any_instance_of(GroundGame::Scenario::UpdateUserAttributesFromFacebook).to receive(:call)
+
             post "#{host}/oauth/token", {
               username: "facebook",
               password: @facebook_access_token
@@ -101,6 +106,8 @@ describe "Tokens API" do
         context "with just the same facebook_id" do
           it 'updates the user from Facebook and returns a token', vcr: { cassette_name: 'requests/api/tokens/creates a user' } do
             user = create(:user, email: "different@email.com", facebook_id: @facebook_user["id"])
+
+            expect_any_instance_of(GroundGame::Scenario::UpdateUserAttributesFromFacebook).to receive(:call)
 
             post "#{host}/oauth/token", {
               username: "facebook",
