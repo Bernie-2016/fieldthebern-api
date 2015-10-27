@@ -307,6 +307,23 @@ module GroundGame
           end
 
           describe "error handling" do
+            before do
+              create(:address, id: 1, latitude: 1, longitude: 2)
+              visit_params = { duration_sec: 150 }
+
+              address_params = { id: 1, latitude: 1, longitude: 3, best_canvas_response: "invalid_value" }
+              people_params = []
+
+              @create_visit_instance = CreateVisit.new(visit_params, address_params, people_params, user)
+            end
+
+            it "handles ArgumentError with code 422" do
+              allow(@create_visit_instance).to receive(:create_visit).and_raise ArgumentError.new("Error message")
+              result = @create_visit_instance.call
+
+              expect(result[:error]).to eq "Error message"
+              expect(result[:error_code]).to eq 422
+            end
           end
 
           describe "cleanup" do
