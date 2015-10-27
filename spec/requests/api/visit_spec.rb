@@ -405,7 +405,22 @@ describe "Visit API" do
       end
 
       context "when it fails creating the visit" do
-        it "should return an error response"
+        it "should return an error response" do
+          address = create(:address, id: 1)
+
+          authenticated_post "visits", {
+            data: {
+              attributes: { duration_sec: 200 },
+              relationships: { address: { data: { id: 1, type: "addresses" } }, person: { data: { id: 10, type: "people" } } }
+            },
+            included: [ { type: "addresses", id: 1, attributes: { } }, { type: "people", id: 10, attributes: {} } ]
+          }, token
+          expect(last_response.status).to eq 404
+          expect(json.errors.id).to eq "RECORD_NOT_FOUND"
+          expect(json.errors.title).to eq "Record not found"
+          expect(json.errors.detail).to eq "Couldn't find Person with 'id'=10"
+          expect(json.errors.status).to eq 404
+        end
       end
     end
   end
