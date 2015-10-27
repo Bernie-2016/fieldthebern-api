@@ -59,4 +59,5 @@ group :test do
   gem 'webmock'
   gem 'fakeredis', :require => "fakeredis/rspec"
   gem 'shoulda-matchers', git: 'https://github.com/thoughtbot/shoulda-matchers.git'
+  gem 'rspec-sidekiq'
 end

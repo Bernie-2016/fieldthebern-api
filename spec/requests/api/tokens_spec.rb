@@ -133,7 +133,6 @@ describe "Tokens API" do
 
       context "when the user already exists" do
         context 'photo updating' do
-          Sidekiq::Testing.inline! do
             it 'doesnt update the photo if it already exists', vcr: { cassette_name: "requests/api/tokens/with_facebook/when_the_user_exists/with_a_photo/doesnt_update_photo" } do
               user = create(:user, :with_a_photo, email: @facebook_user["email"])
 
@@ -141,8 +140,7 @@ describe "Tokens API" do
                 username: 'facebook',
                 password: @facebook_access_token
               }
-
-              expect_any_instance_of(AddFacebookProfilePicture).to_not receive(:perform)
+              expect(AddFacebookProfilePicture.jobs.size).to eq 0
             end
 
             it 'does update the photo if it doesnt exist', vcr: { cassette_name: "requests/api/tokens/with_facebook/when_the_user_exists/without_a_photo/does_update_photo" } do
@@ -152,8 +150,9 @@ describe "Tokens API" do
                 username: 'facebook',
                 password: @facebook_access_token
               }
+              expect(AddFacebookProfilePicture.jobs.size).to eq 1
+              expect(AddFacebookProfilePicture).to have_enqueued_job(user.id)
             end
-          end
         end
 
         context "with just the same email" do
