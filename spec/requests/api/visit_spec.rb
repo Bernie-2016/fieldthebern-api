@@ -403,6 +403,10 @@ describe "Visit API" do
           expect(new_address.best_canvas_response).to eq new_person.canvas_response
         end
       end
+
+      context "when it fails creating the visit" do
+        it "should return an error response"
+      end
     end
   end
 end

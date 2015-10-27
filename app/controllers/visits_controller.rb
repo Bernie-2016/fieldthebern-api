@@ -4,9 +4,13 @@ class VisitsController < ApplicationController
   before_action :doorkeeper_authorize!
 
   def create
-    visit = GroundGame::Scenario::CreateVisit.new(visit_params, address, people, current_user).call
-    UpdateUsersLeaderboardsWorker.perform_async(visit.user.id)
-    render json: visit, include: ['score']
+    result = GroundGame::Scenario::CreateVisit.new(visit_params, address, people, current_user).call
+    if result[:success] == true
+      UpdateUsersLeaderboardsWorker.perform_async(result[:visit].user.id)
+      render json: result[:visit], include: ['score']
+    else
+      # TODO: Error
+    end
   end
 
   private
