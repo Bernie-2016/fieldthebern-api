@@ -25,7 +25,7 @@ http_interactions:
       Content-Type:
       - text/plain; charset=UTF-8
       X-Fb-Trace-Id:
-      - Bc+JK5NeLpD
+      - GEqvNxWkvdi
       X-Fb-Rev:
       - '2010019'
       Pragma:
@@ -40,9 +40,9 @@ http_interactions:
       - ": V3"
       - ": api"
       X-Fb-Debug:
-      - 74+eDBPCIujOVmHv3K8wC25zErw6N4WPDNVIrVWhu+xYMjt+SI2mAURfuv+DgD/2TMMieia9P1x7nEBmlYTuhA==
+      - p6c1WGXGHiKh9BQSL8PYzaFVHnk9UycHZJ/sJXbbwzX9Yli4r6nducrxNnBNMibtI9eK7ZZ1Dd5oCH1uFXo11w==
       Date:
-      - Tue, 27 Oct 2015 00:36:51 GMT
+      - Tue, 27 Oct 2015 00:36:48 GMT
       Connection:
       - keep-alive
       Content-Length:
@@ -51,7 +51,7 @@ http_interactions:
       encoding: UTF-8
       string: access_token=823950097719547|oS3DYF56aL2V4qHXWiBZweVqK44
     http_version: 
-  recorded_at: Tue, 27 Oct 2015 00:36:52 GMT
+  recorded_at: Tue, 27 Oct 2015 00:36:48 GMT
 - request:
     method: post
     uri: https://graph.facebook.com/823950097719547/accounts/test-users
@@ -77,7 +77,7 @@ http_interactions:
       Content-Type:
       - application/json; charset=UTF-8
       X-Fb-Trace-Id:
-      - C9DaN6OoE2G
+      - DDFUzuIqEft
       X-Fb-Rev:
       - '2010019'
       Pragma:
@@ -92,24 +92,24 @@ http_interactions:
       - ": V3"
       - ": api"
       X-Fb-Debug:
-      - l5kenqB1LUeAy7U1LG9grdcANWUZ09GbVRN1FA6CZRVBg/ztRgy7USgL3cU5rey5U1zW1D+L2V6U/IvVuzNnXQ==
+      - DvlEw/lrKiahoMJdftxGL0zx69AJSMiCALb0QFgff13Ln+3Md+P32aeIQn9U5epH8z2+4WAlF4pDXkRp8wpKIQ==
       Date:
-      - Tue, 27 Oct 2015 00:36:54 GMT
+      - Tue, 27 Oct 2015 00:36:50 GMT
       Connection:
       - keep-alive
       Content-Length:
-      - '419'
+      - '415'
     body:
       encoding: UTF-8
-      string: '{"id":"126619957696879","access_token":"CAALtYNTjIPsBAANUkeU7y1pAClrwgZBsgToaQP8ZBFx3bBz0AhZBbxZBZBxKSRl2HtyUNeE5gFCfzH2ZA80cKVQKUreoXzR7UfZAZCrJWviKhdBUlgh7gJ7ZBrSRxomT48ZC7UOAQKNp8uPXo78NGZAhkDBIzUkAvfg4A1aC9wzvELRTIBMr69S1loZCLgyHXUWyNYAZD","login_url":"https:\/\/developers.facebook.com\/checkpoint\/test-user-login\/126619957696879\/","email":"dgxxhuu_alisonberg_1445906212\u0040tfbnw.net","password":"1635552945"}'
+      string: '{"id":"109257772769047","access_token":"CAALtYNTjIPsBAIuQLxzwcl3PnfGgEWuX9rksauZC7fy2fuEzrHEJ9SuX8ZCEqbbJ4HXxTP7tFcceOkxJWwaQA6bEue7Ndf46RsgpYfNfccVPh10e4HA9idZBnpZCLxN4MYrb6UItd9PaiZAqfMBrozeJGaNJcLxZBqB1ZBxL4GzTom4h3xnichBAeRM8inqaZBwZD","login_url":"https:\/\/developers.facebook.com\/checkpoint\/test-user-login\/109257772769047\/","email":"gdofgqp_letuchysen_1445906208\u0040tfbnw.net","password":"1958791691"}'
     http_version: 
-  recorded_at: Tue, 27 Oct 2015 00:36:54 GMT
+  recorded_at: Tue, 27 Oct 2015 00:36:50 GMT
 - request:
     method: post
     uri: https://graph.facebook.com/oauth/access_token
     body:
       encoding: UTF-8
-      string: client_id=823950097719547&client_secret=dea8b556df75b906aa59ab482def6e26&fb_exchange_token=CAALtYNTjIPsBAANUkeU7y1pAClrwgZBsgToaQP8ZBFx3bBz0AhZBbxZBZBxKSRl2HtyUNeE5gFCfzH2ZA80cKVQKUreoXzR7UfZAZCrJWviKhdBUlgh7gJ7ZBrSRxomT48ZC7UOAQKNp8uPXo78NGZAhkDBIzUkAvfg4A1aC9wzvELRTIBMr69S1loZCLgyHXUWyNYAZD&grant_type=fb_exchange_token
+      string: client_id=823950097719547&client_secret=dea8b556df75b906aa59ab482def6e26&fb_exchange_token=CAALtYNTjIPsBAIuQLxzwcl3PnfGgEWuX9rksauZC7fy2fuEzrHEJ9SuX8ZCEqbbJ4HXxTP7tFcceOkxJWwaQA6bEue7Ndf46RsgpYfNfccVPh10e4HA9idZBnpZCLxN4MYrb6UItd9PaiZAqfMBrozeJGaNJcLxZBqB1ZBxL4GzTom4h3xnichBAeRM8inqaZBwZD&grant_type=fb_exchange_token
     headers:
       User-Agent:
       - Faraday v0.9.1
@@ -129,7 +129,7 @@ http_interactions:
       Content-Type:
       - text/plain; charset=UTF-8
       X-Fb-Trace-Id:
-      - FQ0XO3YSreh
+      - HgBAbCz6g9o
       X-Fb-Rev:
       - '2010019'
       Pragma:
@@ -144,21 +144,21 @@ http_interactions:
       - ": V3"
       - ": api"
       X-Fb-Debug:
-      - i+romN2Z7qf70WokB/G9gh3B535q1kP3uuRdv49j1fjhaj4+cRU9DXUwV7ymSLUB4uMHE9/ltwI9aUlW+L5uTw==
+      - 3fmT4xPp9j61/T1sN1t4l+AyTZ8kFjWF6Gwq4HV5h+v7GLLW7bCmWYHFkZvGF5GmAWHY6q3/QCYXAwabE1rEeg==
       Date:
-      - Tue, 27 Oct 2015 00:36:54 GMT
+      - Tue, 27 Oct 2015 00:36:51 GMT
       Connection:
       - keep-alive
       Content-Length:
-      - '215'
+      - '228'
     body:
       encoding: UTF-8
-      string: access_token=CAALtYNTjIPsBACx8vBROZAkX0UVb49jEfVMH5Lg8OZA4aTzvU1RKip2AifH2OUT6TYG1XIsciCq0jYmvMhVVUZCcHgyOfEnIAyJnYjqKPpFdFwgaiaseZCyBUKyAujF6UUOPWhNnvYufZBVZCNyL2XRZBHlN3YCzvZBvP36Glo2ZBdLffAsHOGQ3p&expires=5184000
+      string: access_token=CAALtYNTjIPsBACdtGaJxtFTUWzorX3UvOr4pRufDRigcStRo7xZCDIBZCTczVeZAwOrmto1mbZCBPl7DFtZATtSz7T86et9ZB1rskbbvlNOnVDhxPAD26SYJAMJHbXBs0ZBXQgdZCyveSGSSlbBFtqsuvqeiGFkpedYnqbRuK99bXCuVpvS7JaQFOhW2eYpZCc5wZD&expires=5183999
     http_version: 
-  recorded_at: Tue, 27 Oct 2015 00:36:54 GMT
+  recorded_at: Tue, 27 Oct 2015 00:36:51 GMT
 - request:
     method: get
-    uri: https://graph.facebook.com/oauth/client_code?access_token=CAALtYNTjIPsBACx8vBROZAkX0UVb49jEfVMH5Lg8OZA4aTzvU1RKip2AifH2OUT6TYG1XIsciCq0jYmvMhVVUZCcHgyOfEnIAyJnYjqKPpFdFwgaiaseZCyBUKyAujF6UUOPWhNnvYufZBVZCNyL2XRZBHlN3YCzvZBvP36Glo2ZBdLffAsHOGQ3p&client_id=823950097719547&client_secret=dea8b556df75b906aa59ab482def6e26&redirect_uri=http://localhost:3000/
+    uri: https://graph.facebook.com/oauth/client_code?access_token=CAALtYNTjIPsBACdtGaJxtFTUWzorX3UvOr4pRufDRigcStRo7xZCDIBZCTczVeZAwOrmto1mbZCBPl7DFtZATtSz7T86et9ZB1rskbbvlNOnVDhxPAD26SYJAMJHbXBs0ZBXQgdZCyveSGSSlbBFtqsuvqeiGFkpedYnqbRuK99bXCuVpvS7JaQFOhW2eYpZCc5wZD&client_id=823950097719547&client_secret=dea8b556df75b906aa59ab482def6e26&redirect_uri=http://localhost:3000/
     body:
       encoding: US-ASCII
       string: ''
@@ -179,7 +179,7 @@ http_interactions:
       Content-Type:
       - application/json; charset=UTF-8
       X-Fb-Trace-Id:
-      - DPWteKVLrCf
+      - GSZ6wq8gbIl
       X-Fb-Rev:
       - '2010019'
       Pragma:
@@ -194,21 +194,21 @@ http_interactions:
       - ": V3"
       - ": api"
       X-Fb-Debug:
-      - 74c33QY0ugorht6VJynqAwwJ57dv1vFlppkWwM7B+zx+OI1qfCsKOP5ZLrYy68AQe633Y/yo4nFoSn/1IsI/YA==
+      - XdrQ3iU3ent2cYv0d2Y8grvWDOd2Z6Z6rcVTU/fwO5tZJL9fZ+Ur0bepo9r9nu7VTtYHh/YTJswnISyXxOc6wg==
       Date:
-      - Tue, 27 Oct 2015 00:36:54 GMT
+      - Tue, 27 Oct 2015 00:36:51 GMT
       Connection:
       - keep-alive
       Content-Length:
       - '334'
     body:
       encoding: UTF-8
-      string: '{"code":"AQCgzjU0DlcxdxVYfDxKqnhEn5E-MhVxStU7lRyNlZ7bnjNgzh2BfZqF_Q3fQp4GSlu5-Uzg_aLxmtn-vYaMxmSWJNFRQukNec8ZiYvSqS8SxLdOU4DBmqc19sL22xwG6gEAVmT0u8h2Cqlyhh65ezbjftquyO2zYI2ymcm5Y_gBbCUR-mqnRyOJ2a8Qf0L4sKx1uHnmlD8ha-F4YSqEc-D6_jLBcp2reZLkFwkLaEyXqJMa7zIDM4cJbtyNv6q6zbyX3qdMpdoJOO3sBu_F2DBTFBjgEZFvVwyheN_xTO_DgcLEBJMEr9nbvntLiDVBGVY"}'
+      string: '{"code":"AQB-5epxol6Dl8MXa3YhBmcx1uhOeq7yPfZ08FKl9V9QCbrl6yjYMDuWL_7azmwOt4VW2WEZYirqkyN2CGs5fKaFaEyTJXocfGp_oYMlNdWu2NA4XfKHgRBmBnhyHIYv9F6R4MLmBq_v6R73ay7G6WVUHde60Y0wCXnVEaoYM1OKQDf0ZWr8anh3Ad-_ylmNX2ElBC1pHnSTG-7-cAqQrUGD13aqc8Zd4JIdeQlJ6VsMVYAlbZSEjz4cqv0hJL3CqoR1TMaEYjtOQPUa65G2w2DfPsVFT6kBQ6xQnN5Rk-v0kCBdF1Y1k1YqVe_gUktnmTQ"}'
     http_version: 
-  recorded_at: Tue, 27 Oct 2015 00:36:54 GMT
+  recorded_at: Tue, 27 Oct 2015 00:36:51 GMT
 - request:
     method: get
-    uri: https://graph.facebook.com/oauth/access_token?client_id=823950097719547&client_secret=dea8b556df75b906aa59ab482def6e26&code=AQCgzjU0DlcxdxVYfDxKqnhEn5E-MhVxStU7lRyNlZ7bnjNgzh2BfZqF_Q3fQp4GSlu5-Uzg_aLxmtn-vYaMxmSWJNFRQukNec8ZiYvSqS8SxLdOU4DBmqc19sL22xwG6gEAVmT0u8h2Cqlyhh65ezbjftquyO2zYI2ymcm5Y_gBbCUR-mqnRyOJ2a8Qf0L4sKx1uHnmlD8ha-F4YSqEc-D6_jLBcp2reZLkFwkLaEyXqJMa7zIDM4cJbtyNv6q6zbyX3qdMpdoJOO3sBu_F2DBTFBjgEZFvVwyheN_xTO_DgcLEBJMEr9nbvntLiDVBGVY&redirect_uri=http://localhost:3000/
+    uri: https://graph.facebook.com/oauth/access_token?client_id=823950097719547&client_secret=dea8b556df75b906aa59ab482def6e26&code=AQB-5epxol6Dl8MXa3YhBmcx1uhOeq7yPfZ08FKl9V9QCbrl6yjYMDuWL_7azmwOt4VW2WEZYirqkyN2CGs5fKaFaEyTJXocfGp_oYMlNdWu2NA4XfKHgRBmBnhyHIYv9F6R4MLmBq_v6R73ay7G6WVUHde60Y0wCXnVEaoYM1OKQDf0ZWr8anh3Ad-_ylmNX2ElBC1pHnSTG-7-cAqQrUGD13aqc8Zd4JIdeQlJ6VsMVYAlbZSEjz4cqv0hJL3CqoR1TMaEYjtOQPUa65G2w2DfPsVFT6kBQ6xQnN5Rk-v0kCBdF1Y1k1YqVe_gUktnmTQ&redirect_uri=http://localhost:3000/
     body:
       encoding: US-ASCII
       string: ''
@@ -229,7 +229,7 @@ http_interactions:
       Content-Type:
       - application/json; charset=UTF-8
       X-Fb-Trace-Id:
-      - Haf2zemYWbj
+      - EQ+PvZfTzej
       X-Fb-Rev:
       - '2010019'
       Pragma:
@@ -244,21 +244,21 @@ http_interactions:
       - ": V3"
       - ": api"
       X-Fb-Debug:
-      - xkHLf1vC2EoXjIOg5cqUpSYpkT3CEoIJtgLEUqkEfb0PQa+vRBNwUuBR5p0Hk/Oigs5yocCtro9wWK9RNHYang==
+      - o3FnvIYBnmxLt3i+89R0syZ+6BtZkRo2+1qRohlBrzSIXGXEYGpNSfNQ/wWXlDSmfPm3DfmZYsUhrAtlvBBqUg==
       Date:
-      - Tue, 27 Oct 2015 00:36:54 GMT
+      - Tue, 27 Oct 2015 00:36:51 GMT
       Connection:
       - keep-alive
       Content-Length:
-      - '261'
+      - '262'
     body:
       encoding: UTF-8
-      string: '{"access_token":"CAALtYNTjIPsBAGpHbb66xjIyhvjiFZCO7bhoF39qekDG6YlMZBpKQOBwSbQyOzYw0BdziTbilXVHX1HiyucwGnxj1Q824PXsIac8ZBt2oIQGxzoCjvbBI6ok7FU0FFrhaWiGFdBGo21RzA62rOhubkm6ARGBZC4Yut0CJJJt5nWC1IIvP7Gs","machine_id":"JscuVus-trik3qVgomHeW7r8","expires_in":5184000}'
+      string: '{"access_token":"CAALtYNTjIPsBAMly7ZBIY6vFv8qJ4ZCZCF3m2bM4U1x8sFOGkYNr1tKgRivRGbSECHTY5iQTxChwI4LZADx290wlY0KcJVzjN0SMN99DJnzVRbLuKFCIk0t5KRt4fRpkPekvqJ2d2N5MkCQUAXnQANswoVmszYE0NrXGDEACzQk8ZArRUiSIL","machine_id":"I8cuVkT3odltpAlBhnmdVndF","expires_in":5183999}'
     http_version: 
-  recorded_at: Tue, 27 Oct 2015 00:36:54 GMT
+  recorded_at: Tue, 27 Oct 2015 00:36:51 GMT
 - request:
     method: get
-    uri: https://graph.facebook.com/me?access_token=CAALtYNTjIPsBAGpHbb66xjIyhvjiFZCO7bhoF39qekDG6YlMZBpKQOBwSbQyOzYw0BdziTbilXVHX1HiyucwGnxj1Q824PXsIac8ZBt2oIQGxzoCjvbBI6ok7FU0FFrhaWiGFdBGo21RzA62rOhubkm6ARGBZC4Yut0CJJJt5nWC1IIvP7Gs&appsecret_proof=85cdfe8c484b8bcb803ac3d9f0897c44164110d41b5219a4cd44bd4502a8a944&fields=email,first_name,last_name
+    uri: https://graph.facebook.com/me?access_token=CAALtYNTjIPsBAMly7ZBIY6vFv8qJ4ZCZCF3m2bM4U1x8sFOGkYNr1tKgRivRGbSECHTY5iQTxChwI4LZADx290wlY0KcJVzjN0SMN99DJnzVRbLuKFCIk0t5KRt4fRpkPekvqJ2d2N5MkCQUAXnQANswoVmszYE0NrXGDEACzQk8ZArRUiSIL&appsecret_proof=4735e585b9fd049cea0a51c4e08114cc546a1497ff33f65af2b2d613b97f4292&fields=email,first_name,last_name
     body:
       encoding: US-ASCII
       string: ''
@@ -279,11 +279,11 @@ http_interactions:
       Content-Type:
       - application/json; charset=UTF-8
       X-Fb-Trace-Id:
-      - B1CImDagXbq
+      - D8m9Ji5w2KR
       X-Fb-Rev:
       - '2010019'
       Etag:
-      - '"6e0c54dde5e858ec2f0138a0ff0acfffa6cfbfca"'
+      - '"e7d8e7b02d9b7e0630ca9352de69b3c98f3aae70"'
       Pragma:
       - no-cache
       Cache-Control:
@@ -296,21 +296,21 @@ http_interactions:
       - ": V3"
       - ": api"
       X-Fb-Debug:
-      - scQgqOwFGYt2asCfEKNWHzdV0SOdl9YnT+WKbZfOIUeKOMCx6/EI4hGBG7ZZwne8nVPkhmqiTh/MI/SAWc8NIg==
+      - c9owgN4ccQybCPZVgX5j7h27FKIssP9/9KP43wrofm799Am5ZaOhAZGmTWw4xdDg1y5DCAwyN0uN1KxsWGAdXw==
       Date:
-      - Tue, 27 Oct 2015 00:36:55 GMT
+      - Tue, 27 Oct 2015 00:36:51 GMT
       Connection:
       - keep-alive
       Content-Length:
       - '125'
     body:
       encoding: UTF-8
-      string: '{"email":"dgxxhuu_alisonberg_1445906212\u0040tfbnw.net","first_name":"James","last_name":"Alisonberg","id":"126619957696879"}'
+      string: '{"email":"gdofgqp_letuchysen_1445906208\u0040tfbnw.net","first_name":"Nancy","last_name":"Letuchysen","id":"109257772769047"}'
     http_version: 
-  recorded_at: Tue, 27 Oct 2015 00:36:55 GMT
+  recorded_at: Tue, 27 Oct 2015 00:36:51 GMT
 - request:
     method: get
-    uri: https://graph.facebook.com/me/friends?access_token=CAALtYNTjIPsBAGpHbb66xjIyhvjiFZCO7bhoF39qekDG6YlMZBpKQOBwSbQyOzYw0BdziTbilXVHX1HiyucwGnxj1Q824PXsIac8ZBt2oIQGxzoCjvbBI6ok7FU0FFrhaWiGFdBGo21RzA62rOhubkm6ARGBZC4Yut0CJJJt5nWC1IIvP7Gs&appsecret_proof=85cdfe8c484b8bcb803ac3d9f0897c44164110d41b5219a4cd44bd4502a8a944
+    uri: https://graph.facebook.com/me/friends?access_token=CAALtYNTjIPsBAMly7ZBIY6vFv8qJ4ZCZCF3m2bM4U1x8sFOGkYNr1tKgRivRGbSECHTY5iQTxChwI4LZADx290wlY0KcJVzjN0SMN99DJnzVRbLuKFCIk0t5KRt4fRpkPekvqJ2d2N5MkCQUAXnQANswoVmszYE0NrXGDEACzQk8ZArRUiSIL&appsecret_proof=4735e585b9fd049cea0a51c4e08114cc546a1497ff33f65af2b2d613b97f4292
     body:
       encoding: US-ASCII
       string: ''
@@ -331,7 +331,7 @@ http_interactions:
       Content-Type:
       - application/json; charset=UTF-8
       X-Fb-Trace-Id:
-      - GbNzCN2koVR
+      - CrWiCkiFEs5
       X-Fb-Rev:
       - '2010019'
       Etag:
@@ -348,9 +348,9 @@ http_interactions:
       - ": V3"
       - ": api"
       X-Fb-Debug:
-      - Alw9RFNDMjBqdYCTq3E4MfTxpsFfrjiFI4ulZVAhn0m9/8lt1GSAe+H3Zb2AiM5UKs5HVLranuMn8z3XFcRy1Q==
+      - soLAc2LDdlffs6PlTXVuqn7yK2nxKIDDP+wUrldkg5kMWv8VKhEuRqj1Z5eQsrow93aQqxyfWV/WjqnDyrF/OA==
       Date:
-      - Tue, 27 Oct 2015 00:36:55 GMT
+      - Tue, 27 Oct 2015 00:36:51 GMT
       Connection:
       - keep-alive
       Content-Length:
@@ -359,5 +359,5 @@ http_interactions:
       encoding: UTF-8
       string: '{"data":[],"summary":{"total_count":0}}'
     http_version: 
-  recorded_at: Tue, 27 Oct 2015 00:36:55 GMT
+  recorded_at: Tue, 27 Oct 2015 00:36:51 GMT
 recorded_with: VCR 2.9.3

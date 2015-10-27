@@ -32,12 +32,10 @@ class TokensController < Doorkeeper::TokensController
       u = GroundGame::Scenario::UpdateUserAttributesFromFacebook.new(u, facebook_user).call
       u.facebook_access_token = facebook_access_token
       u.password = User.friendly_token unless u.encrypted_password.present?
-
       u.save!
     end
-
     AddFacebookFriendsWorker.perform_async(user.id)
-    AddFacebookProfilePicture.perform_async(user.id)
+    AddFacebookProfilePicture.perform_async(user.id) unless user.photo.present?
 
     doorkeeper_access_token =
     Doorkeeper::AccessToken.create!(application_id: nil,

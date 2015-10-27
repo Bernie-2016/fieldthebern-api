@@ -132,6 +132,29 @@ describe "Tokens API" do
       end
 
       context "when the user already exists" do
+        context 'photo updating' do
+          Sidekiq::Testing.inline! do
+            it 'doesnt update the photo if it already exists', vcr: { cassette_name: "requests/api/tokens/with_facebook/when_the_user_exists/with_a_photo/doesnt_update_photo" } do
+              user = create(:user, :with_a_photo, email: @facebook_user["email"])
+
+              post "#{host}/oauth/token", {
+                username: 'facebook',
+                password: @facebook_access_token
+              }
+
+              expect_any_instance_of(AddFacebookProfilePicture).to_not receive(:perform)
+            end
+
+            it 'does update the photo if it doesnt exist', vcr: { cassette_name: "requests/api/tokens/with_facebook/when_the_user_exists/without_a_photo/does_update_photo" } do
+              user = create(:user, email: @facebook_user["email"])
+
+              post "#{host}/oauth/token", {
+                username: 'facebook',
+                password: @facebook_access_token
+              }
+            end
+          end
+        end
 
         context "with just the same email" do
           it 'updates the user from Facebook and returns a token', vcr: { cassette_name: "requests/api/tokens/with_facebook/when_the_user_exists/with just the same email/updates the user" } do
@@ -228,7 +251,5 @@ describe "Tokens API" do
         end
       end
     end
-
   end
-
 end
