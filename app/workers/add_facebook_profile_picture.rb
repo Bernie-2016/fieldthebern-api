@@ -3,11 +3,17 @@ class AddFacebookProfilePicture
 
   def perform(user_id)
     user = User.find(user_id)
+    photo_url = facebook_photo_url(user)
+    return unless photo_url
+    user.photo = URI.parse(photo_url)
+    user.save
+  end
+
+  private
+
+  def facebook_photo_url(user)
     facebook_access_token = user.facebook_access_token
     graph = Koala::Facebook::API.new(facebook_access_token, ENV['FACEBOOK_APP_SECRET'])
-    picture_url = graph.get_picture('me', type: "large")
-    return unless picture_url
-    user.photo = URI.parse(picture_url)
-    user.save
+    graph.get_picture('me', type: "large")
   end
 end
