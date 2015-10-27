@@ -3,7 +3,7 @@ require "rails_helper"
 describe UserSerializer, :type => :serializer do
 
   context "individual resource representation" do
-    let(:resource) { build(:user, id: 20, first_name: "John", last_name: "Doe", email: "john.doe@mail.com", state_code: "NY") }
+    let(:resource) { create(:user) }
 
     let(:serializer) { UserSerializer.new(resource) }
     let(:serialization) { ActiveModel::Serializer::Adapter.create(serializer) }
@@ -18,7 +18,7 @@ describe UserSerializer, :type => :serializer do
       end
 
       it "has an id" do
-        expect(subject["id"]).to eq 20.to_s
+        expect(subject["id"]).to eq resource.id.to_s
       end
 
       it "has a type set to `users`" do
@@ -32,27 +32,36 @@ describe UserSerializer, :type => :serializer do
       end
 
       it 'has a first_name' do
-        expect(subject['first_name']).to eql(resource.first_name)
+        expect(subject['first_name']).to eq resource.first_name
       end
 
       it "has a last_name" do
-        expect(subject["last_name"]).to eq "Doe"
+        expect(subject["last_name"]).to eq resource.last_name
       end
 
       it "has an email" do
-        expect(subject["email"]).to eq "john.doe@mail.com"
+        expect(subject["email"]).to eq resource.email
       end
 
       it "has a state_code" do
-        expect(subject["state_code"]).to eq "NY"
+        expect(subject["state_code"]).to eq resource.state_code
       end
 
       it 'has a thumbnail photo url' do
-        expect(subject['photo_thumb_url']).to eql(resource.photo.url(:thumb))
+        expect(subject['photo_thumb_url']).to eq resource.photo.url(:thumb)
       end
 
       it 'has a large photo url' do
-        expect(subject['photo_large_url']).to eql(resource.photo.url(:large))
+        expect(subject['photo_large_url']).to eq resource.photo.url(:large)
+      end
+
+      # BigDecimals are passed as strings
+      it 'has a lat' do
+        expect(subject['lat']).to eq resource.lat.to_s
+      end
+
+      it 'has a lng' do
+        expect(subject['lng']).to eq resource.lng.to_s
       end
     end
 

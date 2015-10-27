@@ -4,7 +4,8 @@ FactoryGirl.define do
     f.last_name "Doe"
     f.password "password"
     f.state_code "NY"
-
+    f.lat 1.23456
+    f.lng 1.23456
     sequence(:email) { |n| "user_" + n.to_s + "@mail.com" }
 
     trait :with_a_photo do

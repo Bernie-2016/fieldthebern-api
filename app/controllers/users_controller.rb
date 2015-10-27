@@ -41,7 +41,8 @@ class UsersController < ApplicationController
 
   def user_params
     record_attributes.permit(:email, :password, :first_name,
-                             :last_name, :state_code, :base_64_photo_data)
+                             :last_name, :state_code, :base_64_photo_data,
+                             :lat, :lng)
   end
 
   def photo_param?

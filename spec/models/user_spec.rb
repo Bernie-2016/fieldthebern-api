@@ -22,6 +22,8 @@ describe User do
     it { should have_db_column(:photo_file_size).of_type(:integer) }
     it { should have_db_column(:photo_updated_at).of_type(:datetime) }
     it { should have_db_column(:visits_count).of_type(:integer) }
+    it { should have_db_column(:lat).of_type(:decimal) }
+    it { should have_db_column(:lng).of_type(:decimal) }
   end
 
   context 'associations' do

@@ -8,6 +8,8 @@ describe "Users API" do
     first_name = 'Jane'
     last_name = 'Doe'
     state_code = 'NY'
+    lat = 1.23456
+    lng = -1.23456
 
     it 'creates a valid user without a photo image' do
       post "#{host}/users", {
@@ -16,7 +18,9 @@ describe "Users API" do
           password: password,
           first_name: first_name,
           last_name: last_name,
-          state_code: state_code
+          state_code: state_code,
+          lat: lat,
+          lng: lng
         } }
       }
       expect(last_response.status).to eq 200
@@ -26,6 +30,8 @@ describe "Users API" do
       expect(response_data.first_name).to eq first_name
       expect(response_data.last_name).to eq last_name
       expect(response_data.state_code).to eq state_code
+      expect(response_data.lat).to eq lat.to_s
+      expect(response_data.lng).to eq lng.to_s
       expect(response_data.photo_thumb_url).to include User::ASSET_HOST_FOR_DEFAULT_PHOTO
       expect(response_data.photo_large_url).to include User::ASSET_HOST_FOR_DEFAULT_PHOTO
 
@@ -34,6 +40,9 @@ describe "Users API" do
       expect(user.email).to eq email
       expect(user.first_name).to eq first_name
       expect(user.last_name).to eq last_name
+      expect(user.state_code).to eq state_code
+      expect(user.lat).to eq lat
+      expect(user.lng).to eq lng
     end
 
     it 'creates a valid user with a photo image' do
@@ -47,7 +56,9 @@ describe "Users API" do
             password: password,
             first_name: first_name,
             last_name: last_name,
-            base_64_photo_data: base_64_image
+            base_64_photo_data: base_64_image,
+            lat: lat,
+            lng: lng
           } }
         }
         expect(last_response.status).to eq 200
@@ -204,7 +215,7 @@ describe "Users API" do
     let(:token) { authenticate(email: "test-user@mail.com", password: "password") }
 
     it 'returns unauthorized when you try to edit any user and are not logged in' do
-      user = create(:user)
+      create(:user)
 
       post "#{host}/users/me", {
         data: { attributes: {
