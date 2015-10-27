@@ -250,6 +250,10 @@ GEM
       http-cookie (>= 1.0.2, < 2.0)
       mime-types (>= 1.16, < 3.0)
       netrc (~> 0.7)
+    rspec (3.3.0)
+      rspec-core (~> 3.3.0)
+      rspec-expectations (~> 3.3.0)
+      rspec-mocks (~> 3.3.0)
     rspec-core (3.3.2)
       rspec-support (~> 3.3.0)
     rspec-expectations (3.3.1)
@@ -267,6 +271,9 @@ GEM
       rspec-expectations (~> 3.3.0)
       rspec-mocks (~> 3.3.0)
       rspec-support (~> 3.3.0)
+    rspec-sidekiq (2.1.0)
+      rspec (~> 3.0, >= 3.0.0)
+      sidekiq (>= 2.4.0)
     rspec-support (3.3.0)
     safe_yaml (1.0.4)
     sidekiq (3.5.0)
@@ -329,9 +336,13 @@ DEPENDENCIES
   rails-api
   rails_12factor
   rspec-rails
+  rspec-sidekiq
   shoulda-matchers!
   sidekiq
   spring
   unicorn
   vcr
   webmock
+
+BUNDLED WITH
+   1.10.6
