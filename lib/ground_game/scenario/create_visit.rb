@@ -17,7 +17,9 @@ module GroundGame
             { success: true, visit: visit }
           end
         rescue ArgumentError => e
-          { success: false, error: e.message, error_code: 422 }
+          { success: false, error: ErrorSerializer.serialize(e) }
+        rescue ActiveRecord::RecordNotFound => e
+          { success: false, error: ErrorSerializer.serialize(e) }
         end
       end
 

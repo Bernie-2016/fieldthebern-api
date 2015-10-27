@@ -321,8 +321,18 @@ module GroundGame
               allow(@create_visit_instance).to receive(:create_visit).and_raise ArgumentError.new("Error message")
               result = @create_visit_instance.call
 
-              expect(result[:error]).to eq "Error message"
-              expect(result[:error_code]).to eq 422
+              expect(result[:error][:errors][:detail]).to eq "Error message"
+              expect(result[:error][:errors][:status]).to eq 422
+            end
+
+            it "handles EasyPost:Error with code 422"
+
+            it "handles ActiveRecord::RecordNotFound with code 404" do
+              allow(@create_visit_instance).to receive(:create_visit).and_raise ActiveRecord::RecordNotFound.new("Error message")
+              result = @create_visit_instance.call
+
+              expect(result[:error][:errors][:detail]).to eq "Error message"
+              expect(result[:error][:errors][:status]).to eq 404
             end
           end
 
