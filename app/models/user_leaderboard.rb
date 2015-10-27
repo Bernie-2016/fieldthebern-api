@@ -20,10 +20,6 @@ class UserLeaderboard < Leaderboard
     rank_member(user.id.to_s, user.total_points_this_week, user.ranking_data_json)
   end
 
-  def update_member_data(user)
-    update_member_data(user.id.to_s, user.ranking_data_json)
-  end
-
   private
 
     REDIS_OPTIONS = {
