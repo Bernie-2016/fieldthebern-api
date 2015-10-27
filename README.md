@@ -19,12 +19,14 @@ get .env variables in a secure way and create .env file from the .env.sample fil
 
 ```json
 {
-  errors: [{
-    id: "DASHERIZED_CAPITALIZED_ERROR_NAME",
-    title: "User friendly error name",
-    detail: "Value of Error.message",
-    status: HTTP_CODE_IN_INTEGER_FORMAT
-  }]
+  "errors": [
+    {
+      "id": "DASHERIZED_CAPITALIZED_ERROR_NAME",
+      "title": "User friendly error name",
+      "detail": "Value of Error.message",
+      "status": "HTTP_CODE_IN_INTEGER_FORMAT"
+    }
+  ]
 }
 ```
 
