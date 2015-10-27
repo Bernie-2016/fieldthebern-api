@@ -403,6 +403,27 @@ describe "Visit API" do
           expect(new_address.best_canvas_response).to eq new_person.canvas_response
         end
       end
+
+      context "when it fails creating the visit" do
+        it "should return an error response" do
+          address = create(:address, id: 1)
+
+          authenticated_post "visits", {
+            data: {
+              attributes: { duration_sec: 200 },
+              relationships: { address: { data: { id: 1, type: "addresses" } }, person: { data: { id: 10, type: "people" } } }
+            },
+            included: [ { type: "addresses", id: 1, attributes: { } }, { type: "people", id: 10, attributes: {} } ]
+          }, token
+          expect(last_response.status).to eq 404
+          expect(json.errors.length).to eq 1
+          error = json.errors.first
+          expect(error.id).to eq "RECORD_NOT_FOUND"
+          expect(error.title).to eq "Record not found"
+          expect(error.detail).to eq "Couldn't find Person with 'id'=10"
+          expect(error.status).to eq 404
+        end
+      end
     end
   end
 end
