@@ -308,31 +308,33 @@ module GroundGame
 
           describe "error handling" do
             before do
-              create(:address, id: 1, latitude: 1, longitude: 2)
-              visit_params = { duration_sec: 150 }
-
-              address_params = { id: 1, latitude: 1, longitude: 3, best_canvas_response: "invalid_value" }
-              people_params = []
-
-              @create_visit_instance = CreateVisit.new(visit_params, address_params, people_params, user)
+              create(:address, id: 10, latitude: 40.771913, longitude: -73.9673735, street_1: "5th Avenue", city: "New York", state_code: "NY")
             end
 
             it "handles ArgumentError with code 422" do
-              allow(@create_visit_instance).to receive(:create_visit).and_raise ArgumentError.new("Error message")
-              result = @create_visit_instance.call
+              visit_params = { duration_sec: 150 }
+              address_params = { id: 10}
+              people_params = [{ first_name: "John", last_name: "Doe", canvas_response: "invalid response" }]
 
-              expect(result[:error][:errors][:detail]).to eq "Error message"
-              expect(result[:error][:errors][:status]).to eq 422
+              error = CreateVisit.new(visit_params, address_params, people_params, user).call[:error][:errors]
+
+              expect(error[:id]).to eq "ARGUMENT_ERROR"
+              expect(error[:title]).to eq "Argument error"
+              expect(error[:detail]).to eq "'invalid response' is not a valid canvas_response"
+              expect(error[:status]).to eq 422
             end
 
-            it "handles EasyPost:Error with code 422"
-
             it "handles ActiveRecord::RecordNotFound with code 404" do
-              allow(@create_visit_instance).to receive(:create_visit).and_raise ActiveRecord::RecordNotFound.new("Error message")
-              result = @create_visit_instance.call
+              visit_params = { duration_sec: 150 }
+              address_params = { id: 11}
+              people_params = [{ first_name: "John", last_name: "Doe" }]
 
-              expect(result[:error][:errors][:detail]).to eq "Error message"
-              expect(result[:error][:errors][:status]).to eq 404
+              error = CreateVisit.new(visit_params, address_params, people_params, user).call[:error][:errors]
+
+              expect(error[:id]).to eq "RECORD_NOT_FOUND"
+              expect(error[:title]).to eq "Record not found"
+              expect(error[:detail]).to eq "Couldn't find Address with 'id'=11"
+              expect(error[:status]).to eq 404
             end
           end
 
@@ -419,7 +421,6 @@ module GroundGame
 
               expect(Score.count).to eq 0
             end
-
           end
         end
       end
