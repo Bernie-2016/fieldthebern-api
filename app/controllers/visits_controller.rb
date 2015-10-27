@@ -5,11 +5,11 @@ class VisitsController < ApplicationController
 
   def create
     result = GroundGame::Scenario::CreateVisit.new(visit_params, address, people, current_user).call
-    if result[:success] == true
-      UpdateUsersLeaderboardsWorker.perform_async(result[:visit].user.id)
-      render json: result[:visit], include: ['score']
+    if result.success?
+      UpdateUsersLeaderboardsWorker.perform_async(result.visit.user.id)
+      render json: result.visit, include: ['score']
     else
-      render json: result[:error], status: result[:error][:errors].first[:status]
+      render json: result.error.hash, status: result.error.status
     end
   end
 

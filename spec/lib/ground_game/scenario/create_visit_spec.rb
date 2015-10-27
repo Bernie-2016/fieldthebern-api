@@ -21,9 +21,9 @@ module GroundGame
             people_params = [{ id: 10 }]
 
             result = CreateVisit.new(visit_params, address_params, people_params, user).call
-            expect(result[:success]).to be true
-            expect(result[:visit]).not_to be_nil
-            expect(result[:error]).to be_nil
+            expect(result.success?).to be true
+            expect(result.visit).not_to be_nil
+            expect(result.error).to be_nil
           end
 
           it "computes and assigns the score" do
@@ -51,7 +51,7 @@ module GroundGame
               party_affiliation: "Democrat"
             }]
 
-            visit = CreateVisit.new(visit_params, address_params, people_params, user).call[:visit]
+            visit = CreateVisit.new(visit_params, address_params, people_params, user).call.visit
             expect(visit.total_points).not_to be_nil
           end
 
@@ -64,7 +64,7 @@ module GroundGame
               address_params = { id: 1 }
               people_params = []
 
-              visit = CreateVisit.new(visit_params, address_params, people_params, user).call[:visit]
+              visit = CreateVisit.new(visit_params, address_params, people_params, user).call.visit
               address_update = AddressUpdate.last
               expect(address_update.visit).to eq visit
               expect(address_update.address).to eq address
@@ -93,7 +93,7 @@ module GroundGame
                   party_affiliation: "Independent"
                 }]
 
-                visit = CreateVisit.new(visit_params, address_params, people_params, user).call[:visit]
+                visit = CreateVisit.new(visit_params, address_params, people_params, user).call.visit
 
                 first_person_update = PersonUpdate.find_by(person_id: 10)
                 expect(first_person_update).not_to be_nil
@@ -139,7 +139,7 @@ module GroundGame
                   party_affiliation: "Democrat"
                 }]
 
-                visit = CreateVisit.new(visit_params, address_params, people_params, user).call[:visit]
+                visit = CreateVisit.new(visit_params, address_params, people_params, user).call.visit
 
                 expect(visit.duration_sec).to eq 150
                 expect(visit.address.id).to eq 1
@@ -170,7 +170,7 @@ module GroundGame
                   party_affiliation: "Independent"
                 }]
 
-                visit = CreateVisit.new(visit_params, address_params, people_params, user).call[:visit]
+                visit = CreateVisit.new(visit_params, address_params, people_params, user).call.visit
 
                 first_person = Person.find_by(first_name: "John")
                 first_person_update = PersonUpdate.find_by(person: first_person)
@@ -216,7 +216,7 @@ module GroundGame
                   party_affiliation: "Democrat"
                 }]
 
-                visit = CreateVisit.new(visit_params, address_params, people_params, user).call[:visit]
+                visit = CreateVisit.new(visit_params, address_params, people_params, user).call.visit
 
                 expect(visit.duration_sec).to eq 150
                 expect(visit.address.id).to eq 1
@@ -240,7 +240,7 @@ module GroundGame
 
               people_params = []
 
-              visit = CreateVisit.new(visit_params, address_params, people_params, user).call[:visit]
+              visit = CreateVisit.new(visit_params, address_params, people_params, user).call.visit
 
               address_update = AddressUpdate.last
               expect(address_update.visit).to eq visit
@@ -266,7 +266,7 @@ module GroundGame
                 party_affiliation: "Democrat"
               }]
 
-              visit = CreateVisit.new(visit_params, address_params, people_params, user).call[:visit]
+              visit = CreateVisit.new(visit_params, address_params, people_params, user).call.visit
 
               expect(visit.duration_sec).to eq 150
 
@@ -301,9 +301,9 @@ module GroundGame
             people_params = []
 
             result = CreateVisit.new(visit_params, address_params, people_params, user).call
-            expect(result[:success]).to be false
-            expect(result[:visit]).to be_nil
-            expect(result[:error][:errors].length).to eq 1
+            expect(result.success?).to be false
+            expect(result.visit).to be_nil
+            expect(result.error).not_to be_nil
           end
 
           describe "error handling" do
@@ -316,12 +316,12 @@ module GroundGame
               address_params = { id: 10}
               people_params = [{ first_name: "John", last_name: "Doe", canvas_response: "invalid response" }]
 
-              error = CreateVisit.new(visit_params, address_params, people_params, user).call[:error][:errors].first
+              error = CreateVisit.new(visit_params, address_params, people_params, user).call.error
 
-              expect(error[:id]).to eq "ARGUMENT_ERROR"
-              expect(error[:title]).to eq "Argument error"
-              expect(error[:detail]).to eq "'invalid response' is not a valid canvas_response"
-              expect(error[:status]).to eq 422
+              expect(error.id).to eq "ARGUMENT_ERROR"
+              expect(error.title).to eq "Argument error"
+              expect(error.detail).to eq "'invalid response' is not a valid canvas_response"
+              expect(error.status).to eq 422
             end
 
             it "handles ActiveRecord::RecordNotFound with code 404" do
@@ -329,12 +329,12 @@ module GroundGame
               address_params = { id: 11}
               people_params = [{ first_name: "John", last_name: "Doe" }]
 
-              error = CreateVisit.new(visit_params, address_params, people_params, user).call[:error][:errors].first
+              error = CreateVisit.new(visit_params, address_params, people_params, user).call.error
 
-              expect(error[:id]).to eq "RECORD_NOT_FOUND"
-              expect(error[:title]).to eq "Record not found"
-              expect(error[:detail]).to eq "Couldn't find Address with 'id'=11"
-              expect(error[:status]).to eq 404
+              expect(error.id).to eq "RECORD_NOT_FOUND"
+              expect(error.title).to eq "Record not found"
+              expect(error.detail).to eq "Couldn't find Address with 'id'=11"
+              expect(error.status).to eq 404
             end
           end
 
@@ -348,7 +348,7 @@ module GroundGame
               people_params = []
 
               result = CreateVisit.new(visit_params, address_params, people_params, user).call
-              expect(result[:success]).to be false
+              expect(result.success?).to be false
 
               expect(Visit.count).to eq 0
               expect(Address.count).to eq 1
@@ -363,7 +363,7 @@ module GroundGame
               people_params = []
 
               result = CreateVisit.new(visit_params, address_params, people_params, user).call
-              expect(result[:success]).to be false
+              expect(result.success?).to be false
 
               expect(Visit.count).to eq 0
               expect(Address.count).to eq 0
@@ -380,7 +380,7 @@ module GroundGame
               people_params = [{ id: 2, first_name: "Jake", last_name: "Doe", canvas_response: "invalid_value" }]
 
               result = CreateVisit.new(visit_params, address_params, people_params, user).call
-              expect(result[:success]).to be false
+              expect(result.success?).to be false
 
               expect(Visit.count).to eq 0
 
@@ -407,7 +407,7 @@ module GroundGame
               ]
 
               result = CreateVisit.new(visit_params, address_params, people_params, user).call
-              expect(result[:success]).to be false
+              expect(result.success?).to be false
 
               expect(Visit.count).to eq 0
 

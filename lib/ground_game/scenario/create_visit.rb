@@ -2,6 +2,57 @@ require "ground_game/scenario/create_score"
 
 module GroundGame
   module Scenario
+
+    class CreateVisitError
+      def initialize(error)
+        @hash = ErrorSerializer.serialize(error)
+      end
+
+      def hash
+        @hash
+      end
+
+      def id
+        first_error_in_hash[:id]
+      end
+
+      def title
+        first_error_in_hash[:title]
+      end
+
+      def detail
+        first_error_in_hash[:detail]
+      end
+
+      def status
+        first_error_in_hash[:status]
+      end
+
+      private
+        def first_error_in_hash
+          @hash[:errors].first
+        end
+    end
+
+    class CreateVisitResult
+      def initialize(visit: nil, error:nil)
+        @visit = visit
+        @error = CreateVisitError.new(error) if not error.nil?
+      end
+
+      def visit
+        @visit
+      end
+
+      def error
+        @error
+      end
+
+      def success?
+        @error.nil?
+      end
+    end
+
     class CreateVisit
       def initialize(visit_params, address_params, people_params, current_user)
         @visit_params = visit_params
@@ -14,12 +65,10 @@ module GroundGame
         begin
           Visit.transaction do
             visit = create_visit(@visit_params, @address_params, @people_params, @current_user)
-            { success: true, visit: visit }
+            CreateVisitResult.new(visit: visit)
           end
-        rescue ArgumentError => e
-          { success: false, error: ErrorSerializer.serialize(e) }
-        rescue ActiveRecord::RecordNotFound => e
-          { success: false, error: ErrorSerializer.serialize(e) }
+        rescue ArgumentError, ActiveRecord::RecordNotFound => e
+          CreateVisitResult.new(error: e)
         end
       end
 
