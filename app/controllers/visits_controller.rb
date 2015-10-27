@@ -9,7 +9,7 @@ class VisitsController < ApplicationController
       UpdateUsersLeaderboardsWorker.perform_async(result[:visit].user.id)
       render json: result[:visit], include: ['score']
     else
-      render json: result[:error], status: result[:error][:errors][:status]
+      render json: result[:error], status: result[:error][:errors].first[:status]
     end
   end
 

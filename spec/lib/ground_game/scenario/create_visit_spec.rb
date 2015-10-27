@@ -303,7 +303,7 @@ module GroundGame
             result = CreateVisit.new(visit_params, address_params, people_params, user).call
             expect(result[:success]).to be false
             expect(result[:visit]).to be_nil
-            expect(result[:error]).not_to be_nil
+            expect(result[:error][:errors].length).to eq 1
           end
 
           describe "error handling" do
@@ -316,7 +316,7 @@ module GroundGame
               address_params = { id: 10}
               people_params = [{ first_name: "John", last_name: "Doe", canvas_response: "invalid response" }]
 
-              error = CreateVisit.new(visit_params, address_params, people_params, user).call[:error][:errors]
+              error = CreateVisit.new(visit_params, address_params, people_params, user).call[:error][:errors].first
 
               expect(error[:id]).to eq "ARGUMENT_ERROR"
               expect(error[:title]).to eq "Argument error"
@@ -329,7 +329,7 @@ module GroundGame
               address_params = { id: 11}
               people_params = [{ first_name: "John", last_name: "Doe" }]
 
-              error = CreateVisit.new(visit_params, address_params, people_params, user).call[:error][:errors]
+              error = CreateVisit.new(visit_params, address_params, people_params, user).call[:error][:errors].first
 
               expect(error[:id]).to eq "RECORD_NOT_FOUND"
               expect(error[:title]).to eq "Record not found"

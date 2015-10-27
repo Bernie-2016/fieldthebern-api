@@ -1,6 +1,6 @@
 class ErrorSerializer
   def self.serialize(error)
-    { errors: serialize_error(error) }
+    { errors: [serialize_error(error)] }
   end
 
   def self.serialize_error(error)
