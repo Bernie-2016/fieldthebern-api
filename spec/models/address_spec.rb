@@ -23,6 +23,7 @@ describe Address do
 
   context 'associations' do
     it { should have_many(:people) }
+    it { should have_many(:address_updates) }
     it { should belong_to(:most_supportive_resident) }
   end
 
@@ -104,5 +105,9 @@ describe Address do
       expect(address.latitude).to eq 1
       expect(address.longitude).to eq 1
     end
+
+    it "throws an error if visiting the same address twice in a short period"
   end
+
+  describe "recently_visited?"
 end

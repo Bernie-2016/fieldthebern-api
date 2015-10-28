@@ -308,7 +308,7 @@ module GroundGame
 
           describe "error handling" do
             before do
-              create(:address, id: 10, latitude: 40.771913, longitude: -73.9673735, street_1: "5th Avenue", city: "New York", state_code: "NY")
+              @address = create(:address, id: 10, latitude: 40.771913, longitude: -73.9673735, street_1: "5th Avenue", city: "New York", state_code: "NY")
             end
 
             it "handles ArgumentError with code 422" do
@@ -335,6 +335,22 @@ module GroundGame
               expect(error.title).to eq "Record not found"
               expect(error.detail).to eq "Couldn't find Address with 'id'=11"
               expect(error.status).to eq 404
+            end
+
+            it "handles GroundGame::VisitNotAllowedError with code 403" do
+              visit = create(:visit)
+              address_update = create(:address_update, visit: visit, address: @address, created_at: DateTime.now - 1.day)
+
+              visit_params = { duration_sec: 150 }
+              address_params = { id: 10}
+              people_params = []
+
+              error = CreateVisit.new(visit_params, address_params, people_params, user).call.error
+
+              expect(error.id).to eq "VISIT_NOT_ALLOWED"
+              expect(error.title).to eq "Visit not allowed"
+              expect(error.detail).to eq "You cannot visit this address so soon since it was last visited"
+              expect(error.status).to eq 403
             end
           end
 
@@ -422,6 +438,11 @@ module GroundGame
               expect(Score.count).to eq 0
             end
           end
+        end
+
+        context "when visiting the same address again" do
+          it "passes if enough time has passed"
+          it "fails if not enough time has passed"
         end
       end
     end

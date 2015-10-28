@@ -27,5 +27,19 @@ describe ErrorSerializer do
       expect(error[:detail]).to eq "A message"
       expect(error[:status]).to eq 404
     end
+
+    it "can serialize GroundGame::VisitNotAllowed error" do
+      require "ground_game/errors/visit_not_allowed"
+      visit_not_allowed_error = GroundGame::VisitNotAllowed.new
+      result = ErrorSerializer.serialize(visit_not_allowed_error)
+      expect(result[:errors]).not_to be_nil
+      expect(result[:errors].length).to eq 1
+
+      error = result[:errors].first
+      expect(error[:id]).to eq "VISIT_NOT_ALLOWED"
+      expect(error[:title]).to eq "Visit not allowed"
+      expect(error[:detail]).to eq "You cannot visit this address so soon since it was last visited"
+      expect(error[:status]).to eq 403
+    end
   end
 end

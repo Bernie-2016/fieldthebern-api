@@ -1,7 +1,9 @@
 require "ground_game/easypost_helper"
+require "ground_game/errors/visit_not_allowed"
 
 class Address < ActiveRecord::Base
   has_many :people
+  has_many :address_updates
   belongs_to :most_supportive_resident, class_name: "Person"
 
   acts_as_mappable :default_units => :meters,
@@ -22,10 +24,19 @@ class Address < ActiveRecord::Base
     not_home: "Not home"
   }
 
-
   def assign_most_supportive_resident(person)
     self.most_supportive_resident = person
     self.best_canvas_response = person.canvas_response
+  end
+
+  def recently_visited?
+    minimum_timespan_hours = ENV["MIN_INTERVAL_BETWEEN_VISITS_HOURS"].to_i.hours
+
+    lower_bound = (DateTime.now - minimum_timespan_hours).to_i
+    upper_bound = (DateTime.now.to_i)
+    invalid_interval = lower_bound..upper_bound
+
+    self.address_updates.any? { |update| invalid_interval.include? update.created_at.to_i }
   end
 
   def self.new_or_existing_from_params(params)
@@ -49,6 +60,7 @@ class Address < ActiveRecord::Base
 
   def self.existing_with_params(id, params)
     address = Address.find(id)
+    raise GroundGame::VisitNotAllowed if address.recently_visited?
     address.assign_attributes(params)
     address
   end

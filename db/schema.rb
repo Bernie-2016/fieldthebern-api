@@ -11,15 +11,16 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151026231032) do
+ActiveRecord::Schema.define(version: 20151028102605) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "address_updates", force: :cascade do |t|
-    t.integer "address_id"
-    t.integer "visit_id"
-    t.string  "update_type", default: "created"
+    t.integer  "address_id"
+    t.integer  "visit_id"
+    t.string   "update_type", default: "created"
+    t.datetime "created_at"
   end
 
   create_table "addresses", force: :cascade do |t|

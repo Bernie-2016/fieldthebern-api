@@ -1,4 +1,5 @@
 require "ground_game/scenario/create_score"
+require "ground_game/errors/visit_not_allowed"
 
 module GroundGame
   module Scenario
@@ -67,7 +68,7 @@ module GroundGame
             visit = create_visit(@visit_params, @address_params, @people_params, @current_user)
             CreateVisitResult.new(visit: visit)
           end
-        rescue ArgumentError, ActiveRecord::RecordNotFound => e
+        rescue ArgumentError, ActiveRecord::RecordNotFound, VisitNotAllowed => e
           CreateVisitResult.new(error: e)
         end
       end
