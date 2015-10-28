@@ -126,13 +126,7 @@ module GroundGame
 
         def update_most_supportive_resident(address, people)
           most_supportive_resident = person_with_highest_rated_canvas_response(people)
-
-          if most_supportive_resident
-            address.assign_most_supportive_resident(most_supportive_resident)
-          elsif not address.most_supportive_resident
-            address.best_canvas_response = :not_home
-          end
-
+          address.assign_most_supportive_resident(most_supportive_resident) if most_supportive_resident
           address
         end
 
