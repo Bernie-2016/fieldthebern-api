@@ -2,6 +2,14 @@ require "ground_game/parse_notification"
 
 module GroundGame
   describe ParseNotification do
+    describe ".send" do
+      it "delegates to .new.send"  do
+        expect(GroundGame::ParseNotification).to receive(:new).with(message: "A message", username: "test", channel: nil).and_call_original
+        expect_any_instance_of(GroundGame::ParseNotification).to receive(:send)
+        ParseNotification.send(username: "test", message: "A message")
+      end
+    end
+
     describe "#send" do
       it "can send to a user"  do
         expect(Parse::Push).to receive(:new).with({ alert: "A message"}).and_call_original

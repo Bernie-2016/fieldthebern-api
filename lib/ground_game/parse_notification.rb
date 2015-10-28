@@ -1,6 +1,10 @@
 module GroundGame
   class ParseNotification
 
+    def self.send(username: nil, channel: nil, message: nil)
+      new(username: username, channel: channel, message: message).send
+    end
+
     def initialize(username: nil, channel: nil, message: nil)
       @username = username
       @channel = channel
