@@ -1,8 +1,6 @@
 module GroundGame
   class ParseNotification
 
-    attr_accessor :username, :channel, :type, :data, :message, :push
-
     def initialize(username: nil, channel: nil, message: nil)
       @username = username
       @channel = channel
@@ -11,27 +9,26 @@ module GroundGame
     end
 
     def send
-      # initialize push object
-      @push = if individual?
-                Parse::Push.new(data)
-              else
-                Parse::Push.new(data, channel)
-              end
+      if individual?
+        push = Parse::Push.new(data) if individual?
+        push.where = query.where if individual?
+      end
 
-      @push.type = "ios" if channel?
-      @push.where = query.where if individual?
+      push = Parse::Push.new(data, @channel) if channel?
 
-      @push.save
+      push.type = "ios" if channel?
+
+      push.save
     end
 
     private
 
       def individual?
-        type == 'individual'
+        @type == 'individual'
       end
 
       def channel?
-        type == 'channel'
+        @type == 'channel'
       end
 
       def data
@@ -40,12 +37,12 @@ module GroundGame
 
       def query
         # initialize query object
-        @query = Parse::Query.new(Parse::Protocol::CLASS_INSTALLATION)
+        query = Parse::Query.new(Parse::Protocol::CLASS_INSTALLATION)
         # set query where clause by some attribute
-        @query.eq('username', @username.to_s)
+        query.eq('username', @username.to_s)
         # setting deviceType in where clause
-        @query.eq('deviceType', 'android') if individual?
-        @query
+        query.eq('deviceType', 'android') if individual?
+        query
       end
   end
 end

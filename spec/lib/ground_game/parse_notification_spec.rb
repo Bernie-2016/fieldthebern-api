@@ -4,7 +4,7 @@ module GroundGame
   describe ParseNotification do
     describe "#send" do
       it "can send to a user"  do
-        expect_any_instance_of(Parse::Push).to receive(:save).and_call_original
+        expect(Parse::Push).to receive(:new).with({ alert: "A message"}).and_call_original
 
         VCR.use_cassette "lib/ground_game/parse_notification/send_to_user" do
           response = ParseNotification.new(username: "test", message: "A message").send
@@ -14,7 +14,7 @@ module GroundGame
       end
 
       it "can send to a channel" do
-        expect_any_instance_of(Parse::Push).to receive(:save).and_call_original
+        expect(Parse::Push).to receive(:new).with({ alert: "A message"}, "test").and_call_original
 
         # TODO: Delete and re-record the tape when we have ios set-up.
         # We need to setup an ios certificate. Right now, the tape recorded a
