@@ -104,5 +104,14 @@ describe Address do
       expect(address.latitude).to eq 1
       expect(address.longitude).to eq 1
     end
+
+    it "should raise an error if there's an invalid 'best_canvas_response' parameter value" do
+      create(:address, id: 1, latitude: 0, longitude: 0)
+      params = {
+        id: 1,
+        best_canvas_response: "strongly_for"
+      }
+      expect { Address.new_or_existing_from_params(params) }.to raise_error ArgumentError
+    end
   end
 end

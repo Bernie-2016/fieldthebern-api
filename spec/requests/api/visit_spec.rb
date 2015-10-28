@@ -40,6 +40,67 @@ describe "Visit API" do
         expect(score_json.points_for_knock).to eq 5
       end
 
+      describe "setting 'address.best_canvas_response' directly" do
+        before do
+          @address = create(:address, id: 1)
+        end
+
+        def post_visit_with_address_best_canvas_response_set_to(best_canvas_response)
+          authenticated_post "visits", {
+            data: {
+              attributes: { duration_sec: 200 },
+              relationships: { address: { data: { id: 1, type: "addresses" } } }
+            },
+            included: [ { id: 1, type: "addresses", attributes: { best_canvas_response: best_canvas_response } } ]
+          }, token
+        end
+
+        it "should be allowed for 'asked_to_leave'" do
+          post_visit_with_address_best_canvas_response_set_to "asked_to_leave"
+          expect(@address.reload.asked_to_leave?).to be true
+        end
+
+        it "should be allowed for 'unknown'" do
+          post_visit_with_address_best_canvas_response_set_to "unknown"
+          expect(@address.reload.unknown?).to be true
+        end
+
+        it "should be allowed for 'not_home'" do
+          post_visit_with_address_best_canvas_response_set_to "not_home"
+          expect(@address.reload.not_home?).to be true
+        end
+
+        it "should be allowed for 'not_yet_visited" do
+          post_visit_with_address_best_canvas_response_set_to "not_yet_visited"
+          expect(@address.reload.not_yet_visited?).to be true
+        end
+
+        it "should not be allowed for 'strongly_for'" do
+          post_visit_with_address_best_canvas_response_set_to "strongly_for"
+          expect(@address.reload.strongly_for?).to be false
+        end
+
+        it "should not be allowed for 'leaning_for'" do
+          post_visit_with_address_best_canvas_response_set_to "leaning_for"
+          expect(@address.reload.leaning_for?).to be false
+        end
+
+        it "should not be allowed for 'undecided'" do
+          post_visit_with_address_best_canvas_response_set_to "undecided"
+          expect(@address.reload.undecided?).to be false
+        end
+
+        it "should not be allowed for 'leaning_against'" do
+          post_visit_with_address_best_canvas_response_set_to "leaning_against"
+          expect(@address.reload.leaning_against?).to be false
+        end
+
+        it "should not be allowed for 'strongly_against'" do
+          post_visit_with_address_best_canvas_response_set_to "strongly_against"
+          expect(@address.reload.strongly_against?).to be false
+        end
+      end
+
       it "should update the user's total score" do
         Sidekiq::Testing.inline! do
           create(:address, id: 1)

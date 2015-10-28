@@ -49,7 +49,19 @@ class Address < ActiveRecord::Base
 
   def self.existing_with_params(id, params)
     address = Address.find(id)
-    address.assign_attributes(params)
-    address
+    if best_canvas_response_value_valid(params[:best_canvas_response])
+      address.assign_attributes(params)
+      return address
+    else
+      raise ArgumentError.new("Invalid argument #{params[:best_canvas_response]} for address.best_canvas_response")
+    end
+  end
+
+  def self.best_canvas_response_value_valid(value)
+    value.nil? or allowed_best_canvas_response_values_for_setting_directly.include? value.to_sym
+  end
+
+  def self.allowed_best_canvas_response_values_for_setting_directly
+    [:asked_to_leave, :unknown, :not_yet_visited, :not_home]
   end
 end
