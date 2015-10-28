@@ -22,5 +22,19 @@ FactoryGirl.define do
       end
     end
 
+    trait :for_address do
+      transient do
+        address { create(:address) }
+        recent? false
+      end
+
+      after(:build) do |visit, evaluator|
+        minimum_interval_between_visits = ENV["MIN_INTERVAL_BETWEEN_VISITS_HOURS"].to_i
+        offset = minimum_interval_between_visits / 2 if evaluator.recent?
+        offset = minimum_interval_between_visits * 2 unless evaluator.recent?
+        timestamp = DateTime.now - offset.hours
+        address_update = create(:address_update, visit: visit, address: evaluator.address, created_at: timestamp)
+      end
+    end
   end
 end

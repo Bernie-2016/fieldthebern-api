@@ -441,8 +441,26 @@ module GroundGame
         end
 
         context "when visiting the same address again" do
-          it "passes if enough time has passed"
-          it "fails if not enough time has passed"
+          it "passes if enough time has passed" do
+            visit = create(:visit, :for_address, recent?: false)
+
+            visit_params = { duration_sec: 150 }
+            address_params = { id: visit.address.id }
+            people_params = []
+            result = CreateVisit.new(visit_params, address_params, people_params, user).call
+
+            expect(result.success?).to be true
+          end
+          it "fails if not enough time has passed" do
+            visit = create(:visit, :for_address, recent?: true)
+
+            visit_params = { duration_sec: 150 }
+            address_params = { id: visit.address.id }
+            people_params = []
+            result = CreateVisit.new(visit_params, address_params, people_params, user).call
+
+            expect(result.success?).to be false
+          end
         end
       end
     end
