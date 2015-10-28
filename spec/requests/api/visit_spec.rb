@@ -60,11 +60,6 @@ describe "Visit API" do
           expect(@address.reload.asked_to_leave?).to be true
         end
 
-        it "should be allowed for 'unknown'" do
-          post_visit_with_address_best_canvas_response_set_to "unknown"
-          expect(@address.reload.unknown?).to be true
-        end
-
         it "should be allowed for 'not_home'" do
           post_visit_with_address_best_canvas_response_set_to "not_home"
           expect(@address.reload.not_home?).to be true
@@ -73,6 +68,11 @@ describe "Visit API" do
         it "should be allowed for 'not_yet_visited" do
           post_visit_with_address_best_canvas_response_set_to "not_yet_visited"
           expect(@address.reload.not_yet_visited?).to be true
+        end
+
+        it "should not be allowed for 'unknown'" do
+          post_visit_with_address_best_canvas_response_set_to "unknown"
+          expect(@address.reload.unknown?).to be false
         end
 
         it "should not be allowed for 'strongly_for'" do

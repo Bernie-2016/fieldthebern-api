@@ -62,6 +62,6 @@ class Address < ActiveRecord::Base
   end
 
   def self.allowed_best_canvas_response_values_for_setting_directly
-    [:asked_to_leave, :unknown, :not_yet_visited, :not_home]
+    [:asked_to_leave, :not_yet_visited, :not_home]
   end
 end
