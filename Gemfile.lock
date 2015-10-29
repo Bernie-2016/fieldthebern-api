@@ -74,6 +74,9 @@ GEM
       aws-sdk-core (= 2.1.31)
     bcrypt (3.1.10)
     builder (3.2.2)
+    bullet (4.14.10)
+      activesupport (>= 3.0.0)
+      uniform_notifier (~> 1.9.0)
     celluloid (0.17.1.2)
       bundler
       celluloid-essentials
@@ -303,6 +306,7 @@ GEM
       kgio (~> 2.6)
       rack
       raindrops (~> 0.7)
+    uniform_notifier (1.9.0)
     vcr (2.9.3)
     webmock (1.21.0)
       addressable (>= 2.3.6)
@@ -314,6 +318,7 @@ PLATFORMS
 DEPENDENCIES
   active_model_serializers!
   aws-sdk
+  bullet
   clearance
   doorkeeper
   dotenv-rails

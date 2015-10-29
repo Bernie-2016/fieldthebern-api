@@ -6,6 +6,7 @@ class AddressesController < ApplicationController
   def index
     if params[:radius]
       addresses = Address.within(index_params[:radius], origin: [index_params[:latitude], index_params[:longitude]])
+                         .includes([:most_supportive_resident, :people])
       render json: addresses
     else
       success, status_code, message, matched_address = GroundGame::Scenario::MatchAddress.new(search_params).call
