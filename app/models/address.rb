@@ -4,7 +4,6 @@ require "ground_game/errors/invalid_best_canvas_response"
 
 class Address < ActiveRecord::Base
   has_many :people
-  has_many :address_updates
   belongs_to :most_supportive_resident, class_name: "Person"
 
   acts_as_mappable :default_units => :meters,
@@ -36,7 +35,7 @@ class Address < ActiveRecord::Base
     upper_bound = (DateTime.now.to_i)
     invalid_interval = lower_bound..upper_bound
 
-    self.address_updates.any? { |update| invalid_interval.include? update.created_at.to_i }
+    invalid_interval.include? self.visited_at.to_i
   end
 
   def self.new_or_existing_from_params(params)

@@ -23,7 +23,6 @@ describe Address do
 
   context 'associations' do
     it { should have_many(:people) }
-    it { should have_many(:address_updates) }
     it { should belong_to(:most_supportive_resident) }
   end
 
@@ -86,13 +85,11 @@ describe Address do
 
     describe "#recently_visited?" do
       it "returns true if the address has been visited within a time span" do
-        address = create(:address)
-        visit = create(:visit, :for_address, address: address, recent?: true)
+        address = create(:address, recently_visited?: true)
         expect(address.reload.recently_visited?).to be true
       end
       it "returns false if the address has not been visited within a time span" do
-        address = create(:address)
-        visit = create(:visit, :for_address, address: address, recent?: false)
+        address = create(:address, recently_visited?: false)
         expect(address.reload.recently_visited?).to be false
       end
     end
@@ -118,9 +115,7 @@ describe Address do
       end
 
       it "throws an error if updating the same address twice in a short period" do
-        address = create(:address, id: 1)
-        visit = create(:visit, :for_address, address: address, recent?: true)
-
+        address = create(:address, id: 1, recently_visited?: true)
         params = { id: 1, latitude: 1, longitude: 1 }
         expect { Address.new_or_existing_from_params(params) }.to raise_error GroundGame::VisitNotAllowed
       end

@@ -9,7 +9,6 @@ describe AddressUpdate do
     it {should have_db_column(:address_id).of_type(:integer) }
     it {should have_db_column(:visit_id).of_type(:integer) }
     it {should have_db_column(:update_type).of_type(:string).with_options(default: 'created') }
-    it { should have_db_column(:created_at).of_type(:datetime) }
   end
 
   context 'associations' do

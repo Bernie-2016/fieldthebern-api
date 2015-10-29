@@ -57,6 +57,16 @@ module GroundGame
 
           context "when the address already exists" do
 
+            it "updates address.visited_at" do
+              address = create(:address, id: 1)
+              visit_params = {}
+              address_params = { id: 1 }
+              people_params = []
+              result = CreateVisit.new(visit_params, address_params, people_params, user).call
+              expect(result.success?).to eq true
+              expect(address.reload.visited_at).to be_within(1.second).of(DateTime.now)
+            end
+
             it "creates an address_update with proper contents" do
               address = create(:address, id: 1)
               visit_params = { duration_sec: 150 }
@@ -227,6 +237,16 @@ module GroundGame
           end
 
           context "when the address doesn't exist"do
+
+            it "sets new_address.visited_at" do
+              visit_params = {}
+              address_params = { }
+              people_params = []
+              result = CreateVisit.new(visit_params, address_params, people_params, user).call
+              expect(result.success?).to eq true
+              expect(Address.last.visited_at).to be_within(1.second).of(DateTime.now)
+            end
+
             it "creates an address_update with proper contents", vcr: { cassette_name: "lib/ground_game/scenario/create_visit/creates_an_address_update_with_proper_contents" } do
               visit_params = { duration_sec: 150 }
 
@@ -338,11 +358,10 @@ module GroundGame
             end
 
             it "handles GroundGame::VisitNotAllowedError with code 403" do
-              visit = create(:visit)
-              address_update = create(:address_update, visit: visit, address: @address, created_at: DateTime.now - 1.day)
+              create(:address, id: 11, recently_visited?: true)
 
-              visit_params = { duration_sec: 150 }
-              address_params = { id: 10}
+              visit_params = {}
+              address_params = { id: 11}
               people_params = []
 
               error = CreateVisit.new(visit_params, address_params, people_params, user).call.error
@@ -455,20 +474,19 @@ module GroundGame
 
         context "when visiting the same address again" do
           it "passes if enough time has passed" do
-            visit = create(:visit, :for_address, recent?: false)
-
-            visit_params = { duration_sec: 150 }
-            address_params = { id: visit.address.id }
+            create(:address, id: 10, recently_visited?: false)
+            visit_params = {}
+            address_params = { id: 10 }
             people_params = []
             result = CreateVisit.new(visit_params, address_params, people_params, user).call
 
             expect(result.success?).to be true
           end
           it "fails if not enough time has passed" do
-            visit = create(:visit, :for_address, recent?: true)
+            create(:address, id: 10, recently_visited?: true)
 
-            visit_params = { duration_sec: 150 }
-            address_params = { id: visit.address.id }
+            visit_params = {}
+            address_params = { id: 10 }
             people_params = []
             result = CreateVisit.new(visit_params, address_params, people_params, user).call
 
