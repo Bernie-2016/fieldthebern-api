@@ -138,8 +138,10 @@ module GroundGame
 
         def update_users_state_to_address_state(visit)
           user = visit.user
-          user.state_code = visit.address.state_code
-          user.save!
+          if user.state_code != visit.try(:address).try(:state_code)
+            user.state_code = visit.address.state_code
+            user.save!
+          end
         end
     end
   end
