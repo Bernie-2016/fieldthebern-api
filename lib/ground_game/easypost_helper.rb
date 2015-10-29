@@ -1,20 +1,24 @@
 module GroundGame
   class EasyPostHelper
-    def self.create_and_verify_address(params)
+    def self.create_and_verify_address!(params)
       street1 = params.fetch(:street_1, "")
       street2 = params.fetch(:street_2, "")
       street_name = [street1, street2].reject(&:empty?).join(" ")
 
+      EasyPost::Address.create_and_verify(
+        :street1 => street_name,
+        :city => params.fetch(:city, nil),
+        :state => params.fetch(:state_code, nil),
+        :zip => params.fetch(:zip_code, nil)
+      )
+    end
+
+    def self.create_and_verify_address(params)
       begin
-        address = EasyPost::Address.create_and_verify(
-          :street1 => street_name,
-          :city => params.fetch(:city, nil),
-          :state => params.fetch(:state_code, nil),
-          :zip => params.fetch(:zip_code, nil)
-        )
-        return address, nil, nil
-      rescue EasyPost::Error => e
-        return nil, e.http_status, e.message.strip
+        address = create_and_verify_address! params
+        return true, address
+      rescue EasyPost::Error
+        return false, nil
       end
     end
 
@@ -29,8 +33,9 @@ module GroundGame
     end
 
     def self.extend_address_params_with_usps(params)
-      easypost_address, error_code, error_message = create_and_verify_address(params)
-      if (easypost_address)
+      success, easypost_address = create_and_verify_address(params)
+
+      if (success)
         usps_hash = easypost_address_to_usps_hash(easypost_address)
         params = params.merge(usps_hash)
       end

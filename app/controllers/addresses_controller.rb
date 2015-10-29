@@ -5,29 +5,41 @@ class AddressesController < ApplicationController
 
   def index
     if params[:radius]
-      addresses = Address.within(index_params[:radius], origin: [index_params[:latitude], index_params[:longitude]])
-                         .includes([:most_supportive_resident, :people])
-      render json: addresses
+      match_addresses_using_radius
     else
-      success, status_code, message, matched_address = GroundGame::Scenario::MatchAddress.new(search_params).call
-
-      render json: matched_address, include: ['people'], status: status_code if success
-      render json: { error: message }, status: status_code || 400 if not success
+      match_address_using_search_parameters
     end
   end
 
-  def index_params
-    latitude = params.require(:latitude)
-    longitude = params.require(:longitude)
-    radius = params.require(:radius)
-    { latitude: latitude, longitude: longitude, radius: radius }
-  end
+  private
 
-  def search_params
-    params.permit(:latitude, :longitude, :street_1, :street_2, :city, :state_code, :zip_code)
-  end
+    def match_addresses_using_radius
+      addresses = Address.within(index_params[:radius], origin: [index_params[:latitude], index_params[:longitude]])
+                         .includes([:most_supportive_resident, :people])
+      render json: addresses
+    end
 
-  def update_params
-    params.permit(:id).merge(update_params)
-  end
+    def match_address_using_search_parameters
+      result = GroundGame::Scenario::MatchAddress.new(search_params).call
+      if result.success?
+        render json: [result.address], include: ['people']
+      else
+        render json: result.error.hash, status: result.error.status
+      end
+    end
+
+    def index_params
+      latitude = params.require(:latitude)
+      longitude = params.require(:longitude)
+      radius = params.require(:radius)
+      { latitude: latitude, longitude: longitude, radius: radius }
+    end
+
+    def search_params
+      params.permit(:latitude, :longitude, :street_1, :street_2, :city, :state_code, :zip_code)
+    end
+
+    def update_params
+      params.permit(:id).merge(update_params)
+    end
 end
