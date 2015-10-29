@@ -35,6 +35,8 @@ gem 'aws-sdk'
 
 gem 'unicorn'
 
+gem "sentry-raven"
+
 group :development, :production do
   gem 'rails_12factor'
 end
