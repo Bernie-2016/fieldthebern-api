@@ -279,6 +279,8 @@ GEM
       sidekiq (>= 2.4.0)
     rspec-support (3.3.0)
     safe_yaml (1.0.4)
+    sentry-raven (0.15.2)
+      faraday (>= 0.7.6)
     sidekiq (3.5.0)
       celluloid (~> 0.17.0)
       connection_pool (~> 2.2, >= 2.2.0)
@@ -342,6 +344,7 @@ DEPENDENCIES
   rails_12factor
   rspec-rails
   rspec-sidekiq
+  sentry-raven
   shoulda-matchers!
   sidekiq
   spring
