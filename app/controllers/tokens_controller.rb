@@ -34,6 +34,7 @@ class TokensController < Doorkeeper::TokensController
       u.password = User.friendly_token unless u.encrypted_password.present?
       u.save!
     end
+    
     AddFacebookFriendsWorker.perform_async(user.id)
     AddFacebookProfilePicture.perform_async(user.id) unless user.photo.present?
 
