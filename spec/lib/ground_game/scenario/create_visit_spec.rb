@@ -352,6 +352,19 @@ module GroundGame
               expect(error.detail).to eq "You cannot visit this address so soon since it was last visited"
               expect(error.status).to eq 403
             end
+
+            it "handles GroundGame::InvalidBestCanvasResponse with code 422" do
+              visit_params = { duration_sec: 150 }
+              address_params = { id: 10, best_canvas_response: "strongly_for"}
+              people_params = []
+
+              error = CreateVisit.new(visit_params, address_params, people_params, user).call.error
+
+              expect(error.id).to eq "INVALID_BEST_CANVAS_RESPONSE"
+              expect(error.title).to eq "Invalid best canvas response"
+              expect(error.detail).to eq "Invalid argument 'strongly_for' for address.best_canvas_response"
+              expect(error.status).to eq 422
+            end
           end
 
           describe "cleanup" do
@@ -460,6 +473,70 @@ module GroundGame
             result = CreateVisit.new(visit_params, address_params, people_params, user).call
 
             expect(result.success?).to be false
+          end
+        end
+
+        describe "setting 'address.best_canvas_response' directly" do
+          before do
+            @address = create(:address, id: 1)
+          end
+
+          def create_visit_with_address_best_canvas_response_set_to(best_canvas_response)
+            visit_params = { duration_sec: 200 }
+            address_params = { id: 1, best_canvas_response: best_canvas_response }
+            people_params = []
+
+            CreateVisit.new(visit_params, address_params, people_params, user).call
+          end
+
+          it "should be allowed for 'asked_to_leave'" do
+            result = create_visit_with_address_best_canvas_response_set_to "asked_to_leave"
+            expect(@address.reload.asked_to_leave?).to be true
+          end
+
+          it "should be allowed for 'not_home'" do
+            create_visit_with_address_best_canvas_response_set_to "not_home"
+            expect(@address.reload.not_home?).to be true
+          end
+
+          it "should be allowed for 'not_yet_visited" do
+            create_visit_with_address_best_canvas_response_set_to "not_yet_visited"
+            expect(@address.reload.not_yet_visited?).to be true
+          end
+
+          it "should not be allowed for 'unknown'" do
+            create_visit_with_address_best_canvas_response_set_to "unknown"
+            expect(@address.reload.unknown?).to be false
+          end
+
+          it "should not be allowed for 'strongly_for'" do
+            result = create_visit_with_address_best_canvas_response_set_to "strongly_for"
+            expect(@address.reload.strongly_for?).to be false
+            expect(result.error.id).to eq "INVALID_BEST_CANVAS_RESPONSE"
+          end
+
+          it "should not be allowed for 'leaning_for'" do
+            result = create_visit_with_address_best_canvas_response_set_to "leaning_for"
+            expect(@address.reload.leaning_for?).to be false
+            expect(result.error.id).to eq "INVALID_BEST_CANVAS_RESPONSE"
+          end
+
+          it "should not be allowed for 'undecided'" do
+            result = create_visit_with_address_best_canvas_response_set_to "undecided"
+            expect(@address.reload.undecided?).to be false
+            expect(result.error.id).to eq "INVALID_BEST_CANVAS_RESPONSE"
+          end
+
+          it "should not be allowed for 'leaning_against'" do
+            result = create_visit_with_address_best_canvas_response_set_to "leaning_against"
+            expect(@address.reload.leaning_against?).to be false
+            expect(result.error.id).to eq "INVALID_BEST_CANVAS_RESPONSE"
+          end
+
+          it "should not be allowed for 'strongly_against'" do
+            result = create_visit_with_address_best_canvas_response_set_to "strongly_against"
+            expect(@address.reload.strongly_against?).to be false
+            expect(result.error.id).to eq "INVALID_BEST_CANVAS_RESPONSE"
           end
         end
       end

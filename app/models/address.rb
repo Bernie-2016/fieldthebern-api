@@ -1,5 +1,6 @@
 require "ground_game/easypost_helper"
 require "ground_game/errors/visit_not_allowed"
+require "ground_game/errors/invalid_best_canvas_response"
 
 class Address < ActiveRecord::Base
   has_many :people
@@ -60,7 +61,19 @@ class Address < ActiveRecord::Base
   def self.existing_with_params(id, params)
     address = Address.find(id)
     raise GroundGame::VisitNotAllowed if address.recently_visited?
+
+    canvas_response = params[:best_canvas_response]
+    raise GroundGame::InvalidBestCanvasResponse.new(canvas_response) unless best_canvas_response_value_valid(canvas_response)
+
     address.assign_attributes(params)
     address
+  end
+
+  def self.best_canvas_response_value_valid(value)
+    value.nil? or allowed_best_canvas_response_values_for_setting_directly.include? value.to_sym
+  end
+
+  def self.allowed_best_canvas_response_values_for_setting_directly
+    [:asked_to_leave, :not_yet_visited, :not_home]
   end
 end

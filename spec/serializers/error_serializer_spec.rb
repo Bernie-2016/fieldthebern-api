@@ -41,5 +41,19 @@ describe ErrorSerializer do
       expect(error[:detail]).to eq "You cannot visit this address so soon since it was last visited"
       expect(error[:status]).to eq 403
     end
+
+    it "can serialize GroundGame::InvalidBestCanvasResponse error" do
+      require "ground_game/errors/visit_not_allowed"
+      invalid_best_canvas_response_error = GroundGame::InvalidBestCanvasResponse.new("value")
+      result = ErrorSerializer.serialize(invalid_best_canvas_response_error)
+      expect(result[:errors]).not_to be_nil
+      expect(result[:errors].length).to eq 1
+
+      error = result[:errors].first
+      expect(error[:id]).to eq "INVALID_BEST_CANVAS_RESPONSE"
+      expect(error[:title]).to eq "Invalid best canvas response"
+      expect(error[:detail]).to eq "Invalid argument 'value' for address.best_canvas_response"
+      expect(error[:status]).to eq 422
+    end
   end
 end

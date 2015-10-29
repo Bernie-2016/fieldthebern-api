@@ -1,4 +1,5 @@
 require "ground_game/errors/visit_not_allowed"
+require "ground_game/errors/invalid_best_canvas_response"
 
 class ErrorSerializer
   def self.serialize(error)
@@ -11,6 +12,7 @@ class ErrorSerializer
       return serialize_argument_error(error) if error.class == ArgumentError
       return serialize_record_not_found_error(error) if error.class == ActiveRecord::RecordNotFound
       return serialize_visit_not_allowed_error(error) if error.class == GroundGame::VisitNotAllowed
+      return serialize_invalid_best_canvas_response_error(error) if error.class == GroundGame::InvalidBestCanvasResponse
     end
 
     def self.serialize_argument_error(error)
@@ -37,6 +39,15 @@ class ErrorSerializer
         title: "Visit not allowed",
         detail: error.message,
         status: 403
+      }
+    end
+
+    def self.serialize_invalid_best_canvas_response_error(error)
+      return {
+        id: "INVALID_BEST_CANVAS_RESPONSE",
+        title: "Invalid best canvas response",
+        detail: error.message,
+        status: 422
       }
     end
 end
