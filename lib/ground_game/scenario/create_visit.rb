@@ -88,6 +88,8 @@ module GroundGame
           visit.total_points = CreateScore.new(visit).call.total_points
           visit.save!
 
+          update_users_state_to_address_state(visit)
+
           visit
         end
 
@@ -132,6 +134,12 @@ module GroundGame
 
         def person_with_highest_rated_canvas_response(people)
           people.max{ |person| person.canvas_response_rating }
+        end
+
+        def update_users_state_to_address_state(visit)
+          user = visit.user
+          user.state_code = visit.address.state_code
+          user.save!
         end
     end
   end
