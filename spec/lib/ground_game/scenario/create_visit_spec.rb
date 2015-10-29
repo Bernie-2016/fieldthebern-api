@@ -368,7 +368,7 @@ module GroundGame
 
               expect(error.id).to eq "VISIT_NOT_ALLOWED"
               expect(error.title).to eq "Visit not allowed"
-              expect(error.detail).to eq "You cannot visit this address so soon since it was last visited"
+              expect(error.detail).to eq "You can't submit the same address so quickly after it was last visited."
               expect(error.status).to eq 403
             end
 

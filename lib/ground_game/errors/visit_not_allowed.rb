@@ -4,6 +4,6 @@ module GroundGame
       super ERROR_MESSAGE
     end
     private
-      ERROR_MESSAGE = "You cannot visit this address so soon since it was last visited"
+      ERROR_MESSAGE = "You can't submit the same address so quickly after it was last visited."
   end
 end
