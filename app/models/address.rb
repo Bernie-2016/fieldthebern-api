@@ -32,11 +32,10 @@ class Address < ActiveRecord::Base
   end
 
   def recently_visited?
-    minimum_timespan_hours = ENV["MIN_INTERVAL_BETWEEN_VISITS_HOURS"].to_i.hours
+    minimum_timespan_hours = (ENV["MIN_INTERVAL_BETWEEN_VISITS_HOURS"] || 1).hours
     lower_bound = (DateTime.now - minimum_timespan_hours).to_i
-    upper_bound = (DateTime.now.to_i)
+    upper_bound = DateTime.now.to_i
     invalid_interval = lower_bound..upper_bound
-
     invalid_interval.include? self.visited_at.to_i
   end
 

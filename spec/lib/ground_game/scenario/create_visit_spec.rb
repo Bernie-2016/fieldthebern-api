@@ -19,8 +19,8 @@ module GroundGame
             visit_params = { duration_sec: 150 }
             address_params = { id: 1 }
             people_params = [{ id: 10 }]
-
             result = CreateVisit.new(visit_params, address_params, people_params, user).call
+
             expect(result.success?).to be true
             expect(result.visit).not_to be_nil
             expect(result.error).to be_nil
@@ -256,7 +256,7 @@ module GroundGame
 
             it "sets new_address.visited_at" do
               visit_params = {}
-              address_params = { }
+              address_params = {state_code: "CA"}
               people_params = []
               result = CreateVisit.new(visit_params, address_params, people_params, user).call
               expect(result.success?).to eq true
