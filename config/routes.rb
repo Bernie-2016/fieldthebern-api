@@ -4,12 +4,12 @@ Rails.application.routes.draw do
     controllers tokens: 'tokens'
   end
 
-  constraints subdomain: 'api' do
+  # constraints subdomain: 'api' do
     get 'ping', to: 'ping#index'
 
     get 'users/me', to: 'users#me'
     post 'users/me', to: 'users#update'
-    
+
     resources :users, only: [:create, :show]
 
     resources :addresses, only: [:index]
@@ -17,6 +17,8 @@ Rails.application.routes.draw do
     resources :visits, only: [:create]
 
     resources :rankings, only: [:index]
-  end
+
+    resources :devices, only: [:create]
+  # end
 
 end
