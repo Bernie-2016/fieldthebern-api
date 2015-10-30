@@ -30,6 +30,19 @@ describe ErrorSerializer do
       expect(error[:status]).to eq 404
     end
 
+    it "can serialize GroundGame::VisitNotAllowed error" do
+      visit_not_allowed_error = GroundGame::VisitNotAllowed.new
+      result = ErrorSerializer.serialize(visit_not_allowed_error)
+      expect(result[:errors]).not_to be_nil
+      expect(result[:errors].length).to eq 1
+
+      error = result[:errors].first
+      expect(error[:id]).to eq "VISIT_NOT_ALLOWED"
+      expect(error[:title]).to eq "Visit not allowed"
+      expect(error[:detail]).to eq "You can't submit the same address so quickly after it was last visited."
+      expect(error[:status]).to eq 403
+    end
+
     it "can serialize GroundGame::AddressUnmatched error" do
       address_unmatched_error = GroundGame::AddressUnmatched.new
       result = ErrorSerializer.serialize(address_unmatched_error)
@@ -41,19 +54,6 @@ describe ErrorSerializer do
       expect(error[:title]).to eq "Address unmatched"
       expect(error[:detail]).to eq "The requested address does not exist in the database."
       expect(error[:status]).to eq 404
-    end
-
-    it "can serialize GroundGame::VisitNotAllowed error" do
-      visit_not_allowed_error = GroundGame::VisitNotAllowed.new
-      result = ErrorSerializer.serialize(visit_not_allowed_error)
-      expect(result[:errors]).not_to be_nil
-      expect(result[:errors].length).to eq 1
-
-      error = result[:errors].first
-      expect(error[:id]).to eq "VISIT_NOT_ALLOWED"
-      expect(error[:title]).to eq "Visit not allowed"
-      expect(error[:detail]).to eq "You cannot visit this address so soon since it was last visited"
-      expect(error[:status]).to eq 403
     end
 
     it "can serialize GroundGame::InvalidBestCanvasResponse error" do
@@ -72,6 +72,7 @@ describe ErrorSerializer do
     it "can serialize EasyPost::Error" do
       easypost_error = EasyPost::Error.new("A message", 400)
       result = ErrorSerializer.serialize(easypost_error)
+
       expect(result[:errors]).not_to be_nil
       expect(result[:errors].length).to eq 1
 
