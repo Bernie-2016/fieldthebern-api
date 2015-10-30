@@ -119,6 +119,6 @@ describe User do
 
   it 'has a counter cache from visits' do
     @user = create(:user)
-    expect { @user.visits.create }.to change { @user.visits_count }.by(1)
+    expect { create(:visit, user: @user) }.to change { @user.visits_count }.by(1)
   end
 end

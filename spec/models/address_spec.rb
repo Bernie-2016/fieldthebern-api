@@ -26,6 +26,10 @@ describe Address do
     it { should belong_to(:most_supportive_resident) }
   end
 
+  context 'validations' do
+    it { should validate_presence_of(:state_code) }
+  end
+
   context 'scopes' do
     it "has a working 'within' scope" do
       first_address_in_radius = create(:address, latitude: 1, longitude: 1)

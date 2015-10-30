@@ -15,6 +15,7 @@ FactoryGirl.define do
         address = create(:address)
         address_update = create(:address_update, address: address, visit: visit)
 
+      if evaluator.people_count > 0
         people = create_list(:person, evaluator.people_count, address: address)
         people.each do |person|
           create(:person_update, person: person, visit: visit)
