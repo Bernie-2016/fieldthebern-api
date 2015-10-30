@@ -22,6 +22,7 @@ class Address < ActiveRecord::Base
     not_home: "Not home"
   }
 
+  validates :state_code, presence: true
 
   def assign_most_supportive_resident(person)
     self.most_supportive_resident = person
