@@ -1,57 +1,17 @@
 require "ground_game/scenario/create_score"
 require "ground_game/errors/visit_not_allowed"
 require "ground_game/errors/invalid_best_canvas_response"
+require "ground_game/scenario/scenario_result"
 
 module GroundGame
   module Scenario
-
-    class CreateVisitError
-      def initialize(error)
-        @hash = ErrorSerializer.serialize(error)
-      end
-
-      def hash
-        @hash
-      end
-
-      def id
-        first_error_in_hash[:id]
-      end
-
-      def title
-        first_error_in_hash[:title]
-      end
-
-      def detail
-        first_error_in_hash[:detail]
-      end
-
-      def status
-        first_error_in_hash[:status]
-      end
-
-      private
-        def first_error_in_hash
-          @hash[:errors].first
-        end
-    end
-
-    class CreateVisitResult
+    class CreateVisitResult < ScenarioResult
       def initialize(visit: nil, error:nil)
-        @visit = visit
-        @error = CreateVisitError.new(error) if not error.nil?
+        super(result: visit, error: error)
       end
 
       def visit
-        @visit
-      end
-
-      def error
-        @error
-      end
-
-      def success?
-        @error.nil?
+        @result
       end
     end
 
@@ -90,6 +50,8 @@ module GroundGame
 
           visit.total_points = CreateScore.new(visit).call.total_points
           visit.save!
+
+          update_users_state_to_address_state(visit)
 
           visit
         end
@@ -135,6 +97,15 @@ module GroundGame
 
         def person_with_highest_rated_canvas_response(people)
           people.max{ |person| person.canvas_response_rating }
+        end
+
+        def update_users_state_to_address_state(visit)
+          user = visit.user
+          if visit.address && visit.address.state_code
+            return if user.state_code == visit.address.state_code
+            user.state_code = visit.address.state_code
+            user.save!
+          end
         end
     end
   end

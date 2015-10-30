@@ -5,64 +5,8 @@ module GroundGame
   module Scenario
     describe MatchAddress do
       describe "#call" do
-        context "when the address doesn't exist" do
-          it "returns 404 if the address doesn't exist in the db", vcr: { cassette_name: "lib/ground_game/scenario/match_address/returns_404_if_the_address_doesnt_exist_in_the_db" } do
-            address_params ={
-              street_1: "5th Avenue",
-              city: "New York",
-              state_code: "NY"
-            }
-
-            matched, code, error, address = MatchAddress.new(address_params).call
-
-            expect(matched).to be false
-            expect(code).to eq 404
-            expect(error).to eq "No match for this address"
-            expect(address).to be_nil
-          end
-
-          it "returns 400 if not enough parameters provided for easypost", vcr: { cassette_name: "lib/ground_game/scenario/match_address/it_returns_400_if_not_enough_parameters_provided_for_easypost" } do
-            address_params ={
-              street_1: "5th avenue",
-              city: "New York",
-            }
-
-            matched, code, error, address = MatchAddress.new(address_params).call
-
-            expect(matched).to be false
-            expect(code).to eq 400
-            expect(error).to eq "Insufficient address data provided. A city and state or a zip must be provided."
-            expect(address).to be_nil
-
-            address_params ={
-              city: "New York",
-              state_code: "NY",
-            }
-
-            matched, code, error, address = MatchAddress.new(address_params).call
-
-            expect(matched).to be false
-            expect(code).to eq 400
-            expect(error).to eq "Insufficient address data provided. A street must be provided."
-            expect(address).to be_nil
-          end
-
-          it "returns 400 if address not found by easypost", vcr: { cassette_name: "lib/ground_game/scenario/match_address/it_returns_400_if_address_not_found_by_easypost" } do
-            address_params ={
-              street_1: "A non existant address to trigger proper error",
-              city: "New York",
-              state_code: "NY",
-            }
-
-            matched, code, error, address = MatchAddress.new(address_params).call
-
-            expect(matched).to be false
-            expect(code).to eq 400
-            expect(error).to eq "Address Not Found."
-            expect(address).to be_nil
-          end
-
-          it "returns an existing address with people included if the address exists", vcr: { cassette_name: "lib/ground_game/scenario/match_address/returns_an_existing_address_with_people_included_if_the_address_exists" } do
+        context "when it succeeds" do
+          it "returns an existing address with people included if the address exists", vcr: { cassette_name: "lib/ground_game/scenario/match_address/successful_easypost_request" } do
             address = create(:address,
               id: 1,
               latitude: 1,
@@ -91,13 +35,12 @@ module GroundGame
               state_code: "NY"
             }
 
-            matched, code, error, matches = MatchAddress.new(address_params).call
+            result = MatchAddress.new(address_params).call
 
-            expect(code).to eq 200
+            expect(result.success?).to be true
+            expect(result.address.nil?).to be false
 
-            expect(matches.length).to eq 1
-
-            matched_address = matches.first
+            matched_address = result.address
             expect(matched_address.latitude).to eq 1.0
             expect(matched_address.longitude).to eq 1.0
             expect(matched_address.street_1).to eq "5th Avenue"
@@ -109,6 +52,54 @@ module GroundGame
 
             expect(matched_address.most_supportive_resident_id).to eq 5
             expect(matched_address.people.map(&:id)).to contain_exactly 5, 6
+          end
+        end
+
+        context "when it fails" do
+          it "handles a GroundGame::AddressUnmatched", vcr: { cassette_name: "lib/ground_game/scenario/match_address/successful_easypost_request" } do
+            address_params ={
+              street_1: "5th Avenue",
+              city: "New York",
+              state_code: "NY"
+            }
+
+            result = MatchAddress.new(address_params).call
+
+            expect(result.success?).to be false
+            expect(result.error.status).to eq 404
+            expect(result.error.detail).to eq "The requested address does not exist in the database."
+            expect(result.address).to be_nil
+          end
+
+          it "handles an EasyPost::Error" do
+            address_params ={
+              street_1: "5th avenue",
+              city: "New York",
+            }
+
+            VCR.use_cassette "lib/ground_game/scenario/match_address/failed_easypost_request_no_state" do
+              result = MatchAddress.new(address_params).call
+
+              expect(result.success?).to be false
+              expect(result.error.status).to eq 400
+              expect(result.error.detail).to eq "Insufficient address data provided. A city and state or a zip must be provided."
+              expect(result.address).to be_nil
+            end
+
+
+            address_params ={
+              city: "New York",
+              state_code: "NY",
+            }
+
+            VCR.use_cassette "lib/ground_game/scenario/match_address/failed_easypost_request_no_street" do
+              result = MatchAddress.new(address_params).call
+
+              expect(result.success?).to be false
+              expect(result.error.status).to eq 400
+              expect(result.error.detail).to eq "Insufficient address data provided. A street must be provided."
+              expect(result.address).to be_nil
+            end
           end
         end
       end
