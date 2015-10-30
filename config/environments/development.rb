@@ -51,4 +51,9 @@ Rails.application.configure do
       secret_access_key: ENV['AWS_SECRET_ACCESS_KEY']
     }
   }
+
+  config.after_initialize do
+    Bullet.enable = true
+    Bullet.bullet_logger = true
+  end
 end

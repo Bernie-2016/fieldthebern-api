@@ -55,6 +55,22 @@ module GroundGame
             expect(visit.total_points).not_to be_nil
           end
 
+          it "updates the user's state code" do
+            user = create(:user, email: "josh@cookacademy.com", state_code: "MD")
+
+            address = create(:address, id: 1, state_code: "CA")
+            create(:person, id: 10, address: address, canvas_response: :unknown, party_affiliation: :unknown_affiliation)
+
+            visit_params = { duration_sec: 150 }
+            address_params = { id: 1 }
+            people_params = [{ id: 10 }]
+
+            result = CreateVisit.new(visit_params, address_params, people_params, user).call
+            expect(result.success?).to be true
+            user.reload
+            expect(user.state_code).to eq "CA"
+          end
+
           context "when the address already exists" do
 
             it "creates an address_update with proper contents" do
@@ -421,6 +437,70 @@ module GroundGame
 
               expect(Score.count).to eq 0
             end
+          end
+        end
+
+        describe "setting 'address.best_canvas_response' directly" do
+          before do
+            @address = create(:address, id: 1)
+          end
+
+          def create_visit_with_address_best_canvas_response_set_to(best_canvas_response)
+            visit_params = { duration_sec: 200 }
+            address_params = { id: 1, best_canvas_response: best_canvas_response }
+            people_params = []
+
+            CreateVisit.new(visit_params, address_params, people_params, user).call
+          end
+
+          it "should be allowed for 'asked_to_leave'" do
+            result = create_visit_with_address_best_canvas_response_set_to "asked_to_leave"
+            expect(@address.reload.asked_to_leave?).to be true
+          end
+
+          it "should be allowed for 'not_home'" do
+            create_visit_with_address_best_canvas_response_set_to "not_home"
+            expect(@address.reload.not_home?).to be true
+          end
+
+          it "should be allowed for 'not_yet_visited" do
+            create_visit_with_address_best_canvas_response_set_to "not_yet_visited"
+            expect(@address.reload.not_yet_visited?).to be true
+          end
+
+          it "should not be allowed for 'unknown'" do
+            create_visit_with_address_best_canvas_response_set_to "unknown"
+            expect(@address.reload.unknown?).to be false
+          end
+
+          it "should not be allowed for 'strongly_for'" do
+            result = create_visit_with_address_best_canvas_response_set_to "strongly_for"
+            expect(@address.reload.strongly_for?).to be false
+            expect(result.error.id).to eq "ARGUMENT_ERROR"
+          end
+
+          it "should not be allowed for 'leaning_for'" do
+            result = create_visit_with_address_best_canvas_response_set_to "leaning_for"
+            expect(@address.reload.leaning_for?).to be false
+            expect(result.error.id).to eq "ARGUMENT_ERROR"
+          end
+
+          it "should not be allowed for 'undecided'" do
+            result = create_visit_with_address_best_canvas_response_set_to "undecided"
+            expect(@address.reload.undecided?).to be false
+            expect(result.error.id).to eq "ARGUMENT_ERROR"
+          end
+
+          it "should not be allowed for 'leaning_against'" do
+            result = create_visit_with_address_best_canvas_response_set_to "leaning_against"
+            expect(@address.reload.leaning_against?).to be false
+            expect(result.error.id).to eq "ARGUMENT_ERROR"
+          end
+
+          it "should not be allowed for 'strongly_against'" do
+            result = create_visit_with_address_best_canvas_response_set_to "strongly_against"
+            expect(@address.reload.strongly_against?).to be false
+            expect(result.error.id).to eq "ARGUMENT_ERROR"
           end
         end
       end

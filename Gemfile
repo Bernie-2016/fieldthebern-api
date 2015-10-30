@@ -37,6 +37,8 @@ gem 'aws-sdk'
 
 gem 'unicorn'
 
+gem "sentry-raven"
+
 group :development, :production do
   gem 'rails_12factor'
 end
@@ -48,6 +50,8 @@ group :development, :test do
   gem 'pry-rails'
   gem 'pry'
   gem 'pry-nav'
+
+  gem 'bullet'
 end
 
 group :development do
