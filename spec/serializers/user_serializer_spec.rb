@@ -65,6 +65,24 @@ describe UserSerializer, :type => :serializer do
       end
     end
 
+    context "relationships" do
+      subject do
+        JSON.parse(serialization.to_json)["data"]["relationships"]
+      end
+
+      it "should include a 'visits' relationship" do
+        expect(subject["visits"]).not_to be_nil
+      end
+
+      it "should include a 'following' relationship" do
+        expect(subject["following"]).not_to be_nil
+      end
+
+      it "should include a 'followers' relationship" do
+        expect(subject["followers"]).not_to be_nil
+      end
+    end
+
     context "included" do
       subject do
         JSON.parse(serialization.to_json)["included"]
