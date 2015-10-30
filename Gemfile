@@ -37,6 +37,8 @@ gem 'unicorn'
 
 gem "sentry-raven"
 
+gem 'rack-cors', require: 'rack/cors'
+
 group :development, :production do
   gem 'rails_12factor'
 end
