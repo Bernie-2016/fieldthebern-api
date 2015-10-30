@@ -33,43 +33,23 @@ describe "Address API" do
       end
 
       context "when searching by parameters instead of scope" do
-        it "returns 404 if the address doesn't exist in the db", vcr: { cassette_name: "requests/api/addresses/returns_404_if_the_address_doesnt_exist_in_the_db" } do
+        it "should return an error response when it failes", vcr: { cassette_name: "requests/api/addresses/succesful_easypost_response" }  do
           authenticated_get "addresses", {
             street_1: "5th Avenue",
             city: "New York",
             state_code: "NY"
           }, token
+
           expect(last_response.status).to eq 404
-          expect(json.error).to eq "No match for this address"
+          expect(json.errors.length).to eq 1
+          error = json.errors.first
+          expect(error.id).to eq "ADDRESS_UNMATCHED"
+          expect(error.title).to eq "Address unmatched"
+          expect(error.detail).to eq "The requested address does not exist in the database."
+          expect(error.status).to eq 404
         end
 
-        it "returns 400 if not enough parameters provided for easypost", vcr: { cassette_name: "requests/api/addresses/it_returns_400_if_not_enough_parameters_provided_for_easypost" } do
-          authenticated_get "addresses", {
-            street_1: "5th avenue",
-            city: "New York",
-          }, token
-          expect(json.error).to eq "Insufficient address data provided. A city and state or a zip must be provided."
-          expect(last_response.status).to eq 400
-
-          authenticated_get "addresses", {
-            city: "New York",
-            state_code: "NY",
-          }, token
-          expect(json.error).to eq "Insufficient address data provided. A street must be provided."
-          expect(last_response.status).to eq 400
-        end
-
-        it "returns 400 if address not found by easypost", vcr: { cassette_name: "requests/api/addresses/it_returns_400_if_address_not_found_by_easypost" } do
-          authenticated_get "addresses", {
-            street_1: "A non existant address to trigger proper error",
-            city: "New York",
-            state_code: "NY",
-          }, token
-          expect(json.error).to eq "Address Not Found."
-          expect(last_response.status).to eq 400
-        end
-
-        it "returns an existing address with people included if the address exists", vcr: { cassette_name: "requests/api/addresses/returns_an_existing_address_with_people_included_if_the_address_exists" } do
+        it "returns an existing address with people included if the address exists", vcr: { cassette_name: "requests/api/addresses/succesful_easypost_response" } do
           address = create(:address,
             id: 1,
             latitude: 1,
