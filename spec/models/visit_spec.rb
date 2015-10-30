@@ -23,6 +23,7 @@ describe Visit do
 
   context 'validations' do
     it { should validate_presence_of(:user) }
+    it { should validate_presence_of(:address_update) }
   end
 
   context 'scopes' do

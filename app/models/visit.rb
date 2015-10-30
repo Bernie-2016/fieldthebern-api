@@ -10,6 +10,7 @@ class Visit < ActiveRecord::Base
   has_many :people, through: :person_updates
 
   validates :user, presence: true
+  validates :address_update, presence: true
 
   scope :this_week, -> { where(created_at: Time.zone.now.all_week) }
 
