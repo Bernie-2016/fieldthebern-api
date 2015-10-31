@@ -1,4 +1,6 @@
 require "ground_game/easypost_helper"
+require "ground_game/errors/visit_not_allowed"
+require "ground_game/errors/invalid_best_canvas_response"
 
 class Address < ActiveRecord::Base
   has_many :people
@@ -29,6 +31,14 @@ class Address < ActiveRecord::Base
     self.best_canvas_response = person.canvas_response
   end
 
+  def recently_visited?
+    minimum_timespan_hours = (ENV["MIN_INTERVAL_BETWEEN_VISITS_HOURS"] || 1).to_i.hours
+    lower_bound = (DateTime.now - minimum_timespan_hours).to_i
+    upper_bound = DateTime.now.to_i
+    invalid_interval = lower_bound..upper_bound
+    invalid_interval.include? self.visited_at.to_i
+  end
+
   def self.new_or_existing_from_params(params)
     address_id = params.fetch(:id, nil)
 
@@ -50,12 +60,13 @@ class Address < ActiveRecord::Base
 
   def self.existing_with_params(id, params)
     address = Address.find(id)
-    if best_canvas_response_value_valid(params[:best_canvas_response])
-      address.assign_attributes(params)
-      return address
-    else
-      raise ArgumentError.new("Invalid argument #{params[:best_canvas_response]} for address.best_canvas_response")
-    end
+    raise GroundGame::VisitNotAllowed if address.recently_visited?
+
+    canvas_response = params[:best_canvas_response]
+    raise GroundGame::InvalidBestCanvasResponse.new(canvas_response) unless best_canvas_response_value_valid(canvas_response)
+
+    address.assign_attributes(params)
+    address
   end
 
   def self.best_canvas_response_value_valid(value)

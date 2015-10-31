@@ -29,5 +29,19 @@ FactoryGirl.define do
         address.people = [person]
       end
     end
+
+    transient do
+      recently_visited? false
+    end
+
+    after(:build) do |address, evaluator|
+      unless evaluator.visited_at
+        minimum_interval_between_visits = (ENV["MIN_INTERVAL_BETWEEN_VISITS_HOURS"] || 1).to_i
+        offset = minimum_interval_between_visits / 2 if evaluator.recently_visited?
+        offset = minimum_interval_between_visits * 2 unless evaluator.recently_visited?
+        timestamp = DateTime.now - offset.hours
+        address.visited_at = timestamp
+      end
+    end
   end
 end

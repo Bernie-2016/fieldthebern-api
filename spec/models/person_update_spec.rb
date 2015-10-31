@@ -1,8 +1,10 @@
 require 'rails_helper'
 
 describe PersonUpdate do
+  let(:visit) { build(:visit) }
+
   it "has a valid factory" do
-    expect(build(:person_update)).to be_valid
+    expect(build(:person_update, visit: visit)).to be_valid
   end
 
   context 'schema' do
@@ -26,7 +28,7 @@ describe PersonUpdate do
   end
 
   it "has a working 'update_type' enum" do
-    person_update = create(:person_update)
+    person_update = create(:person_update, visit: visit)
 
     expect(person_update.created?).to be true
 

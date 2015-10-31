@@ -1,4 +1,6 @@
 require "ground_game/scenario/create_score"
+require "ground_game/errors/visit_not_allowed"
+require "ground_game/errors/invalid_best_canvas_response"
 require "ground_game/scenario/scenario_result"
 
 module GroundGame
@@ -27,7 +29,7 @@ module GroundGame
             visit = create_visit(@visit_params, @address_params, @people_params, @current_user)
             CreateVisitResult.new(visit: visit)
           end
-        rescue ArgumentError, ActiveRecord::RecordNotFound => e
+        rescue ArgumentError, ActiveRecord::RecordNotFound, VisitNotAllowed, InvalidBestCanvasResponse => e
           CreateVisitResult.new(error: e)
         end
       end
@@ -39,6 +41,7 @@ module GroundGame
           visit.user = user
 
           address = create_or_update_address(address_params, visit)
+          address.visited_at = DateTime.now
 
           people = create_or_update_people_for_address(people_params, address, visit)
 

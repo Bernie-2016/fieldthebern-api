@@ -25,7 +25,7 @@ http_interactions:
       message: Bad Request
     headers:
       Date:
-      - Thu, 29 Oct 2015 13:21:13 GMT
+      - Fri, 30 Oct 2015 16:49:59 GMT
       Status:
       - 400 Bad Request
       Connection:
@@ -41,15 +41,15 @@ http_interactions:
       Cache-Control:
       - no-cache
       X-Request-Id:
-      - 76d90ea0-caa3-4aca-ae88-2f1077b493e3
+      - 192bb49a-d93a-4743-8423-cdf1acdcab03
       X-Runtime:
-      - '0.427322'
+      - '0.492487'
       X-Node:
-      - web5sj, bea3250d8c
+      - web3sj, c28a10e7d5
       X-Backend:
       - easypost
       X-Proxied:
-      - lb5sj, d36de79499
+      - lb4sj, d36de79499
       Strict-Transport-Security:
       - max-age=86400
     body:
@@ -57,5 +57,5 @@ http_interactions:
       string: '{"error":{"code":"ADDRESS.VERIFY.FAILURE","message":"Insufficient address
         data provided. A city and state or a zip must be provided.","errors":[]}}'
     http_version: 
-  recorded_at: Thu, 29 Oct 2015 13:21:14 GMT
+  recorded_at: Fri, 30 Oct 2015 16:49:59 GMT
 recorded_with: VCR 2.9.3

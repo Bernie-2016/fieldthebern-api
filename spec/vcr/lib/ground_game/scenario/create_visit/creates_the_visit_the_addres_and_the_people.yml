@@ -25,7 +25,7 @@ http_interactions:
       message: OK
     headers:
       Date:
-      - Wed, 21 Oct 2015 08:08:15 GMT
+      - Fri, 30 Oct 2015 16:49:22 GMT
       Status:
       - 200 OK
       Connection:
@@ -37,29 +37,29 @@ http_interactions:
       X-Content-Type-Options:
       - nosniff
       Location:
-      - "/api/v2/addresses/adr_565f0af2987645e5bdbdc729084fcf89"
+      - "/api/v2/addresses/adr_e70c81778d264a33bd784b6973ee3229"
       Content-Type:
       - application/json; charset=utf-8
       Etag:
-      - W/"456c4816cea127919a3f3901e9300771"
+      - W/"2bb271816066f6d27df7cf820f489093"
       Cache-Control:
       - max-age=0, private, must-revalidate
       X-Request-Id:
-      - 727f7b0b-f00a-4171-9c03-7064468c4049
+      - 2741148d-e284-4ed9-968e-dd693ec69444
       X-Runtime:
-      - '0.597071'
+      - '0.703783'
       X-Node:
-      - web6sj, 81669f77aa
+      - web3sj, c28a10e7d5
       X-Backend:
       - easypost
       X-Proxied:
-      - lb5sj, d36de79499
+      - lb4sj, d36de79499
       Strict-Transport-Security:
       - max-age=86400
     body:
       encoding: UTF-8
-      string: '{"address":{"id":"adr_565f0af2987645e5bdbdc729084fcf89","object":"Address","created_at":"2015-10-21T08:08:15Z","updated_at":"2015-10-21T08:08:15Z","name":null,"company":null,"street1":"5
-        AVENUE A","street2":"","city":"NEW YORK","state":"NY","zip":"10009-7944","country":"US","phone":null,"email":null,"mode":"test","carrier_facility":null,"residential":false,"federal_tax_id":null}}'
+      string: '{"address":{"id":"adr_e70c81778d264a33bd784b6973ee3229","object":"Address","created_at":"2015-10-30T16:49:21Z","updated_at":"2015-10-30T16:49:21Z","name":null,"company":null,"street1":"5
+        AVENUE A","street2":"","city":"NEW YORK","state":"NY","zip":"10009-7944","country":"US","phone":null,"email":null,"mode":"production","carrier_facility":null,"residential":false,"federal_tax_id":null}}'
     http_version: 
-  recorded_at: Wed, 21 Oct 2015 08:08:18 GMT
+  recorded_at: Fri, 30 Oct 2015 16:49:22 GMT
 recorded_with: VCR 2.9.3
