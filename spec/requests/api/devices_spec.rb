@@ -9,8 +9,9 @@ describe "Devices API" do
 
 
   it "should register a devise for a user" do
+    authenticated_get 'users/me', {}, token
 
-
+    user_id = json.data.id
 
     authenticated_post "devices", {
       data: {
@@ -26,6 +27,7 @@ describe "Devices API" do
     expect(json.token).to eq "123456"
     expect(json.platform).to eq "Android"
     expect(json).to be_enabled
+    expect(json.user_id.to_s).to eq user_id.to_s
   end
 
 end
