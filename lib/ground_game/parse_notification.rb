@@ -1,14 +1,18 @@
 module GroundGame
   class ParseNotification
 
-    def self.send(username: nil, channel: nil, message: nil)
-      new(username: username, channel: channel, message: message).send
+    def self.send_to_device(device_token: nil, message: nil)
+      new(device_token: device_token, message: message).send
     end
 
-    def initialize(username: nil, channel: nil, message: nil)
-      @username = username
+    def self.send_to_channel(channel: nil, message: nil)
+      new(channel: channel, message: message).send
+    end
+
+    def initialize(device_token: nil, channel: nil, message: nil)
+      @device_token = device_token
+      @type = @device_token.present? ? 'individual' : 'channel'
       @channel = channel
-      @type = @username.present? ? 'individual' : 'channel'
       @message = message
     end
 
@@ -43,7 +47,7 @@ module GroundGame
         # initialize query object
         query = Parse::Query.new(Parse::Protocol::CLASS_INSTALLATION)
         # set query where clause by some attribute
-        query.eq('username', @username.to_s)
+        query.eq('username', @device_token.to_s)
         # setting deviceType in where clause
         query.eq('deviceType', 'android') if individual?
         query
