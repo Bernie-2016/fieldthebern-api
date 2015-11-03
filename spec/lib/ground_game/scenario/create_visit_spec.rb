@@ -254,16 +254,24 @@ module GroundGame
 
           context "when the address doesn't exist"do
 
-            it "sets new_address.visited_at" do
+            it "sets new_address.visited_at", vcr: { cassette_name: "lib/ground_game/scenario/create_visit/successful_easypost_request" } do
               visit_params = {}
-              address_params = {state_code: "CA"}
+
+              address_params = {
+                latitude: 40.771913,
+                longitude: -73.9673735,
+                street_1: "5th Avenue",
+                city: "New York",
+                state_code: "NY"
+              }
+
               people_params = []
               result = CreateVisit.new(visit_params, address_params, people_params, user).call
               expect(result.success?).to eq true
               expect(Address.last.visited_at).to be_within(1.second).of(DateTime.now)
             end
 
-            it "creates an address_update with proper contents", vcr: { cassette_name: "lib/ground_game/scenario/create_visit/creates_an_address_update_with_proper_contents" } do
+            it "creates an address_update with proper contents", vcr: { cassette_name: "lib/ground_game/scenario/create_visit/successful_easypost_request" } do
               visit_params = { duration_sec: 150 }
 
               address_params = {
@@ -284,7 +292,7 @@ module GroundGame
               expect(address_update.created?).to be true
             end
 
-            it "creates the visit, the address and the people", vcr: { cassette_name: "lib/ground_game/scenario/create_visit/creates_the_visit_the_addres_and_the_people" } do
+            it "creates the visit, the address and the people", vcr: { cassette_name: "lib/ground_game/scenario/create_visit/successful_easypost_request" } do
               visit_params = { duration_sec: 150 }
 
               address_params = {
