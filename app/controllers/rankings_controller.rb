@@ -14,6 +14,6 @@ class RankingsController < ApplicationController
       rankings = Ranking.for_user_in_users_friend_list(user: current_user)
     end
 
-    render json: {data: rankings}
+    render json: rankings
   end
 end
