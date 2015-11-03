@@ -20,11 +20,11 @@ describe "Devices API" do
         }
       }, token
 
-      expect(json.id).not_to be_blank
-      expect(json.token).to eq "123456"
-      expect(json.platform).to eq "Android"
-      expect(json).to be_enabled
-      expect(json.user_id.to_s).to eq @user.id.to_s
+      expect(json.data.id).not_to be_blank
+      expect(json.data.attributes.token).to eq "123456"
+      expect(json.data.attributes.platform).to eq "Android"
+      expect(json.data.attributes.enabled).to be true
+      expect(json.data.relationships.user.data.id).to eq @user.id.to_s
     end
   end
 
@@ -43,11 +43,11 @@ describe "Devices API" do
       }, token
 
       expect(Device.count).to eq 1
-      expect(json.id).to eq 5
-      expect(json.token).to eq "123456"
-      expect(json.platform).to eq "Android"
-      expect(json).to be_enabled
-      expect(json.user_id.to_s).to eq @user.id.to_s
+      expect(json.data.id).to eq "5"
+      expect(json.data.attributes.token).to eq "123456"
+      expect(json.data.attributes.platform).to eq "Android"
+      expect(json.data.attributes.enabled).to be true
+      expect(json.data.relationships.user.data.id).to eq @user.id.to_s
     end
   end
 
