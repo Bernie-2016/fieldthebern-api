@@ -53,12 +53,26 @@ describe RankingSerializer, :type => :serializer do
     end
 
     context "included" do
-      subject do
-        JSON.parse(serialization.to_json)["included"]
+      context "when including" do
+        let(:serialization) { ActiveModel::Serializer::Adapter.create(serializer, include: ["users"]) }
+
+        subject do
+          JSON.parse(serialization.to_json)["included"]
+        end
+
+        it "should not be empty" do
+          expect(subject).to_not be_nil
+        end
       end
 
-      it "should be empty" do
-        expect(subject).to be_nil
+      context "when not including" do
+        subject do
+          JSON.parse(serialization.to_json)["included"]
+        end
+
+        it "should be empty" do
+          expect(subject).to be_nil
+        end
       end
     end
   end

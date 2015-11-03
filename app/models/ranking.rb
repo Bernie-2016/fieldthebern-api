@@ -1,4 +1,6 @@
-class Ranking
+require "active_model_serializers/model"
+
+class Ranking < ActiveModelSerializers::Model
 
   DEFAULT_OPTIONS = {
     with_member_data: true
