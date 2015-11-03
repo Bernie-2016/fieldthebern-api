@@ -25,7 +25,7 @@ http_interactions:
       message: Bad Request
     headers:
       Date:
-      - Thu, 29 Oct 2015 13:22:08 GMT
+      - Fri, 30 Oct 2015 16:50:00 GMT
       Status:
       - 400 Bad Request
       Connection:
@@ -41,11 +41,11 @@ http_interactions:
       Cache-Control:
       - no-cache
       X-Request-Id:
-      - 3a008e7b-28b4-4a35-87ec-3370655c8515
+      - 8a4a8c47-ef82-47bf-8b47-93984fc3a763
       X-Runtime:
-      - '0.551248'
+      - '0.521538'
       X-Node:
-      - web3sj, bea3250d8c
+      - web3sj, c28a10e7d5
       X-Backend:
       - easypost
       X-Proxied:
@@ -57,5 +57,5 @@ http_interactions:
       string: '{"error":{"code":"ADDRESS.VERIFY.FAILURE","message":"Insufficient address
         data provided. A street must be provided.","errors":[]}}'
     http_version: 
-  recorded_at: Thu, 29 Oct 2015 13:22:08 GMT
+  recorded_at: Fri, 30 Oct 2015 16:50:00 GMT
 recorded_with: VCR 2.9.3
