@@ -21,7 +21,7 @@ class Ranking
   end
 
   include ActiveModel::Serialization
-  # include ActiveModel::Associations
+  extend ActiveModel::Naming
 
   attr_accessor :score, :rank, :member, :member_data
 
@@ -45,5 +45,9 @@ class Ranking
 
   def user
     @user ||= User.find(user_id)
+  end
+
+  def id
+    @rank
   end
 end
