@@ -23,6 +23,7 @@ describe Visit do
 
   context 'validations' do
     it { should validate_presence_of(:user) }
+    it { should validate_presence_of(:address_update) }
   end
 
   context 'scopes' do
@@ -37,7 +38,9 @@ describe Visit do
   context 'instance methods' do
     it 'should count the number of people updated with #number_of_updated_people' do
       visit = build(:visit)
-      expect(visit.number_of_updated_people).to eq 2 # why 2?
+      expect(visit.number_of_updated_people).to eq 0
+      visit_with_people = build(:visit, :with_people, people_count: 2)
+      expect(visit_with_people.number_of_updated_people).to eq 2
     end
   end
 end

@@ -26,6 +26,10 @@ describe Address do
     it { should belong_to(:most_supportive_resident) }
   end
 
+  context 'validations' do
+    it { should validate_presence_of(:state_code) }
+  end
+
   context 'scopes' do
     it "has a working 'within' scope" do
       first_address_in_radius = create(:address, latitude: 1, longitude: 1)
@@ -70,6 +74,7 @@ describe Address do
   end
 
   describe "instance methods" do
+
     describe "#assign_most_supportive_resident" do
       it "assigns person as most supportive resident and persons canvas_response as best_canvas_response" do
         address = create(:address)
@@ -95,30 +100,42 @@ describe Address do
       end
     end
 
+    describe "#recently_visited?" do
+      it "returns true if the address has been visited within a time span" do
+        address = create(:address, recently_visited?: true)
+        expect(address.reload.recently_visited?).to be true
+      end
+      it "returns false if the address has not been visited within a time span" do
+        address = create(:address, recently_visited?: false)
+        expect(address.reload.recently_visited?).to be false
+      end
+    end
   end
 
-  describe ".new_or_existing_from_params" do
-    it "initializes a new address if the params do not contain an id", vcr: { cassette_name: "models/address/creates_a_new_address_if_the_params_do_not_contain_an_id" } do
-      expect(Address.count).to eq 0
-      params = {
-        latitude: 1,
-        longitude: 1
-      }
-      address = Address.new_or_existing_from_params(params)
-      expect(address.persisted?).to be false
-    end
-    it "fetches and updates (without save) an existing address if the params do contain an id" do
-      create(:address, id: 1, latitude: 0, longitude: 0)
-      params = {
-        id: 1,
-        latitude: 1,
-        longitude: 1
-      }
-      address = Address.new_or_existing_from_params(params)
-      expect(Address.count).to eq 1
-      expect(address.changed?).to be true
-      expect(address.latitude).to eq 1
-      expect(address.longitude).to eq 1
+  describe "class methods" do
+    describe ".new_or_existing_from_params" do
+      it "initializes a new address if the params do not contain an id", vcr: { cassette_name: "models/address/creates_a_new_address_if_the_params_do_not_contain_an_id" } do
+        expect(Address.count).to eq 0
+        params = { latitude: 1, longitude: 1 }
+        address = Address.new_or_existing_from_params(params)
+        expect(address.persisted?).to be false
+      end
+
+      it "fetches and updates (without save) an existing address if the params do contain an id" do
+        create(:address, id: 1, latitude: 0, longitude: 0)
+        params = { id: 1, latitude: 1, longitude: 1 }
+        address = Address.new_or_existing_from_params(params)
+        expect(Address.count).to eq 1
+        expect(address.changed?).to be true
+        expect(address.latitude).to eq 1
+        expect(address.longitude).to eq 1
+      end
+
+      it "throws an error if updating the same address twice in a short period" do
+        address = create(:address, id: 1, recently_visited?: true)
+        params = { id: 1, latitude: 1, longitude: 1 }
+        expect { Address.new_or_existing_from_params(params) }.to raise_error GroundGame::VisitNotAllowed
+      end
     end
 
     it "should raise an error if there's an invalid 'best_canvas_response' parameter value" do

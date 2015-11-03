@@ -1,7 +1,7 @@
 FactoryGirl.define do
   factory :person_update do |f|
-    f.person
-    f.visit
+    association :person
+    association :visit
 
     f.new_canvas_response :unknown
     f.new_party_affiliation :unknown_affiliation

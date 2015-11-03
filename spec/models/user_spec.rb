@@ -81,19 +81,6 @@ describe User do
     end
   end
 
-  it "is invalid with a duplicate email" do
-    create(:user, email: "existing-email@mail.com")
-    expect(build(:user, email: "existing-email@mail.com")).not_to be_valid
-  end
-
-  it "can have followers" do
-    user = create(:user)
-    other_user_1 = create(:user)
-    other_user_2 = create(:user)
-    create(:relationship, follower: other_user_1, followed: user)
-    create(:relationship, follower: other_user_2, followed: user)
-  end
-
   context 'leaderboard' do
     before(:each) do
       @user = create(:user)
@@ -132,6 +119,6 @@ describe User do
 
   it 'has a counter cache from visits' do
     @user = create(:user)
-    expect { @user.visits.create }.to change { @user.visits_count }.by(1)
+    expect { create(:visit, user: @user) }.to change { @user.visits_count }.by(1)
   end
 end
