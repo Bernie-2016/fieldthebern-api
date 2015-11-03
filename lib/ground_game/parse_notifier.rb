@@ -1,3 +1,5 @@
+require "ground_game/parse_notification"
+
 module GroundGame
   class ParseNotifier
     def self.ping_user(user: nil)

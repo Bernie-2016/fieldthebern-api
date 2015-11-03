@@ -1,5 +1,6 @@
 require "rails_helper"
 require "ground_game/scenario/update_users_friend_leaderboard"
+require "ground_game/parse_notification"
 
 module GroundGame
   module Scenario
@@ -21,7 +22,8 @@ module GroundGame
         end
 
         context "when it alters the friends rank" do
-          it "sends notification to all friends devices" do
+          it "sends notification to all friends devices", vcr: { cassette_name: "lib/ground_game/update_users_friend_leaderboard/when it alters the friends rank/sends notification to all friends devices" } do
+            Sidekiq::Testing.inline! do
             user_with_higher_score = create(:user)
             some_other_user = create(:user)
             device_a = create(:device, user: @friend, token: "1")
@@ -33,6 +35,7 @@ module GroundGame
             expect(GroundGame::ParseNotification).to receive(:send).with(message: "Your friend has beaten you!", username: "2")
             expect(GroundGame::ParseNotification).not_to receive(:send).with(message: "Your friend has beaten you!", username: "3")
             UpdateUsersFriendLeaderboard.new(@friend, user_with_higher_score).call
+          end
           end
         end
       end
