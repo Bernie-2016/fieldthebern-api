@@ -133,7 +133,7 @@ describe "Users API" do
 
             rankings = Ranking.for_everyone(id: User.last.id)
             expect(rankings.length).to eq 1
-            expect(rankings.first.user).to eq User.last
+            expect(rankings.first[:member]).to eq User.last.id.to_s
           end
         end
 
@@ -143,7 +143,7 @@ describe "Users API" do
 
             rankings = Ranking.for_state(id: User.last.id, state_code: "NY")
             expect(rankings.length).to eq 1
-            expect(rankings.first.user).to eq User.last
+            expect(rankings.first[:member]).to eq User.last.id.to_s
           end
         end
 
@@ -153,7 +153,7 @@ describe "Users API" do
 
             rankings = Ranking.for_user_in_users_friend_list(user: User.last)
             expect(rankings.length).to eq 1
-            expect(rankings.first.user).to eq User.last
+            expect(rankings.first[:member]).to eq User.last.id.to_s
           end
         end
       end
@@ -179,7 +179,7 @@ describe "Users API" do
 
             rankings = Ranking.for_everyone(id: User.last.id)
             expect(rankings.length).to eq 1
-            expect(rankings.first.user).to eq User.last
+            expect(rankings.first[:member]).to eq User.last.id.to_s
           end
         end
 
@@ -189,7 +189,7 @@ describe "Users API" do
 
             rankings = Ranking.for_state(id: User.last.id, state_code: "NY")
             expect(rankings.length).to eq 1
-            expect(rankings.first.user).to eq User.last
+            expect(rankings.first[:member]).to eq User.last.id.to_s
           end
         end
 
@@ -199,7 +199,7 @@ describe "Users API" do
 
             rankings = Ranking.for_user_in_users_friend_list(user: User.last)
             expect(rankings.length).to eq 1
-            expect(rankings.first.user).to eq User.last
+            expect(rankings.first[:member]).to eq User.last.id.to_s
           end
         end
       end
@@ -273,7 +273,7 @@ describe "Users API" do
 
             rankings = Ranking.for_everyone(id: User.last.id)
             expect(rankings.length).to eq 1
-            expect(rankings.first.user).to eq User.last
+            expect(rankings.first[:member]).to eq User.last.id.to_s
           end
         end
 
@@ -283,7 +283,7 @@ describe "Users API" do
 
             rankings = Ranking.for_state(id: User.last.id, state_code: "NY")
             expect(rankings.length).to eq 1
-            expect(rankings.first.user).to eq User.last
+            expect(rankings.first[:member]).to eq User.last.id.to_s
           end
         end
 
@@ -293,7 +293,7 @@ describe "Users API" do
 
             rankings = Ranking.for_user_in_users_friend_list(user: User.last)
             expect(rankings.length).to eq 1
-            expect(rankings.first.user).to eq User.last
+            expect(rankings.first[:member]).to eq User.last.id.to_s
           end
         end
       end
@@ -310,7 +310,7 @@ describe "Users API" do
 
             rankings = Ranking.for_everyone(id: User.last.id)
             expect(rankings.length).to eq 1
-            expect(rankings.first.user).to eq User.last
+            expect(rankings.first[:member]).to eq User.last.id.to_s
           end
         end
 
@@ -320,7 +320,7 @@ describe "Users API" do
 
             rankings = Ranking.for_state(id: User.last.id, state_code: "NY")
             expect(rankings.length).to eq 1
-            expect(rankings.first.user).to eq User.last
+            expect(rankings.first[:member]).to eq User.last.id.to_s
           end
         end
 
@@ -330,7 +330,7 @@ describe "Users API" do
 
             rankings = Ranking.for_user_in_users_friend_list(user: User.last)
             expect(rankings.length).to eq 1
-            expect(rankings.first.user).to eq User.last
+            expect(rankings.first[:member]).to eq User.last.id.to_s
           end
         end
       end
