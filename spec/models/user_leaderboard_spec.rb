@@ -83,39 +83,67 @@ describe UserLeaderboard do
     end
   end
 
-  describe "#rank_user" do
-    before do
-      @leaderboard = UserLeaderboard.for_everyone()
-    end
+  describe "instance methods" do
 
-    context "if the user is not in the leaderboard" do
-      it "adds the user to the leaderboard" do
-        user = create(:user, id: 10)
-        @leaderboard.rank_user(user)
-        expect(@leaderboard.total_members).to eq 1
-
-        contents = @leaderboard.around_me(10)
-        expect(contents.first[:member]).to eq "10"
-        expect(contents.first[:rank]).to eq 1
-        expect(contents.first[:score]).to eq 0.0
-      end
-    end
-
-    context "if the user is already in the leaderboard" do
+    describe "#rank_user" do
       before do
-        @user = create(:user, id: 10)
-        @leaderboard.rank_user(@user)
+        @leaderboard = UserLeaderboard.for_everyone()
       end
 
-      it "updates the user within the leaderboard" do
-        visit = create(:visit, user: @user)
-        @leaderboard.rank_user(@user)
-        expect(@leaderboard.total_members).to eq 1
+      context "if the user is not in the leaderboard" do
+        it "adds the user to the leaderboard" do
+          user = create(:user, id: 10)
+          @leaderboard.rank_user(user)
+          expect(@leaderboard.total_members).to eq 1
 
-        contents = @leaderboard.around_me(10)
-        expect(contents.first[:member]).to eq "10"
-        expect(contents.first[:rank]).to eq 1
-        expect(contents.first[:score]).to eq 1000.0
+          contents = @leaderboard.around_me(10)
+          expect(contents.first[:member]).to eq "10"
+          expect(contents.first[:rank]).to eq 1
+          expect(contents.first[:score]).to eq 0.0
+        end
+      end
+
+      context "if the user is already in the leaderboard" do
+        before do
+          @user = create(:user, id: 10)
+          @leaderboard.rank_user(@user)
+        end
+
+        it "updates the user within the leaderboard" do
+          visit = create(:visit, user: @user)
+          @leaderboard.rank_user(@user)
+          expect(@leaderboard.total_members).to eq 1
+
+          contents = @leaderboard.around_me(10)
+          expect(contents.first[:member]).to eq "10"
+          expect(contents.first[:rank]).to eq 1
+          expect(contents.first[:score]).to eq 1000.0
+        end
+      end
+    end
+
+    describe "#check_user_rank" do
+      before do
+        @leaderboard = UserLeaderboard.for_everyone()
+        5.times { @leaderboard.rank_user(create(:user)) }
+
+        @user = create(:user)
+      end
+
+      context "if the user is not in the leaderboard" do
+        it "returns the user's rank" do
+          expect(@leaderboard.check_user_rank(@user)).to be_nil
+        end
+      end
+
+      context "if the user is in the leaderboard" do
+        before do
+          create(:visit, user: @user)
+          @leaderboard.rank_user(@user)
+        end
+        it "returns the user's rank" do
+          expect(@leaderboard.check_user_rank(@user)).to eq 1
+        end
       end
     end
   end

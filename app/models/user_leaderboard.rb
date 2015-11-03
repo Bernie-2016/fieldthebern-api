@@ -20,6 +20,10 @@ class UserLeaderboard < Leaderboard
     rank_member(user.id.to_s, user.total_points_this_week, user.ranking_data_json)
   end
 
+  def check_user_rank(user)
+    rank_for(user.id)
+  end
+
   private
 
     REDIS_OPTIONS = {
