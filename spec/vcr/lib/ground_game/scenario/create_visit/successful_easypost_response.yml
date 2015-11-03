@@ -37,29 +37,29 @@ http_interactions:
       X-Content-Type-Options:
       - nosniff
       Location:
-      - "/api/v2/addresses/adr_e70c81778d264a33bd784b6973ee3229"
+      - "/api/v2/addresses/adr_0560363e0d104f87a065808df6bab363"
       Content-Type:
       - application/json; charset=utf-8
       Etag:
-      - W/"2bb271816066f6d27df7cf820f489093"
+      - W/"a91afaac53416e9fd22623d1cd195cd4"
       Cache-Control:
       - max-age=0, private, must-revalidate
       X-Request-Id:
-      - 2741148d-e284-4ed9-968e-dd693ec69444
+      - 5d3cfa5a-72a2-460f-9fc9-d9a8a33d6a79
       X-Runtime:
-      - '0.703783'
+      - '0.569346'
       X-Node:
-      - web3sj, c28a10e7d5
+      - web11sj, c28a10e7d5
       X-Backend:
       - easypost
       X-Proxied:
-      - lb4sj, d36de79499
+      - lb5sj, e7a611e00e
       Strict-Transport-Security:
       - max-age=86400
     body:
       encoding: UTF-8
-      string: '{"address":{"id":"adr_e70c81778d264a33bd784b6973ee3229","object":"Address","created_at":"2015-10-30T16:49:21Z","updated_at":"2015-10-30T16:49:21Z","name":null,"company":null,"street1":"5
+      string: '{"address":{"id":"adr_0560363e0d104f87a065808df6bab363","object":"Address","created_at":"2015-10-30T16:49:22Z","updated_at":"2015-10-30T16:49:22Z","name":null,"company":null,"street1":"5
         AVENUE A","street2":"","city":"NEW YORK","state":"NY","zip":"10009-7944","country":"US","phone":null,"email":null,"mode":"production","carrier_facility":null,"residential":false,"federal_tax_id":null}}'
-    http_version: 
+    http_version:
   recorded_at: Fri, 30 Oct 2015 16:49:22 GMT
 recorded_with: VCR 2.9.3
