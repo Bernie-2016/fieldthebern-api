@@ -1,9 +1,7 @@
 test:
   adapter: postgresql
   database: ground_game_test
-  host: localhost
 development:
   adapter: postgresql
   database: ground_game_dev
-  host: localhost
   role: postgress

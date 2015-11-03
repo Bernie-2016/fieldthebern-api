@@ -8,17 +8,32 @@ module GroundGame
 
       describe "#call" do
         before do
-          @user = create(:user, id: 10)
           @friend = create(:user, id: 11)
-          # I would love to somehow have this work with factory_girl or something similar, but I'm not sure how
           friends = UserLeaderboard.for_friend_list_of_user(@friend)
           friends.rank_user(@friend)
         end
 
         it "updates the user's friend's 'friends' leaderboard" do
-          UpdateUsersFriendLeaderboard.new(@friend, @user).call
+          user = create(:user, id: 10)
+          UpdateUsersFriendLeaderboard.new(@friend, user).call
           rankings = Ranking.for_friend_list(list_owner: @friend, id: 10)
           expect(rankings.length).to eq 2
+        end
+
+        context "when it alters the friends rank" do
+          it "sends notification to all friends devices" do
+            user_with_higher_score = create(:user)
+            some_other_user = create(:user)
+            device_a = create(:device, user: @friend, token: "1")
+            device_b = create(:device, user: @friend, token: "2")
+            device_c = create(:device, user: some_other_user, token: "3")
+            create(:visit, user: user_with_higher_score)
+
+            expect(GroundGame::ParseNotification).to receive(:send).with(message: "Your friend has beaten you!", username: "1")
+            expect(GroundGame::ParseNotification).to receive(:send).with(message: "Your friend has beaten you!", username: "2")
+            expect(GroundGame::ParseNotification).not_to receive(:send).with(message: "Your friend has beaten you!", username: "3")
+            UpdateUsersFriendLeaderboard.new(@friend, user_with_higher_score).call
+          end
         end
       end
     end

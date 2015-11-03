@@ -7,7 +7,11 @@ module GroundGame
       end
 
       def call
+        old_friend_rank = friends_leaderboard.check_user_rank(@friend)
         friends_leaderboard.rank_user(@user)
+        new_friend_rank = friends_leaderboard.check_user_rank(@friend)
+        rank_changed = old_friend_rank != new_friend_rank
+        NotifyUserOfChangedRankWorker.perform_async(@friend.id, @user.id) if rank_changed
       end
 
       private
