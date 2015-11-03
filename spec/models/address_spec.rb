@@ -69,16 +69,32 @@ describe Address do
     expect(address.asked_to_leave?).to be true
   end
 
-  describe "#assign_most_supportive_resident" do
-    it "assigns person as most supportive resident and persons canvas_response as best_canvas_response" do
-      address = create(:address)
-      person = create(:person, canvas_response: :strongly_for)
+  describe "instance methods" do
+    describe "#assign_most_supportive_resident" do
+      it "assigns person as most supportive resident and persons canvas_response as best_canvas_response" do
+        address = create(:address)
+        person = create(:person, canvas_response: :strongly_for)
 
-      address.assign_most_supportive_resident(person)
+        address.assign_most_supportive_resident(person)
 
-      expect(address.most_supportive_resident).to eq person
-      expect(address.best_canvas_response).to eq person.canvas_response
+        expect(address.most_supportive_resident).to eq person
+        expect(address.best_canvas_response).to eq person.canvas_response
+      end
+
+      it "doesn't assign the person if another person is assigned and is more supportive" do
+        more_supportive_person = create(:person, canvas_response: :strongly_for)
+        address = create(:address,
+          best_canvas_response: more_supportive_person.canvas_response,
+          most_supportive_resident: more_supportive_person)
+
+        less_supportive_person = create(:person, canvas_response: :leaning_for)
+        address.assign_most_supportive_resident(less_supportive_person)
+
+        expect(address.most_supportive_resident).not_to be less_supportive_person
+        expect(address.best_canvas_response).not_to be :leaning_for
+      end
     end
+
   end
 
   describe ".new_or_existing_from_params" do

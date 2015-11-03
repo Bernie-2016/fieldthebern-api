@@ -24,8 +24,13 @@ class Address < ActiveRecord::Base
 
 
   def assign_most_supportive_resident(person)
-    self.most_supportive_resident = person
-    self.best_canvas_response = person.canvas_response
+    current_resident = self.most_supportive_resident
+    there_is_not_current_resident = current_resident.nil?
+
+    if there_is_not_current_resident or person.more_supportive_than? current_resident
+      self.most_supportive_resident = person
+      self.best_canvas_response = person.canvas_response
+    end
   end
 
   def self.new_or_existing_from_params(params)
