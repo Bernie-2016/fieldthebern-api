@@ -61,34 +61,48 @@ describe Person do
     expect(person.independent_affiliation?).to be true
   end
 
-  describe "#canvas_response_rating" do
-    it "works" do
-      person = create(:person)
+  describe "instance methods" do
+    describe "#more_supportive_than?" do
+      it "works" do
+        person = create(:person, canvas_response: :leaning_for)
+        other_person_1 = create(:person, canvas_response: :undecided)
+        other_person_2 = create(:person, canvas_response: :strongly_for)
 
-      expect(person.canvas_response_rating).to eq 2
+        expect(person.more_supportive_than? other_person_1).to be true
+        expect(person.more_supportive_than? other_person_2).to be false
+      end
+    end
 
-      person.strongly_for!
-      expect(person.canvas_response_rating).to eq 5
+    describe "#canvas_response_rating" do
+      it "works" do
+        person = create(:person)
 
-      person.leaning_for!
-      expect(person.canvas_response_rating).to eq 3
+        expect(person.canvas_response_rating).to eq 2
 
-      person.undecided!
-      expect(person.canvas_response_rating).to eq 2
+        person.strongly_for!
+        expect(person.canvas_response_rating).to eq 5
 
-      person.leaning_against!
-      expect(person.canvas_response_rating).to eq 1
+        person.leaning_for!
+        expect(person.canvas_response_rating).to eq 3
 
-      person.strongly_against!
-      expect(person.canvas_response_rating).to eq 0
+        person.undecided!
+        expect(person.canvas_response_rating).to eq 2
 
-      person.unknown!
-      expect(person.canvas_response_rating).to eq 2
+        person.leaning_against!
+        expect(person.canvas_response_rating).to eq 1
 
-      person.asked_to_leave!
-      expect(person.canvas_response_rating).to eq -1
+        person.strongly_against!
+        expect(person.canvas_response_rating).to eq 0
+
+        person.unknown!
+        expect(person.canvas_response_rating).to eq 2
+
+        person.asked_to_leave!
+        expect(person.canvas_response_rating).to eq -1
+      end
     end
   end
+
 
   describe ".new_or_existing_from_params" do
     it "initializes a new person if the params do not contain an id" do

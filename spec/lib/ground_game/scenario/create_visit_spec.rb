@@ -253,47 +253,39 @@ module GroundGame
           end
 
           context "when the address doesn't exist"do
-
-            it "sets new_address.visited_at" do
-              visit_params = {}
-              address_params = {state_code: "CA"}
-              people_params = []
-              result = CreateVisit.new(visit_params, address_params, people_params, user).call
-              expect(result.success?).to eq true
-              expect(Address.last.visited_at).to be_within(1.second).of(DateTime.now)
-            end
-
-            it "creates an address_update with proper contents", vcr: { cassette_name: "lib/ground_game/scenario/create_visit/creates_an_address_update_with_proper_contents" } do
-              visit_params = { duration_sec: 150 }
-
-              address_params = {
+            before do
+              @visit_params = { duration_sec: 150 }
+              @address_params = {
                 latitude: 40.771913,
                 longitude: -73.9673735,
                 street_1: "5th Avenue",
                 city: "New York",
                 state_code: "NY"
               }
+            end
+
+            it "sets new_address.visited_at" do
+              people_params = []
+              result = CreateVisit.new(@visit_params, @address_params, people_params, user).call
+              expect(result.success?).to eq true
+              expect(Address.last.visited_at).to be_within(1.second).of(DateTime.now)
+            end
+
+            it "creates an address_update and address with proper contents", vcr: { cassette_name: "lib/ground_game/scenario/create_visit/successful_easypost_response" } do
 
               people_params = []
 
-              visit = CreateVisit.new(visit_params, address_params, people_params, user).call.visit
+              visit = CreateVisit.new(@visit_params, @address_params, people_params, user).call.visit
 
               address_update = AddressUpdate.last
               expect(address_update.visit).to eq visit
               expect(address_update.address).to eq visit.address
               expect(address_update.created?).to be true
+
+              expect(address_update.address.not_home?).to be true
             end
 
-            it "creates the visit, the address and the people", vcr: { cassette_name: "lib/ground_game/scenario/create_visit/creates_the_visit_the_addres_and_the_people" } do
-              visit_params = { duration_sec: 150 }
-
-              address_params = {
-                latitude: 40.771913,
-                longitude: -73.9673735,
-                street_1: "5th Avenue",
-                city: "New York",
-                state_code: "NY"
-              }
+            it "creates the visit, the address and the people", vcr: { cassette_name: "lib/ground_game/scenario/create_visit/successful_easypost_response" } do
 
               people_params = [{
                 first_name: "John",
@@ -302,7 +294,7 @@ module GroundGame
                 party_affiliation: "Democrat"
               }]
 
-              visit = CreateVisit.new(visit_params, address_params, people_params, user).call.visit
+              visit = CreateVisit.new(@visit_params, @address_params, people_params, user).call.visit
 
               expect(visit.duration_sec).to eq 150
 

@@ -35,6 +35,9 @@ class Person < ActiveRecord::Base
     end
   end
 
+  def more_supportive_than? other_person
+    self.canvas_response_rating > other_person.canvas_response_rating
+  end
 
   def self.new_or_existing_from_params(params)
     person_id = params.fetch(:id, nil)
