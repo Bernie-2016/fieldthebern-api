@@ -3,7 +3,7 @@ require "rails_helper"
 describe VisitSerializer, :type => :serializer do
 
   context "individual resource representation" do
-    let(:resource) { create(:visit) }
+    let(:resource) { create(:visit, :with_people) }
 
     let(:serializer) { VisitSerializer.new(resource) }
     let(:serialization) { ActiveModel::Serializer::Adapter.create(serializer) }

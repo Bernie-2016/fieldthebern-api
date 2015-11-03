@@ -25,7 +25,7 @@ http_interactions:
       message: OK
     headers:
       Date:
-      - Thu, 29 Oct 2015 13:30:39 GMT
+      - Fri, 30 Oct 2015 16:49:21 GMT
       Status:
       - 200 OK
       Connection:
@@ -37,19 +37,19 @@ http_interactions:
       X-Content-Type-Options:
       - nosniff
       Location:
-      - "/api/v2/addresses/adr_47b4051e91e845348351048e4a996c2c"
+      - "/api/v2/addresses/adr_974ad2880d0241b7a2fd900cf7175af4"
       Content-Type:
       - application/json; charset=utf-8
       Etag:
-      - W/"09aceb59b7b3453414e457e313f3bbaa"
+      - W/"41b0a815c4f7bb22846b8d9735af0022"
       Cache-Control:
       - max-age=0, private, must-revalidate
       X-Request-Id:
-      - 0e7c2bf4-6b94-4ffc-9ebb-17888f1ea337
+      - b9b4c2d1-ed2c-4fc4-befd-08fd05cb77f2
       X-Runtime:
-      - '0.617173'
+      - '1.037058'
       X-Node:
-      - web4sj, bea3250d8c
+      - web3sj, c28a10e7d5
       X-Backend:
       - easypost
       X-Proxied:
@@ -58,8 +58,8 @@ http_interactions:
       - max-age=86400
     body:
       encoding: UTF-8
-      string: '{"address":{"id":"adr_47b4051e91e845348351048e4a996c2c","object":"Address","created_at":"2015-10-29T13:30:39Z","updated_at":"2015-10-29T13:30:39Z","name":null,"company":null,"street1":"5
-        AVENUE A","street2":"","city":"NEW YORK","state":"NY","zip":"10009-7944","country":"US","phone":null,"email":null,"mode":"test","carrier_facility":null,"residential":false,"federal_tax_id":null}}'
+      string: '{"address":{"id":"adr_974ad2880d0241b7a2fd900cf7175af4","object":"Address","created_at":"2015-10-30T16:49:20Z","updated_at":"2015-10-30T16:49:20Z","name":null,"company":null,"street1":"5
+        AVENUE A","street2":"","city":"NEW YORK","state":"NY","zip":"10009-7944","country":"US","phone":null,"email":null,"mode":"production","carrier_facility":null,"residential":false,"federal_tax_id":null}}'
     http_version: 
-  recorded_at: Thu, 29 Oct 2015 13:30:40 GMT
+  recorded_at: Fri, 30 Oct 2015 16:49:21 GMT
 recorded_with: VCR 2.9.3

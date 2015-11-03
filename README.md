@@ -15,6 +15,8 @@ get .env variables in a secure way and create .env file from the .env.sample fil
 ## Test
 `http://api.lvh.me:5000/ping`
 
+You must set `ENV['MIN_INTERVAL_BETWEEN_VISITS_HOURS']` to at least `1` for specs to pass.
+
 ## API Error Format
 
 ```json

@@ -15,17 +15,17 @@ module GroundGame
         end
 
         it "gives 5 points for a visit with no updated people" do
-          visit = build(:visit, people_count: 0)
+          visit = build(:visit)
           score = CreateScore.new(visit).call
           expect(score.total_points).to eq 5
         end
 
         it "gives 10 points per updated or added person" do
-          visit_with_1_person = build(:visit, people_count: 1)
+          visit_with_1_person = build(:visit, :with_people, people_count: 1)
           score = CreateScore.new(visit_with_1_person).call
           expect(score.total_points).to eq 15
 
-          visit_with_2_people = build(:visit, people_count: 2)
+          visit_with_2_people = build(:visit, :with_people, people_count: 2)
           score = CreateScore.new(visit_with_2_people).call
           expect(score.total_points).to eq 25
         end
