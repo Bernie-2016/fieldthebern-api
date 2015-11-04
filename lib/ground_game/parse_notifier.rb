@@ -18,7 +18,5 @@ module GroundGame
         ParseNotification.send_to_device(device_token: device.token, message: message)
       end
     end
-
-    # TODO: Define notification types we will use
   end
 end
