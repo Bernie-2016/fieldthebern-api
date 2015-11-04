@@ -17,7 +17,6 @@ class TokensController < Doorkeeper::TokensController
   def authorize_user_and_update_leaderboards
     response = strategy.authorize
     user_id = response.try(:token).try(:resource_owner_id)
-    binding.pry
     body = response.body.merge('user_id' => user_id)
     update_users_leaderboards(user_id) if user_id
     self.headers.merge! response.headers
