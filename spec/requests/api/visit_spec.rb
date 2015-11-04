@@ -135,8 +135,8 @@ describe "Visit API" do
 
           rankings = Ranking.for_everyone(id: @user.id)
           expect(rankings.length).to eq 1
-          expect(rankings.first[:member]).to eq "11" # user id
-          expect(rankings.first[:score]).to eq 5.0 # user score
+          expect(rankings.first.user).to eq @user
+          expect(rankings.first.score).to eq 5.0
         end
       end
 
@@ -156,8 +156,8 @@ describe "Visit API" do
 
           rankings = Ranking.for_state(id: @user.id, state_code: "NY")
           expect(rankings.length).to eq 1
-          expect(rankings.first[:member]).to eq "11" # user id
-          expect(rankings.first[:score]).to eq 5.0 # user score
+          expect(rankings.first.user).to eq @user
+          expect(rankings.first.score).to eq 5.0
         end
       end
 
@@ -177,8 +177,8 @@ describe "Visit API" do
 
           rankings = Ranking.for_user_in_users_friend_list(user: @user)
           expect(rankings.length).to eq 1
-          expect(rankings.first[:member]).to eq "11" # user id
-          expect(rankings.first[:score]).to eq 5.0 # user score
+          expect(rankings.first.user).to eq @user
+          expect(rankings.first.score).to eq 5.0
         end
       end
 
