@@ -4,3 +4,4 @@ test:
 development:
   adapter: postgresql
   database: ground_game_dev
+  role: postgress

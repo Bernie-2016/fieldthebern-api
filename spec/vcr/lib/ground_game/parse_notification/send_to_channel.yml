@@ -1,0 +1,53 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: https://api.parse.com/1/push
+    body:
+      encoding: UTF-8
+      string: '{"data":{"alert":"A message"},"channel":"test","type":"ios"}'
+    headers:
+      User-Agent:
+      - Parse for Ruby, 0.0
+      Content-Type:
+      - application/json
+      X-Parse-Application-Id:
+      - PARSE_APPLICATION_ID
+      X-Parse-Rest-Api-Key:
+      - PARSE_API_KEY
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Access-Control-Allow-Methods:
+      - "*"
+      Access-Control-Allow-Origin:
+      - "*"
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Wed, 04 Nov 2015 08:39:47 GMT
+      Server:
+      - nginx/1.6.0
+      X-Parse-Platform:
+      - G1
+      X-Parse-Push-Status-Id:
+      - JrH2CAKeel
+      X-Runtime:
+      - '0.024305'
+      Content-Length:
+      - '16'
+      Connection:
+      - keep-alive
+    body:
+      encoding: UTF-8
+      string: |
+        {"result":true}
+    http_version: 
+  recorded_at: Wed, 04 Nov 2015 08:39:49 GMT
+recorded_with: VCR 2.9.3

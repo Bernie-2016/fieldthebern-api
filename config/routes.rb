@@ -9,7 +9,7 @@ Rails.application.routes.draw do
 
     get 'users/me', to: 'users#me'
     post 'users/me', to: 'users#update'
-    
+
     resources :users, only: [:create, :show]
 
     resources :addresses, only: [:index]
@@ -17,6 +17,8 @@ Rails.application.routes.draw do
     resources :visits, only: [:create]
 
     resources :rankings, only: [:index]
+
+    resources :devices, only: [:create]
   end
 
 end

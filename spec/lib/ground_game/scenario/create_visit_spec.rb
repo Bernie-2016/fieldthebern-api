@@ -264,14 +264,15 @@ module GroundGame
               }
             end
 
-            it "sets new_address.visited_at" do
+            it "sets new_address.visited_at", vcr: { cassette_name: "lib/ground_game/scenario/create_visit/successful_easypost_request" } do
               people_params = []
               result = CreateVisit.new(@visit_params, @address_params, people_params, user).call
               expect(result.success?).to eq true
               expect(Address.last.visited_at).to be_within(1.second).of(DateTime.now)
             end
 
-            it "creates an address_update and address with proper contents", vcr: { cassette_name: "lib/ground_game/scenario/create_visit/successful_easypost_response" } do
+            it "creates an address_update and address with proper contents", vcr: { cassette_name: "lib/ground_game/scenario/create_visit/successful_easypost_request" } do
+
 
               people_params = []
 
@@ -281,11 +282,10 @@ module GroundGame
               expect(address_update.visit).to eq visit
               expect(address_update.address).to eq visit.address
               expect(address_update.created?).to be true
-
               expect(address_update.address.not_home?).to be true
             end
 
-            it "creates the visit, the address and the people", vcr: { cassette_name: "lib/ground_game/scenario/create_visit/successful_easypost_response" } do
+            it "creates the visit, the address and the people", vcr: { cassette_name: "lib/ground_game/scenario/create_visit/successful_easypost_request" } do
 
               people_params = [{
                 first_name: "John",

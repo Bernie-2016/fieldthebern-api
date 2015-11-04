@@ -3,6 +3,8 @@ class User < ActiveRecord::Base
 
   include Clearance::User
 
+  has_many :devices
+
   has_many :visits
 
   has_many :active_relationships, class_name:  "Relationship",
