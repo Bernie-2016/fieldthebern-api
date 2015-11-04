@@ -19,8 +19,8 @@ module GroundGame
             visit_params = { duration_sec: 150 }
             address_params = { id: 1 }
             people_params = [{ id: 10 }]
-
             result = CreateVisit.new(visit_params, address_params, people_params, user).call
+
             expect(result.success?).to be true
             expect(result.visit).not_to be_nil
             expect(result.error).to be_nil
@@ -72,6 +72,16 @@ module GroundGame
           end
 
           context "when the address already exists" do
+
+            it "updates address.visited_at" do
+              address = create(:address, id: 1)
+              visit_params = {}
+              address_params = { id: 1 }
+              people_params = []
+              result = CreateVisit.new(visit_params, address_params, people_params, user).call
+              expect(result.success?).to eq true
+              expect(address.reload.visited_at).to be_within(1.second).of(DateTime.now)
+            end
 
             it "creates an address_update with proper contents" do
               address = create(:address, id: 1)
@@ -243,37 +253,39 @@ module GroundGame
           end
 
           context "when the address doesn't exist"do
-            it "creates an address_update with proper contents", vcr: { cassette_name: "lib/ground_game/scenario/create_visit/creates_an_address_update_with_proper_contents" } do
-              visit_params = { duration_sec: 150 }
-
-              address_params = {
+            before do
+              @visit_params = { duration_sec: 150 }
+              @address_params = {
                 latitude: 40.771913,
                 longitude: -73.9673735,
                 street_1: "5th Avenue",
                 city: "New York",
                 state_code: "NY"
               }
+            end
+
+            it "sets new_address.visited_at" do
+              people_params = []
+              result = CreateVisit.new(@visit_params, @address_params, people_params, user).call
+              expect(result.success?).to eq true
+              expect(Address.last.visited_at).to be_within(1.second).of(DateTime.now)
+            end
+
+            it "creates an address_update and address with proper contents", vcr: { cassette_name: "lib/ground_game/scenario/create_visit/successful_easypost_response" } do
 
               people_params = []
 
-              visit = CreateVisit.new(visit_params, address_params, people_params, user).call.visit
+              visit = CreateVisit.new(@visit_params, @address_params, people_params, user).call.visit
 
               address_update = AddressUpdate.last
               expect(address_update.visit).to eq visit
               expect(address_update.address).to eq visit.address
               expect(address_update.created?).to be true
+
+              expect(address_update.address.not_home?).to be true
             end
 
-            it "creates the visit, the address and the people", vcr: { cassette_name: "lib/ground_game/scenario/create_visit/creates_the_visit_the_addres_and_the_people" } do
-              visit_params = { duration_sec: 150 }
-
-              address_params = {
-                latitude: 40.771913,
-                longitude: -73.9673735,
-                street_1: "5th Avenue",
-                city: "New York",
-                state_code: "NY"
-              }
+            it "creates the visit, the address and the people", vcr: { cassette_name: "lib/ground_game/scenario/create_visit/successful_easypost_response" } do
 
               people_params = [{
                 first_name: "John",
@@ -282,7 +294,7 @@ module GroundGame
                 party_affiliation: "Democrat"
               }]
 
-              visit = CreateVisit.new(visit_params, address_params, people_params, user).call.visit
+              visit = CreateVisit.new(@visit_params, @address_params, people_params, user).call.visit
 
               expect(visit.duration_sec).to eq 150
 
@@ -324,7 +336,7 @@ module GroundGame
 
           describe "error handling" do
             before do
-              create(:address, id: 10, latitude: 40.771913, longitude: -73.9673735, street_1: "5th Avenue", city: "New York", state_code: "NY")
+              @address = create(:address, id: 10, latitude: 40.771913, longitude: -73.9673735, street_1: "5th Avenue", city: "New York", state_code: "NY")
             end
 
             it "handles ArgumentError with code 422" do
@@ -351,6 +363,34 @@ module GroundGame
               expect(error.title).to eq "Record not found"
               expect(error.detail).to eq "Couldn't find Address with 'id'=11"
               expect(error.status).to eq 404
+            end
+
+            it "handles GroundGame::VisitNotAllowedError with code 403" do
+              create(:address, id: 11, recently_visited?: true)
+
+              visit_params = {}
+              address_params = { id: 11}
+              people_params = []
+
+              error = CreateVisit.new(visit_params, address_params, people_params, user).call.error
+
+              expect(error.id).to eq "VISIT_NOT_ALLOWED"
+              expect(error.title).to eq "Visit not allowed"
+              expect(error.detail).to eq "You can't submit the same address so quickly after it was last visited."
+              expect(error.status).to eq 403
+            end
+
+            it "handles GroundGame::InvalidBestCanvasResponse with code 422" do
+              visit_params = { duration_sec: 150 }
+              address_params = { id: 10, best_canvas_response: "strongly_for"}
+              people_params = []
+
+              error = CreateVisit.new(visit_params, address_params, people_params, user).call.error
+
+              expect(error.id).to eq "INVALID_BEST_CANVAS_RESPONSE"
+              expect(error.title).to eq "Invalid best canvas response"
+              expect(error.detail).to eq "Invalid argument 'strongly_for' for address.best_canvas_response"
+              expect(error.status).to eq 422
             end
           end
 
@@ -440,6 +480,28 @@ module GroundGame
           end
         end
 
+        context "when visiting the same address again" do
+          it "passes if enough time has passed" do
+            create(:address, id: 10, recently_visited?: false)
+            visit_params = {}
+            address_params = { id: 10 }
+            people_params = []
+            result = CreateVisit.new(visit_params, address_params, people_params, user).call
+
+            expect(result.success?).to be true
+          end
+          it "fails if not enough time has passed" do
+            create(:address, id: 10, recently_visited?: true)
+
+            visit_params = {}
+            address_params = { id: 10 }
+            people_params = []
+            result = CreateVisit.new(visit_params, address_params, people_params, user).call
+
+            expect(result.success?).to be false
+          end
+        end
+
         describe "setting 'address.best_canvas_response' directly" do
           before do
             @address = create(:address, id: 1)
@@ -476,31 +538,31 @@ module GroundGame
           it "should not be allowed for 'strongly_for'" do
             result = create_visit_with_address_best_canvas_response_set_to "strongly_for"
             expect(@address.reload.strongly_for?).to be false
-            expect(result.error.id).to eq "ARGUMENT_ERROR"
+            expect(result.error.id).to eq "INVALID_BEST_CANVAS_RESPONSE"
           end
 
           it "should not be allowed for 'leaning_for'" do
             result = create_visit_with_address_best_canvas_response_set_to "leaning_for"
             expect(@address.reload.leaning_for?).to be false
-            expect(result.error.id).to eq "ARGUMENT_ERROR"
+            expect(result.error.id).to eq "INVALID_BEST_CANVAS_RESPONSE"
           end
 
           it "should not be allowed for 'undecided'" do
             result = create_visit_with_address_best_canvas_response_set_to "undecided"
             expect(@address.reload.undecided?).to be false
-            expect(result.error.id).to eq "ARGUMENT_ERROR"
+            expect(result.error.id).to eq "INVALID_BEST_CANVAS_RESPONSE"
           end
 
           it "should not be allowed for 'leaning_against'" do
             result = create_visit_with_address_best_canvas_response_set_to "leaning_against"
             expect(@address.reload.leaning_against?).to be false
-            expect(result.error.id).to eq "ARGUMENT_ERROR"
+            expect(result.error.id).to eq "INVALID_BEST_CANVAS_RESPONSE"
           end
 
           it "should not be allowed for 'strongly_against'" do
             result = create_visit_with_address_best_canvas_response_set_to "strongly_against"
             expect(@address.reload.strongly_against?).to be false
-            expect(result.error.id).to eq "ARGUMENT_ERROR"
+            expect(result.error.id).to eq "INVALID_BEST_CANVAS_RESPONSE"
           end
         end
       end
