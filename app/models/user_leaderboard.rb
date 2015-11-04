@@ -24,6 +24,10 @@ class UserLeaderboard < Leaderboard
     rank_for(user.id)
   end
 
+  def around_me(id, options = {})
+    super(id.to_s, options).map { |rank_params| Ranking.new(rank_params) }
+  end
+
   private
 
     REDIS_OPTIONS = {

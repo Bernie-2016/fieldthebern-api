@@ -7,7 +7,7 @@ describe "Tokens API" do
 
     context "with an email and password" do
       before do
-        create(:user, id: 10, email: 'existing-user@mail.com', password: 'test_password')
+        @user = create(:user, id: 10, email: 'existing-user@mail.com', password: 'test_password')
       end
 
       it "returns a token when both email and password are valid" do
@@ -53,7 +53,7 @@ describe "Tokens API" do
 
             rankings = Ranking.for_everyone(id: 10)
             expect(rankings.length).to eq 1
-            expect(rankings.first[:member]).to eq "10"
+            expect(rankings.first.user).to eq @user
           end
         end
 
@@ -63,7 +63,7 @@ describe "Tokens API" do
 
             rankings = Ranking.for_state(id: 10, state_code: "NY")
             expect(rankings.length).to eq 1
-            expect(rankings.first[:member]).to eq "10"
+            expect(rankings.first.user).to eq @user
           end
         end
 
@@ -73,7 +73,7 @@ describe "Tokens API" do
 
             rankings = Ranking.for_user_in_users_friend_list(user: User.find(10))
             expect(rankings.length).to eq 1
-            expect(rankings.first[:member]).to eq "10"
+            expect(rankings.first.user).to eq @user
           end
         end
       end
@@ -224,7 +224,7 @@ describe "Tokens API" do
 
               rankings = Ranking.for_everyone(id: 10)
               expect(rankings.length).to eq 1
-              expect(rankings.first[:member]).to eq "10"
+              expect(rankings.first.user).to eq @user
             end
           end
 
@@ -234,7 +234,7 @@ describe "Tokens API" do
 
               rankings = Ranking.for_user_in_users_friend_list(user: @user)
               expect(rankings.length).to eq 1
-              expect(rankings.first[:member]).to eq "10"
+              expect(rankings.first.user).to eq @user
             end
           end
 
@@ -244,7 +244,7 @@ describe "Tokens API" do
 
               rankings = Ranking.for_state(id: 10, state_code: "NY")
               expect(rankings.length).to eq 1
-              expect(rankings.first[:member]).to eq "10"
+              expect(rankings.first.user).to eq @user
             end
           end
         end

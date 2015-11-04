@@ -97,9 +97,9 @@ describe UserLeaderboard do
           expect(@leaderboard.total_members).to eq 1
 
           contents = @leaderboard.around_me(10)
-          expect(contents.first[:member]).to eq "10"
-          expect(contents.first[:rank]).to eq 1
-          expect(contents.first[:score]).to eq 0.0
+          expect(contents.first.user).to eq user
+          expect(contents.first.rank).to eq 1
+          expect(contents.first.score).to eq 0.0
         end
       end
 
@@ -115,9 +115,9 @@ describe UserLeaderboard do
           expect(@leaderboard.total_members).to eq 1
 
           contents = @leaderboard.around_me(10)
-          expect(contents.first[:member]).to eq "10"
-          expect(contents.first[:rank]).to eq 1
-          expect(contents.first[:score]).to eq 1000.0
+          expect(contents.first.user).to eq @user
+          expect(contents.first.rank).to eq 1
+          expect(contents.first.score).to eq 1000.0
         end
       end
     end
@@ -141,6 +141,7 @@ describe UserLeaderboard do
           create(:visit, user: @user)
           @leaderboard.rank_user(@user)
         end
+
         it "returns the user's rank" do
           expect(@leaderboard.check_user_rank(@user)).to eq 1
         end
