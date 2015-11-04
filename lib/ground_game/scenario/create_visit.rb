@@ -59,6 +59,12 @@ module GroundGame
         def create_or_update_address(address_params, visit)
           address = Address.new_or_existing_from_params(address_params)
 
+          # In a regular case, the default for address.best_canvas_response is "not yet visited"
+          # In the case of a visit, however, it makes more sense for the default to ne "not home"
+          # Due to this, it makes more sense to set that default here, in the CreateVisit scenario
+          # instead of at the model level.
+          address.best_canvas_response = :not_home unless address.persisted? and address_params[:best_canvas_response]
+
           # I do not like that this is here, but I couldn't think of a better way.
           # AddressUpdate absolutely needs to be created after initializing/fetching
           # and updating, but before saving the address due to it needing access to
