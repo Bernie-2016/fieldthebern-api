@@ -9,6 +9,7 @@ class TokensController < Doorkeeper::TokensController
     end
   rescue Doorkeeper::Errors::DoorkeeperError, Doorkeeper::OAuth::Error => e
     handle_token_exception e
+    Raven.capture_exception e
   end
 
   private
