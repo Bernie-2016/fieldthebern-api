@@ -11,7 +11,6 @@ module GroundGame
     end
 
     describe ".send_to_channel" do
-
       it "delegates to .new.send"  do
         expect(GroundGame::ParseNotification).to receive(:new).with(message: "A message", channel: "test").and_call_original
         expect_any_instance_of(GroundGame::ParseNotification).to receive(:send)
@@ -33,14 +32,10 @@ module GroundGame
       it "can send to a channel" do
         expect(Parse::Push).to receive(:new).with({ alert: "A message"}, "test").and_call_original
 
-        # TODO: Delete and re-record the tape when we have ios set-up.
-        # We need to setup an ios certificate. Right now, the tape recorded a
-        # '115: To push to ios devices, you must first configure a valid certificate.' response
         VCR.use_cassette "lib/ground_game/parse_notification/send_to_channel" do
           response = ParseNotification.new(channel: "test", message: "A message").send
           expect(response["result"]).to be true
         end
-
       end
     end
   end

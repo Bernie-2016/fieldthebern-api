@@ -21,8 +21,8 @@ http_interactions:
       - "*/*"
   response:
     status:
-      code: 400
-      message: Bad Request
+      code: 200
+      message: OK
     headers:
       Access-Control-Allow-Methods:
       - "*"
@@ -31,23 +31,23 @@ http_interactions:
       Content-Type:
       - application/json; charset=utf-8
       Date:
-      - Wed, 28 Oct 2015 08:09:59 GMT
+      - Wed, 04 Nov 2015 08:39:47 GMT
       Server:
       - nginx/1.6.0
       X-Parse-Platform:
       - G1
       X-Parse-Push-Status-Id:
-      - v8mt1G3O0R
+      - JrH2CAKeel
       X-Runtime:
-      - '0.023233'
+      - '0.024305'
       Content-Length:
-      - '93'
+      - '16'
       Connection:
       - keep-alive
     body:
       encoding: UTF-8
       string: |
-        {"code":115,"error":"To push to ios devices, you must first configure a valid certificate."}
+        {"result":true}
     http_version: 
-  recorded_at: Wed, 28 Oct 2015 08:10:00 GMT
+  recorded_at: Wed, 04 Nov 2015 08:39:49 GMT
 recorded_with: VCR 2.9.3

@@ -9,9 +9,10 @@ module GroundGame
       new(channel: channel, message: message).send
     end
 
-    def initialize(device_token: nil, channel: nil, message: nil)
+    def initialize(device_token: nil, channel: nil, message: nil, device_type: "ios")
       @device_token = device_token
       @type = @device_token.present? ? 'individual' : 'channel'
+      @device_type =  device_type
       @channel = channel
       @message = message
     end
@@ -49,7 +50,7 @@ module GroundGame
         # set query where clause by some attribute
         query.eq('username', @device_token.to_s)
         # setting deviceType in where clause
-        query.eq('deviceType', 'android') if individual?
+        query.eq('deviceType', @device_type) if individual?
         query
       end
   end
