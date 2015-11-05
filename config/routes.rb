@@ -6,6 +6,7 @@ Rails.application.routes.draw do
 
   constraints subdomain: 'api' do
     get 'ping', to: 'ping#index'
+    get 'compatibility', to: 'compatibility#show'
 
     get 'users/me', to: 'users#me'
     post 'users/me', to: 'users#update'
@@ -20,5 +21,4 @@ Rails.application.routes.draw do
 
     resources :devices, only: [:create]
   end
-
 end
