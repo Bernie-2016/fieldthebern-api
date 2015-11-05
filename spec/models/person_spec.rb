@@ -13,6 +13,7 @@ describe Person do
     it { should have_db_column(:address_id).of_type(:integer) }
     it { should have_db_column(:created_at).of_type(:datetime) }
     it { should have_db_column(:updated_at).of_type(:datetime) }
+    it { should have_db_column(:previously_participated_at_caucus_or_primary).of_type(:boolean).with_options(default: false) }
   end
 
   context 'associations' do
@@ -109,23 +110,31 @@ describe Person do
       expect(Person.count).to eq 0
       params = {
         first_name: "John",
-        last_name: "Doe"
+        last_name: "Doe",
+        previously_participated_at_caucus_or_primary: true
       }
       person = Person.new_or_existing_from_params(params)
       expect(person.persisted?).to be false
+      expect(person.previously_participated_at_caucus_or_primary?).to be true
     end
     it "fetches and updates (without save) an existing person if the params do contain an id" do
-      create(:person, id: 1, first_name: "Jake", last_name: "Smith")
+      create(:person,
+        id: 1,
+        first_name: "Jake",
+        last_name: "Smith",
+        previously_participated_at_caucus_or_primary: false)
       params = {
         id: 1,
         first_name: "John",
-        last_name: "Doe"
+        last_name: "Doe",
+        previously_participated_at_caucus_or_primary: true
       }
       person = Person.new_or_existing_from_params(params)
       expect(Person.count).to eq 1
       expect(person.changed?).to be true
       expect(person.first_name).to eq "John"
       expect(person.last_name).to eq "Doe"
+      expect(person.previously_participated_at_caucus_or_primary?).to be true
     end
   end
 end

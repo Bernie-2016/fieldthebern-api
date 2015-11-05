@@ -55,6 +55,10 @@ describe PersonSerializer, :type => :serializer do
       it 'has a updated_at' do
         expect(subject['updated_at']).to eql(resource.updated_at)
       end
+
+      it 'has a previously_participated_at_caucus_or_primary' do
+        expect(subject['previously_participated_at_caucus_or_primary']).to eql(resource.previously_participated_at_caucus_or_primary)
+      end
     end
 
     context 'relationships' do
