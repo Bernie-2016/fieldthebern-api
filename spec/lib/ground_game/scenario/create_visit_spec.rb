@@ -55,7 +55,7 @@ module GroundGame
             expect(visit.total_points).not_to be_nil
           end
 
-          it "updates the user's state code" do
+          it "updates the user's state code to the address state code" do
             user = create(:user, email: "josh@cookacademy.com", state_code: "MD")
 
             address = create(:address, id: 1, state_code: "CA")

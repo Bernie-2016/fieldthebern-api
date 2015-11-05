@@ -13,13 +13,16 @@ describe Person do
     it { should have_db_column(:address_id).of_type(:integer) }
     it { should have_db_column(:created_at).of_type(:datetime) }
     it { should have_db_column(:updated_at).of_type(:datetime) }
+    it { should have_db_column(:phone).of_type(:string) }
+    it { should have_db_column(:email).of_type(:string) }
+    it { should have_db_column(:preferred_contact_method).of_type(:string).with_options(default: "email") }
   end
 
   context 'associations' do
     it { should belong_to(:address) }
   end
 
-  it "has a working canvas_response enum" do
+  it "has a working 'canvas_response' enum" do
     person = create(:person)
 
     expect(person.unknown?).to be true
@@ -43,7 +46,7 @@ describe Person do
     expect(person.asked_to_leave?).to be true
   end
 
-  it "has a working party_affiliation enum" do
+  it "has a working 'party_affiliation' enum" do
     person = create(:person)
 
     expect(person.unknown_affiliation?).to be true
@@ -59,6 +62,18 @@ describe Person do
 
     person.independent_affiliation!
     expect(person.independent_affiliation?).to be true
+  end
+
+  it "has a working 'preferred_contact_method' enum" do
+    person = create(:person)
+
+    expect(person.contact_by_phone?).to be true
+
+    person.contact_by_email!
+    expect(person.contact_by_email?).to be true
+
+    person.contact_by_phone!
+    expect(person.contact_by_phone?).to be true
   end
 
   describe "instance methods" do
@@ -103,29 +118,60 @@ describe Person do
     end
   end
 
-
   describe ".new_or_existing_from_params" do
     it "initializes a new person if the params do not contain an id" do
       expect(Person.count).to eq 0
       params = {
         first_name: "John",
-        last_name: "Doe"
+        last_name: "Doe",
+        email: "john@doe.com",
+        phone: "12456",
+        party_affiliation: :democrat_affiliation,
+        canvas_response: :strongly_for,
+        preferred_contact_method: :contact_by_phone
       }
       person = Person.new_or_existing_from_params(params)
       expect(person.persisted?).to be false
+      expect(person.first_name).to eq "John"
+      expect(person.last_name).to eq "Doe"
+      expect(person.email).to eq "john@doe.com"
+      expect(person.phone).to eq "12345"
+      expect(person.democrat_affiliation?).to be true
+      expect(person.strongly_for?).to be true
+      expect(person.contact_by_phone?).to be true
     end
     it "fetches and updates (without save) an existing person if the params do contain an id" do
-      create(:person, id: 1, first_name: "Jake", last_name: "Smith")
+      create(:person,
+        id: 1,
+        first_name: "Jake",
+        last_name: "Smith",
+        email: "jake@smith.com",
+        phone: "54321",
+        party_affiliation: :republican_affiliation,
+        canvas_response: :leaning_for,
+        preferred_contact_method: :contact_by_email)
+
       params = {
         id: 1,
         first_name: "John",
-        last_name: "Doe"
+        last_name: "Doe",
+        email: "john@doe.com",
+        phone: "12456",
+        party_affiliation: "democrat",
+        canvas_response: "strongly_for",
+        preferred_contact_method: "phone"
+
       }
       person = Person.new_or_existing_from_params(params)
       expect(Person.count).to eq 1
       expect(person.changed?).to be true
       expect(person.first_name).to eq "John"
       expect(person.last_name).to eq "Doe"
+      expect(person.email).to eq "john@doe.com"
+      expect(person.phone).to eq "12345"
+      expect(person.democrat_affiliation?).to be true
+      expect(person.strongly_for?).to be true
+      expect(person.contact_by_phone?).to be true
     end
   end
 end
