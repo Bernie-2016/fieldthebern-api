@@ -57,15 +57,15 @@ describe PersonSerializer, :type => :serializer do
       end
 
       it 'has a phone' do
-        expect(subject['phone'].to eql(resource.phone))
+        expect(subject['phone']).to eql(resource.phone)
       end
 
       it 'has an email' do
-        expect(subject['email'].to eql(resource.email))
+        expect(subject['email']).to eql(resource.email)
       end
 
       it 'has a preferred_contact_method' do
-        expect(subject['preferred_contact_method'].to eql(resource.preferred_contact_method))
+        expect(subject['preferred_contact_method']).to eql(resource.preferred_contact_method)
       end
     end
 
