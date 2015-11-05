@@ -93,7 +93,7 @@ describe "Tokens API" do
       end
 
       after do
-        AddFacebookFriendsWorker.drain
+        InitializeNewFacebookUserWorker.drain
       end
 
       context "when the user does not already exist" do
@@ -111,7 +111,7 @@ describe "Tokens API" do
           expect(json.expires_in).to eq 7200
           expect(json.token_type).to eq "bearer"
 
-          expect(AddFacebookFriendsWorker.jobs.size).to eq 1
+          expect(InitializeNewFacebookUserWorker.jobs.size).to eq 1
         end
 
         it "fills in missing information from facebook data" do
