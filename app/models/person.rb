@@ -19,6 +19,11 @@ class Person < ActiveRecord::Base
     independent_affiliation: "Independent"
   }
 
+  enum preferred_contact_method: {
+    contact_by_phone: "phone",
+    contact_by_email: "email"
+  }
+
   def canvas_response_rating
     if asked_to_leave?
       return -1
@@ -47,6 +52,7 @@ class Person < ActiveRecord::Base
     else
       person = Person.new(params)
     end
+
     person
   end
 end

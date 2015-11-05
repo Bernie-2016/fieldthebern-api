@@ -67,13 +67,13 @@ describe Person do
   it "has a working 'preferred_contact_method' enum" do
     person = create(:person)
 
-    expect(person.contact_by_phone?).to be true
-
-    person.contact_by_email!
     expect(person.contact_by_email?).to be true
 
     person.contact_by_phone!
     expect(person.contact_by_phone?).to be true
+
+    person.contact_by_email!
+    expect(person.contact_by_email?).to be true
   end
 
   describe "instance methods" do
@@ -125,7 +125,7 @@ describe Person do
         first_name: "John",
         last_name: "Doe",
         email: "john@doe.com",
-        phone: "12456",
+        phone: "12345",
         party_affiliation: :democrat_affiliation,
         canvas_response: :strongly_for,
         preferred_contact_method: :contact_by_phone
@@ -156,8 +156,8 @@ describe Person do
         first_name: "John",
         last_name: "Doe",
         email: "john@doe.com",
-        phone: "12456",
-        party_affiliation: "democrat",
+        phone: "12345",
+        party_affiliation: "Democrat",
         canvas_response: "strongly_for",
         preferred_contact_method: "phone"
 
