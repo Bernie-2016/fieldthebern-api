@@ -23,11 +23,10 @@ describe Person do
   end
 
   context 'validations' do
+    before(:each) do
+      @person = create(:person)
+    end
     describe 'phone validations' do
-      before(:each) do
-        @person = create(:person)
-      end
-
       it 'should accept a 11 digit number that looks like a phone without hyphens' do
         @person.phone = '5555551212'
         expect(@person).to be_valid
@@ -50,6 +49,24 @@ describe Person do
 
       it 'should not accept alphas as a phone' do
         @person.phone = 'abc-abc-abcd'
+        expect(@person).to_not be_valid
+      end
+    end
+
+    describe 'email validations' do
+      it 'should accept a valid email' do
+        @person.email = 'juan@example.com'
+        expect(@person).to be_valid
+      end
+
+      it 'should not accept a invalid email' do
+        @person.email = 'juan@example'
+        expect(@person).to_not be_valid
+        @person.email = 'juan'
+        expect(@person).to_not be_valid
+        @person.email = 'example.com'
+        expect(@person).to_not be_valid
+        @person.email = 'juan@example.com123'
         expect(@person).to_not be_valid
       end
     end

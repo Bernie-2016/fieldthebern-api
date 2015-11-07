@@ -307,6 +307,7 @@ DEPENDENCIES
   doorkeeper
   dotenv-rails
   easypost
+  email_validator
   factory_girl_rails
   faker
   fakeredis
