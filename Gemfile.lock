@@ -77,8 +77,7 @@ GEM
     bullet (4.14.10)
       activesupport (>= 3.0.0)
       uniform_notifier (~> 1.9.0)
-    celluloid (0.17.1.2)
-      bundler
+    celluloid (0.17.2)
       celluloid-essentials
       celluloid-extras
       celluloid-fsm
@@ -182,6 +181,7 @@ GEM
       faraday
       faraday_middleware
     pg (0.18.3)
+    phonelib (0.5.4)
     pry (0.10.3)
       coderay (~> 1.1.0)
       method_source (~> 0.8.1)
@@ -318,6 +318,7 @@ DEPENDENCIES
   paperclip!
   parse-ruby-client
   pg
+  phonelib
   pry
   pry-nav
   pry-rails
