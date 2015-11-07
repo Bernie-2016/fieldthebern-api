@@ -22,6 +22,39 @@ describe Person do
     it { should belong_to(:address) }
   end
 
+  context 'validations' do
+    describe 'phone validations' do
+      before(:each) do
+        @person = create(:person)
+      end
+
+      it 'should accept a 11 digit number that looks like a phone without hyphens' do
+        @person.phone = '5555551212'
+        expect(@person).to be_valid
+      end
+
+      it 'should accept a 11 digit number that looks like a phone with hyphens' do
+        @person.phone = '555-555-1212'
+        expect(@person).to be_valid
+      end
+
+      it 'should not accept a phone number without an area code' do
+        @person.phone = '5551212'
+        expect(@person).to_not be_valid
+      end
+
+      it 'should not accept a random digit string as a phone' do
+        @person.phone = '12345'
+        expect(@person).to_not be_valid
+      end
+
+      it 'should not accept alphas as a phone' do
+        @person.phone = 'abc-abc-abcd'
+        expect(@person).to_not be_valid
+      end
+    end
+  end
+
   it "has a working 'canvas_response' enum" do
     person = create(:person)
 

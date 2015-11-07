@@ -161,7 +161,7 @@ describe "Visit API" do
                       canvas_response: "leaning_for",
                       party_affiliation: "Democrat",
                       email: "john@doe.com",
-                      phone: "12345",
+                      phone: "555-555-1212",
                       preferred_contact_method: "phone"
                     }
                   }
@@ -188,7 +188,7 @@ describe "Visit API" do
               expect(modified_person.leaning_for?).to be true
               expect(modified_person.democrat_affiliation?).to be true
               expect(modified_person.email).to eq "john@doe.com"
-              expect(modified_person.phone).to eq "12345"
+              expect(modified_person.phone).to eq "555-555-1212"
               expect(modified_person.contact_by_phone?).to be true
 
               expect(modified_person.address).to eq modified_address
@@ -233,7 +233,7 @@ describe "Visit API" do
                       canvas_response: "leaning_for",
                       party_affiliation: "Democrat",
                       email: "john@doe.com",
-                      phone: "12345",
+                      phone: "555-555-1212",
                       preferred_contact_method: "phone"
                     }
                   }
@@ -261,7 +261,7 @@ describe "Visit API" do
               expect(new_person.leaning_for?).to be true
               expect(new_person.democrat_affiliation?).to be true
               expect(new_person.email).to eq "john@doe.com"
-              expect(new_person.phone).to eq "12345"
+              expect(new_person.phone).to eq "555-555-1212"
               expect(new_person.contact_by_phone?).to be true
 
               expect(new_person.address).to eq modified_address
@@ -307,7 +307,7 @@ describe "Visit API" do
                       canvas_response: "leaning_for",
                       party_affiliation: "Democrat",
                       email: "john@doe.com",
-                      phone:"12345",
+                      phone:"555-555-1212",
                       preferred_contact_method: "phone"
                     }
                   },
@@ -319,7 +319,7 @@ describe "Visit API" do
                       canvas_response: "strongly_for",
                       party_affiliation: "Republican",
                       email: "jane@doe.com",
-                      phone: "54321",
+                      phone: "555-555-1212",
                       preferred_contact_method: "email"
                     }
                   }
@@ -346,7 +346,7 @@ describe "Visit API" do
               expect(modified_person.leaning_for?).to be true
               expect(modified_person.democrat_affiliation?).to be true
               expect(modified_person.email).to eq "john@doe.com"
-              expect(modified_person.phone).to eq "12345"
+              expect(modified_person.phone).to eq "555-555-1212"
               expect(modified_person.contact_by_phone?).to be true
 
               new_person = Person.find_by(first_name: "Jane")
@@ -355,7 +355,7 @@ describe "Visit API" do
               expect(new_person.strongly_for?).to be true
               expect(new_person.republican_affiliation?).to be true
               expect(new_person.email).to eq "jane@doe.com"
-              expect(new_person.phone).to eq "54321"
+              expect(new_person.phone).to eq "555-555-1212"
               expect(new_person.contact_by_email?).to be true
 
               expect(modified_person.address).to eq modified_address
@@ -392,7 +392,7 @@ describe "Visit API" do
                     canvas_response: "leaning_for",
                     party_affiliation: "Democrat",
                     email: "john@doe.com",
-                    phone: "12345",
+                    phone: "555-555-1212",
                     preferred_contact_method: "phone"
                   }
                 }
@@ -426,7 +426,7 @@ describe "Visit API" do
             expect(new_person.leaning_for?).to be true
             expect(new_person.democrat_affiliation?).to be true
             expect(new_person.email).to eq "john@doe.com"
-            expect(new_person.phone).to eq "12345"
+            expect(new_person.phone).to eq "555-555-1212"
             expect(new_person.contact_by_phone?).to be true
 
             expect(new_person.address).to eq new_address
