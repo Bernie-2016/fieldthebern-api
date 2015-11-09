@@ -2,6 +2,7 @@ Rails.application.routes.draw do
 
   use_doorkeeper do
     controllers tokens: 'tokens'
+    skip_controllers :applications, :authorized_applications
   end
 
   constraints subdomain: 'api' do
