@@ -55,6 +55,18 @@ describe PersonSerializer, :type => :serializer do
       it 'has a updated_at' do
         expect(subject['updated_at']).to eql(resource.updated_at)
       end
+
+      it 'has a phone' do
+        expect(subject['phone']).to eql(resource.phone)
+      end
+
+      it 'has an email' do
+        expect(subject['email']).to eql(resource.email)
+      end
+
+      it 'has a preferred_contact_method' do
+        expect(subject['preferred_contact_method']).to eql(resource.preferred_contact_method)
+      end
     end
 
     context 'relationships' do
