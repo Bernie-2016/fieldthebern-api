@@ -18,7 +18,7 @@ class TokensController < Doorkeeper::TokensController
     response = strategy.authorize
     user_id = response.try(:token).try(:resource_owner_id)
     body = response.body.merge('user_id' => user_id)
-    update_users_leaderboards(user_id) if user_id
+    UpdateUsersLeaderboardsWorker.perform_async(user_id) if user_id
     self.headers.merge! response.headers
     self.response_body = body.to_json
     self.status = response.status
@@ -35,9 +35,6 @@ class TokensController < Doorkeeper::TokensController
       u.password = User.friendly_token unless u.encrypted_password.present?
       u.save!
     end
-    
-    AddFacebookFriendsWorker.perform_async(user.id)
-    AddFacebookProfilePicture.perform_async(user.id) unless user.photo.present?
 
     doorkeeper_access_token =
     Doorkeeper::AccessToken.create!(application_id: nil,
@@ -50,7 +47,8 @@ class TokensController < Doorkeeper::TokensController
       user_id: user.id.to_s
     }
 
-    update_users_leaderboards(user.id)
+    InitializeNewFacebookUserWorker.perform_async(user.id)
+    AddFacebookProfilePicture.perform_async(user.id) unless user.photo.present?
 
     render json: token_data.to_json, status: :ok
   end
@@ -59,10 +57,5 @@ class TokensController < Doorkeeper::TokensController
     @facebook_oauth ||= Koala::Facebook::OAuth.new(ENV['FACEBOOK_APP_ID'],
                                                    ENV['FACEBOOK_APP_SECRET'],
                                                    ENV['FACEBOOK_REDIRECT_URL'])
-  end
-
-  def update_users_leaderboards(user_id)
-    user = User.find(user_id)
-    UpdateUsersLeaderboardsWorker.perform_async(user.id) if user
   end
 end
