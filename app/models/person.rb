@@ -1,5 +1,7 @@
 class Person < ActiveRecord::Base
   belongs_to :address
+  validates :phone, phone: { possible: true, allow_blank: true }
+  validates :email, email: true, allow_blank: true
 
   enum canvas_response: {
     unknown: "Unknown",
