@@ -57,6 +57,10 @@ describe User do
       it 'should have cloudfront in the URL' do
         expect(@user.photo.url(:thumb)).to include 'cloudfront'
       end
+
+      it 'should have the right path' do
+        expect(@user.photo.url(:thumb)).to include "users/#{@user.id}/thumb.jpg"
+      end
     end
   end
 
