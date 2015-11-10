@@ -1,7 +1,8 @@
 require "rails_helper"
 
 describe "Address API" do
-  describe "GET /address" do
+  describe "GET /addresses" do
+
     it "requires authentication" do
       get "#{host}/addresses"
       expect(last_response.status).to eq 401
@@ -102,7 +103,6 @@ describe "Address API" do
           expect(json.included.all? { |person| person.relationships.address.data.id == "1" }).to be true
         end
       end
-
     end
   end
 end

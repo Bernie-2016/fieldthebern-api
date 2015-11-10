@@ -9,7 +9,6 @@ describe "Rankings API" do
 
     context "when authenticated" do
 
-
       before do
 
         @user = create(:user, email: "test-user@mail.com", password: "password", state_code: "NY", total_points: 100)

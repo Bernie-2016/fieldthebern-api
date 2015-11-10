@@ -204,10 +204,9 @@ describe "Users API" do
         end
       end
     end
-
   end
 
-  context 'PATCH/user' do
+  context 'POST /users/me' do
     before do
         @user = create(:user, id: 11, email: "test-user@mail.com", password: "password", state_code: "NY")
     end
@@ -337,7 +336,7 @@ describe "Users API" do
     end
   end
 
-  context 'GET users/me' do
+  context 'GET /users/me' do
     email = 'test-user@mail.com'
     password = 'password'
     state_code = "NY"
@@ -363,7 +362,7 @@ describe "Users API" do
     end
   end
 
-  context 'users/SHOW' do
+  context 'GET /users/:id' do
     email = 'test-user@mail.com'
     password = 'password'
     state_code = "NY"
