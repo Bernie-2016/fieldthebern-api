@@ -15,7 +15,6 @@ describe "Visit API" do
       end
 
       context "when it succeeds creating the visit" do
-
         it "should return the created visit, with score included" do
           create(:address, id: 1)
 
@@ -166,6 +165,9 @@ describe "Visit API" do
                       last_name: "Doe",
                       canvas_response: "leaning_for",
                       party_affiliation: "Democrat",
+                      email: "john@doe.com",
+                      phone: "555-555-1212",
+                      preferred_contact_method: "phone",
                       previously_participated_in_caucus_or_primary: true
                     }
                   }
@@ -191,6 +193,9 @@ describe "Visit API" do
               expect(modified_person.last_name).to eq "Doe"
               expect(modified_person.leaning_for?).to be true
               expect(modified_person.democrat_affiliation?).to be true
+              expect(modified_person.email).to eq "john@doe.com"
+              expect(modified_person.phone).to eq "555-555-1212"
+              expect(modified_person.contact_by_phone?).to be true
               expect(modified_person.previously_participated_in_caucus_or_primary?).to be true
 
               expect(modified_person.address).to eq modified_address
@@ -234,6 +239,9 @@ describe "Visit API" do
                       last_name: "Doe",
                       canvas_response: "leaning_for",
                       party_affiliation: "Democrat",
+                      email: "john@doe.com",
+                      phone: "555-555-1212",
+                      preferred_contact_method: "phone",
                       previously_participated_in_caucus_or_primary: true
                     }
                   }
@@ -260,6 +268,9 @@ describe "Visit API" do
               expect(new_person.last_name).to eq "Doe"
               expect(new_person.leaning_for?).to be true
               expect(new_person.democrat_affiliation?).to be true
+              expect(new_person.email).to eq "john@doe.com"
+              expect(new_person.phone).to eq "555-555-1212"
+              expect(new_person.contact_by_phone?).to be true
               expect(new_person.previously_participated_in_caucus_or_primary?).to be true
 
               expect(new_person.address).to eq modified_address
@@ -272,12 +283,7 @@ describe "Visit API" do
 
             it "creates a visit, updates the address, creates people that don't exist, updates people that do" do
               address = create(:address, id: 1)
-              create(:person,
-                id: 10,
-                address: address,
-                canvas_response: :unknown,
-                party_affiliation: :unknown_affiliation,
-                previously_participated_in_caucus_or_primary: false)
+              create(:person, id: 10, address: address, canvas_response: :unknown, party_affiliation: :unknown_affiliation)
 
               authenticated_post "visits", {
                 data: {
@@ -309,6 +315,9 @@ describe "Visit API" do
                       last_name: "Doe",
                       canvas_response: "leaning_for",
                       party_affiliation: "Democrat",
+                      email: "john@doe.com",
+                      phone:"555-555-1212",
+                      preferred_contact_method: "phone",
                       previously_participated_in_caucus_or_primary: true
                     }
                   },
@@ -319,6 +328,9 @@ describe "Visit API" do
                       last_name: "Doe",
                       canvas_response: "strongly_for",
                       party_affiliation: "Republican",
+                      email: "jane@doe.com",
+                      phone: "555-555-1212",
+                      preferred_contact_method: "email",
                       previously_participated_in_caucus_or_primary: true
                     }
                   }
@@ -344,6 +356,9 @@ describe "Visit API" do
               expect(modified_person.last_name).to eq "Doe"
               expect(modified_person.leaning_for?).to be true
               expect(modified_person.democrat_affiliation?).to be true
+              expect(modified_person.email).to eq "john@doe.com"
+              expect(modified_person.phone).to eq "555-555-1212"
+              expect(modified_person.contact_by_phone?).to be true
               expect(modified_person.previously_participated_in_caucus_or_primary?).to be true
 
               new_person = Person.find_by(first_name: "Jane")
@@ -351,6 +366,9 @@ describe "Visit API" do
               expect(new_person.last_name).to eq "Doe"
               expect(new_person.strongly_for?).to be true
               expect(new_person.republican_affiliation?).to be true
+              expect(new_person.email).to eq "jane@doe.com"
+              expect(new_person.phone).to eq "555-555-1212"
+              expect(new_person.contact_by_email?).to be true
               expect(new_person.previously_participated_in_caucus_or_primary?).to be true
 
               expect(modified_person.address).to eq modified_address
@@ -361,7 +379,7 @@ describe "Visit API" do
           end
         end
 
-        context "when address doesn\'t exist" do
+        context "when address doesn't exist" do
 
           it "creates the visit, the address and the people", vcr: { cassette_name: "requests/api/visits/create_visit/creates_the_visit_the_addres_and_the_people" }  do
             authenticated_post "visits", {
@@ -386,6 +404,9 @@ describe "Visit API" do
                     last_name: "Doe",
                     canvas_response: "leaning_for",
                     party_affiliation: "Democrat",
+                    email: "john@doe.com",
+                    phone: "555-555-1212",
+                    preferred_contact_method: "phone",
                     previously_participated_in_caucus_or_primary: true
                   }
                 }
@@ -418,6 +439,9 @@ describe "Visit API" do
             expect(new_person.last_name).to eq "Doe"
             expect(new_person.leaning_for?).to be true
             expect(new_person.democrat_affiliation?).to be true
+            expect(new_person.email).to eq "john@doe.com"
+            expect(new_person.phone).to eq "555-555-1212"
+            expect(new_person.contact_by_phone?).to be true
             expect(new_person.previously_participated_in_caucus_or_primary?).to be true
 
             expect(new_person.address).to eq new_address

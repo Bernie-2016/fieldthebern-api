@@ -1,5 +1,7 @@
 class Person < ActiveRecord::Base
   belongs_to :address
+  validates :phone, phone: { possible: true, allow_blank: true }
+  validates :email, email: true, allow_blank: true
 
   enum canvas_response: {
     unknown: "Unknown",
@@ -17,6 +19,11 @@ class Person < ActiveRecord::Base
     republican_affiliation: "Republican",
     undeclared_affiliation: "Undeclared",
     independent_affiliation: "Independent"
+  }
+
+  enum preferred_contact_method: {
+    contact_by_phone: "phone",
+    contact_by_email: "email"
   }
 
   def canvas_response_rating
@@ -47,6 +54,7 @@ class Person < ActiveRecord::Base
     else
       person = Person.new(params)
     end
+
     person
   end
 end

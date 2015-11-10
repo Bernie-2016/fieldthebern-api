@@ -59,6 +59,18 @@ describe PersonSerializer, :type => :serializer do
       it 'has a previously_participated_in_caucus_or_primary' do
         expect(subject['previously_participated_in_caucus_or_primary']).to eql(resource.previously_participated_in_caucus_or_primary)
       end
+
+      it 'has a phone' do
+        expect(subject['phone']).to eql(resource.phone)
+      end
+
+      it 'has an email' do
+        expect(subject['email']).to eql(resource.email)
+      end
+
+      it 'has a preferred_contact_method' do
+        expect(subject['preferred_contact_method']).to eql(resource.preferred_contact_method)
+      end
     end
 
     context 'relationships' do
