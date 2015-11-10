@@ -128,7 +128,12 @@ describe "Visit API" do
 
             it "creates a visit, updates the address and the person" do
               address = create(:address, id: 1)
-              create(:person, id: 10, address: address, canvas_response: :unknown, party_affiliation: :unknown_affiliation)
+              create(:person,
+                id: 10,
+                address: address,
+                canvas_response: :unknown,
+                party_affiliation: :unknown_affiliation,
+                previously_participated_in_caucus_or_primary: false)
 
               authenticated_post "visits", {
                 data: {
@@ -162,7 +167,8 @@ describe "Visit API" do
                       party_affiliation: "Democrat",
                       email: "john@doe.com",
                       phone: "555-555-1212",
-                      preferred_contact_method: "phone"
+                      preferred_contact_method: "phone",
+                      previously_participated_in_caucus_or_primary: true
                     }
                   }
                 ]
@@ -190,6 +196,7 @@ describe "Visit API" do
               expect(modified_person.email).to eq "john@doe.com"
               expect(modified_person.phone).to eq "555-555-1212"
               expect(modified_person.contact_by_phone?).to be true
+              expect(modified_person.previously_participated_in_caucus_or_primary?).to be true
 
               expect(modified_person.address).to eq modified_address
               expect(modified_address.most_supportive_resident).to eq modified_person
@@ -234,7 +241,8 @@ describe "Visit API" do
                       party_affiliation: "Democrat",
                       email: "john@doe.com",
                       phone: "555-555-1212",
-                      preferred_contact_method: "phone"
+                      preferred_contact_method: "phone",
+                      previously_participated_in_caucus_or_primary: true
                     }
                   }
                 ]
@@ -263,6 +271,7 @@ describe "Visit API" do
               expect(new_person.email).to eq "john@doe.com"
               expect(new_person.phone).to eq "555-555-1212"
               expect(new_person.contact_by_phone?).to be true
+              expect(new_person.previously_participated_in_caucus_or_primary?).to be true
 
               expect(new_person.address).to eq modified_address
               expect(modified_address.most_supportive_resident).to eq new_person
@@ -308,7 +317,8 @@ describe "Visit API" do
                       party_affiliation: "Democrat",
                       email: "john@doe.com",
                       phone:"555-555-1212",
-                      preferred_contact_method: "phone"
+                      preferred_contact_method: "phone",
+                      previously_participated_in_caucus_or_primary: true
                     }
                   },
                   {
@@ -320,7 +330,8 @@ describe "Visit API" do
                       party_affiliation: "Republican",
                       email: "jane@doe.com",
                       phone: "555-555-1212",
-                      preferred_contact_method: "email"
+                      preferred_contact_method: "email",
+                      previously_participated_in_caucus_or_primary: true
                     }
                   }
                 ]
@@ -348,6 +359,7 @@ describe "Visit API" do
               expect(modified_person.email).to eq "john@doe.com"
               expect(modified_person.phone).to eq "555-555-1212"
               expect(modified_person.contact_by_phone?).to be true
+              expect(modified_person.previously_participated_in_caucus_or_primary?).to be true
 
               new_person = Person.find_by(first_name: "Jane")
               expect(new_person).to be_persisted
@@ -357,6 +369,7 @@ describe "Visit API" do
               expect(new_person.email).to eq "jane@doe.com"
               expect(new_person.phone).to eq "555-555-1212"
               expect(new_person.contact_by_email?).to be true
+              expect(new_person.previously_participated_in_caucus_or_primary?).to be true
 
               expect(modified_person.address).to eq modified_address
               expect(new_person.address).to eq modified_address
@@ -366,7 +379,7 @@ describe "Visit API" do
           end
         end
 
-        context "when address doesn\'t exist" do
+        context "when address doesn't exist" do
 
           it "creates the visit, the address and the people", vcr: { cassette_name: "requests/api/visits/create_visit/creates_the_visit_the_addres_and_the_people" }  do
             authenticated_post "visits", {
@@ -393,7 +406,8 @@ describe "Visit API" do
                     party_affiliation: "Democrat",
                     email: "john@doe.com",
                     phone: "555-555-1212",
-                    preferred_contact_method: "phone"
+                    preferred_contact_method: "phone",
+                    previously_participated_in_caucus_or_primary: true
                   }
                 }
               ]
@@ -428,6 +442,7 @@ describe "Visit API" do
             expect(new_person.email).to eq "john@doe.com"
             expect(new_person.phone).to eq "555-555-1212"
             expect(new_person.contact_by_phone?).to be true
+            expect(new_person.previously_participated_in_caucus_or_primary?).to be true
 
             expect(new_person.address).to eq new_address
             expect(new_address.most_supportive_resident).to eq new_person

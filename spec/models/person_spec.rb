@@ -13,6 +13,7 @@ describe Person do
     it { should have_db_column(:address_id).of_type(:integer) }
     it { should have_db_column(:created_at).of_type(:datetime) }
     it { should have_db_column(:updated_at).of_type(:datetime) }
+    it { should have_db_column(:previously_participated_in_caucus_or_primary).of_type(:boolean).with_options(default: false) }
     it { should have_db_column(:phone).of_type(:string) }
     it { should have_db_column(:email).of_type(:string) }
     it { should have_db_column(:preferred_contact_method).of_type(:string).with_options(default: "email") }
@@ -178,7 +179,8 @@ describe Person do
         phone: "12345",
         party_affiliation: :democrat_affiliation,
         canvas_response: :strongly_for,
-        preferred_contact_method: :contact_by_phone
+        preferred_contact_method: :contact_by_phone,
+        previously_participated_in_caucus_or_primary: true
       }
       person = Person.new_or_existing_from_params(params)
       expect(person.persisted?).to be false
@@ -189,7 +191,9 @@ describe Person do
       expect(person.democrat_affiliation?).to be true
       expect(person.strongly_for?).to be true
       expect(person.contact_by_phone?).to be true
+      expect(person.previously_participated_in_caucus_or_primary?).to be true
     end
+
     it "fetches and updates (without save) an existing person if the params do contain an id" do
       create(:person,
         id: 1,
@@ -199,8 +203,8 @@ describe Person do
         phone: "54321",
         party_affiliation: :republican_affiliation,
         canvas_response: :leaning_for,
-        preferred_contact_method: :contact_by_email)
-
+        preferred_contact_method: :contact_by_email,
+        previously_participated_in_caucus_or_primary: false)
       params = {
         id: 1,
         first_name: "John",
@@ -209,8 +213,8 @@ describe Person do
         phone: "12345",
         party_affiliation: "Democrat",
         canvas_response: "strongly_for",
-        preferred_contact_method: "phone"
-
+        preferred_contact_method: "phone",
+        previously_participated_in_caucus_or_primary: true
       }
       person = Person.new_or_existing_from_params(params)
       expect(Person.count).to eq 1
@@ -222,6 +226,7 @@ describe Person do
       expect(person.democrat_affiliation?).to be true
       expect(person.strongly_for?).to be true
       expect(person.contact_by_phone?).to be true
+      expect(person.previously_participated_in_caucus_or_primary?).to be true
     end
   end
 end
