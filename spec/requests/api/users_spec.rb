@@ -363,6 +363,30 @@ describe "Users API" do
     end
   end
 
+  context 'GET users/lookup' do
+    before(:each) do
+        @user = create(:user, email: "josh@coderly.com", password: "password", facebook_id: 12345)
+    end
+
+    let(:token) { authenticate(email: "josh@coderly.com", password: "password") }
+
+    it 'should return no users if they do not exist' do
+      get "#{host}/users/lookup", { data: { attributes: { facebook_id: "678910" } } }
+      expect(last_response.status).to eq 200
+
+      response_data = json.data
+      expect(response_data.count).to eq 0
+    end
+
+    it 'should return users if they do exist' do
+      get "#{host}/users/lookup", { data: { attributes: { facebook_id: "12345" } } }
+      expect(last_response.status).to eq 200
+
+      response_data = json.data
+      expect(response_data.count).to eq 1
+    end
+  end
+
   context 'users/SHOW' do
     email = 'test-user@mail.com'
     password = 'password'

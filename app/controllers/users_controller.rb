@@ -10,6 +10,11 @@ class UsersController < ApplicationController
     end
   end
 
+  def lookup
+    user = User.where(user_params)
+    render json: user
+  end
+
   def show
     user = User.find(params[:id])
     render json: user
@@ -42,7 +47,7 @@ class UsersController < ApplicationController
   def user_params
     record_attributes.permit(:email, :password, :first_name,
                              :last_name, :state_code, :base_64_photo_data,
-                             :lat, :lng)
+                             :lat, :lng, :facebook_id)
   end
 
   def photo_param?
