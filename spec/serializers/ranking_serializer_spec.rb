@@ -53,7 +53,7 @@ describe RankingSerializer, :type => :serializer do
     end
 
     context "included" do
-      context "when including" do
+      context "when including user" do
         let(:serialization) { ActiveModel::Serializer::Adapter.create(serializer, include: ["user"]) }
 
         subject do
