@@ -10,7 +10,7 @@ Rails.application.routes.draw do
     get 'compatibility', to: 'compatibility#show'
 
     get 'users/me', to: 'users#me'
-    post 'users/me', to: 'users#update'
+    patch 'users/me', to: 'users#update'
 
     resources :users, only: [:create, :show]
 
