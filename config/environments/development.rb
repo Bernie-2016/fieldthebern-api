@@ -58,4 +58,6 @@ Rails.application.configure do
     Bullet.enable = true
     Bullet.bullet_logger = true
   end
+
+  Aws.use_bundled_cert!
 end
