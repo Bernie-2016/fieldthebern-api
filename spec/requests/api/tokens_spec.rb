@@ -93,14 +93,14 @@ describe "Tokens API" do
       end
 
       context "when facebook user doesn't exist", vcr: { cassette_name: 'requests/api/tokens/facebook_user_not_found' } do
-        it "fails with 401" do
+        it "fails with 404" do
           post "#{host}/oauth/token", {
             grant_type: "password",
             username: 'facebook',
             password: 'non-existant-token'
           }
 
-          expect(last_response.status).to eq 401
+          expect(last_response.status).to eq 404
           expect(json.access_token).to be nil
         end
       end
@@ -135,20 +135,23 @@ describe "Tokens API" do
           end
 
           it "updates leaderboards" do
-            valid_attributes = { grant_type: "password", username: 'existing-user@mail.com', password: 'test_password'}
 
             Sidekiq::Testing.inline! do
-              post "#{host}/oauth/token", valid_attributes
+              post "#{host}/oauth/token", {
+                grant_type: "password",
+                username: 'facebook',
+                password: @facebook_access_token
+              }
 
-              rankings = Ranking.for_everyone(id: 10)
+              rankings = Ranking.for_everyone(id: @user.id)
               expect(rankings.length).to eq 1
               expect(rankings.first.user).to eq @user
 
-              rankings = Ranking.for_state(id: 10, state_code: "NY")
+              rankings = Ranking.for_state(id: @user.id, state_code: "NY")
               expect(rankings.length).to eq 1
               expect(rankings.first.user).to eq @user
 
-              rankings = Ranking.for_user_in_users_friend_list(user: User.find(10))
+              rankings = Ranking.for_user_in_users_friend_list(user: @user)
               expect(rankings.length).to eq 1
               expect(rankings.first.user).to eq @user
             end
@@ -165,44 +168,6 @@ describe "Tokens API" do
 
             expect(last_response.status).to eq 404
             expect(json.access_token).to be nil
-          end
-        end
-      end
-
-
-      describe "automatic leaderboard update" do
-        before do
-          @user = create(:user, id: 10, email: "mail@email.com", facebook_id: @facebook_user["id"], state_code: "NY")
-          @valid_attributes = { username: "facebook", password: @facebook_access_token }
-        end
-
-        it "should update the 'everyone' leaderboard", vcr: { cassette_name: "requests/api/tokens/with_facebook/when_the_user_exists/update_the_everyone_leaderboard" } do
-          Sidekiq::Testing.inline! do
-            post "#{host}/oauth/token", @valid_attributes
-
-            rankings = Ranking.for_everyone(id: 10)
-            expect(rankings.length).to eq 1
-            expect(rankings.first.user).to eq @user
-          end
-        end
-
-        it "should update the 'friends' leaderboard", vcr: { cassette_name: "requests/api/tokens/with_facebook/when_the_user_exists/update_the_friends_leaderboard" } do
-          Sidekiq::Testing.inline! do
-            post "#{host}/oauth/token", @valid_attributes
-
-            rankings = Ranking.for_user_in_users_friend_list(user: @user)
-            expect(rankings.length).to eq 1
-            expect(rankings.first.user).to eq @user
-          end
-        end
-
-        it "should update the 'state' leaderboard", vcr: { cassette_name: "requests/api/tokens/with_facebook/when_the_user_exists/update_the_state_leaderboard" } do
-          Sidekiq::Testing.inline! do
-            post "#{host}/oauth/token", @valid_attributes
-
-            rankings = Ranking.for_state(id: 10, state_code: "NY")
-            expect(rankings.length).to eq 1
-            expect(rankings.first.user).to eq @user
           end
         end
       end
