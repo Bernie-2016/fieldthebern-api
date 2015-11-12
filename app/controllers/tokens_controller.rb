@@ -58,10 +58,4 @@ class TokensController < Doorkeeper::TokensController
 
       return user_id
     end
-
-    def facebook_oauth
-      @facebook_oauth ||= Koala::Facebook::OAuth.new(ENV['FACEBOOK_APP_ID'],
-                                                     ENV['FACEBOOK_APP_SECRET'],
-                                                     ENV['FACEBOOK_REDIRECT_URL'])
-    end
 end
