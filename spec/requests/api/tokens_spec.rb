@@ -79,7 +79,7 @@ describe "Tokens API" do
       end
     end
 
-    context "with a facebook_auth_code", sidekiq: :fake, vcr: { cassette_name: 'requests/api/tokens/creates a user' } do
+    context "with a facebook_auth_code" do
 
       before do
         oauth = Koala::Facebook::OAuth.new(ENV["FACEBOOK_APP_ID"], ENV["FACEBOOK_APP_SECRET"], ENV["FACEBOOK_REDIRECT_URL"])
@@ -91,6 +91,84 @@ describe "Tokens API" do
         access_token_info = oauth.get_access_token_info(facebook_auth_code)
         @facebook_access_token = access_token_info["access_token"] || JSON.parse(access_token_info.keys[0])["access_token"]
       end
+
+      context "when facebook user doesn't exist", vcr: { cassette_name: 'requests/api/tokens/facebook_user_not_found' } do
+        it "fails with 401" do
+          post "#{host}/oauth/token", {
+            grant_type: "password",
+            username: 'facebook',
+            password: 'non-existant-token'
+          }
+
+          expect(last_response.status).to eq 401
+          expect(json.access_token).to be nil
+        end
+      end
+
+      context "when facebook user does exist", vcr: { cassette_name: 'requests/api/tokens/facebook_user_found' } do
+        before do
+          oauth = Koala::Facebook::OAuth.new(ENV["FACEBOOK_APP_ID"], ENV["FACEBOOK_APP_SECRET"], ENV["FACEBOOK_REDIRECT_URL"])
+          test_users = Koala::Facebook::TestUsers.new(app_id: ENV["FACEBOOK_APP_ID"], secret: ENV["FACEBOOK_APP_SECRET"])
+          @facebook_user = test_users.create(true, "email,user_friends")
+
+          short_lived_token = @facebook_user["access_token"]
+          long_lived_token_info = oauth.exchange_access_token_info(short_lived_token)
+          facebook_auth_code = oauth.generate_client_code(long_lived_token_info["access_token"])
+          access_token_info = oauth.get_access_token_info(facebook_auth_code)
+          @facebook_access_token = access_token_info["access_token"] || JSON.parse(access_token_info.keys[0])["access_token"]
+        end
+
+        context "and there's a user with facebook_id in the database" do
+          before do
+            @user = create(:user, facebook_id: @facebook_user["id"])
+          end
+
+          it "returns a token" do
+            post "#{host}/oauth/token", {
+              grant_type: "password",
+              username: 'facebook',
+              password: @facebook_access_token
+            }
+
+            expect(last_response.status).to eq 200
+            expect(json.access_token).not_to be nil
+          end
+
+          it "updates leaderboards" do
+            valid_attributes = { grant_type: "password", username: 'existing-user@mail.com', password: 'test_password'}
+
+            Sidekiq::Testing.inline! do
+              post "#{host}/oauth/token", valid_attributes
+
+              rankings = Ranking.for_everyone(id: 10)
+              expect(rankings.length).to eq 1
+              expect(rankings.first.user).to eq @user
+
+              rankings = Ranking.for_state(id: 10, state_code: "NY")
+              expect(rankings.length).to eq 1
+              expect(rankings.first.user).to eq @user
+
+              rankings = Ranking.for_user_in_users_friend_list(user: User.find(10))
+              expect(rankings.length).to eq 1
+              expect(rankings.first.user).to eq @user
+            end
+          end
+        end
+
+        context "and there's no user with that facebook_id in the database" do
+          it "fails with a 404" do
+            post "#{host}/oauth/token", {
+              grant_type: "password",
+              username: 'facebook',
+              password: @facebook_access_token
+            }
+
+            expect(last_response.status).to eq 404
+            expect(json.access_token).to be nil
+          end
+        end
+      end
+
 
       describe "automatic leaderboard update" do
         before do
