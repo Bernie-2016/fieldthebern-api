@@ -93,14 +93,14 @@ describe "Tokens API" do
       end
 
       context "when facebook user doesn't exist", vcr: { cassette_name: 'requests/api/tokens/facebook_user_not_found' } do
-        it "fails with 404" do
+        it "fails with 400" do
           post "#{host}/oauth/token", {
             grant_type: "password",
             username: 'facebook',
             password: 'non-existant-token'
           }
 
-          expect(last_response.status).to eq 404
+          expect(last_response.status).to eq 400
           expect(json.access_token).to be nil
         end
       end
