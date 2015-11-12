@@ -1,4 +1,3 @@
-require "ground_game/scenario/update_user_attributes_from_facebook"
 
 class UsersController < ApplicationController
   before_filter :require_login, only: [:update, :me]

@@ -1,5 +1,4 @@
 require 'rails_helper'
-require 'ground_game/scenario/update_user_attributes_from_facebook'
 
 describe "Tokens API" do
 

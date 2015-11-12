@@ -26,6 +26,7 @@ describe "Users API" do
 
       after do
         InitializeNewFacebookUserWorker.drain
+        AddFacebookProfilePicture.drain
       end
 
       context "when the user does not already exist" do
@@ -70,6 +71,7 @@ describe "Users API" do
           expect(user.facebook_access_token).to eq @facebook_access_token
 
           expect(InitializeNewFacebookUserWorker.jobs.size).to eq 1
+          expect(AddFacebookProfilePicture.jobs.size).to eq 1
         end
       end
 
@@ -77,6 +79,42 @@ describe "Users API" do
 
         before do
           create(:user, email: @facebook_user["email"])
+        end
+
+        it 'creates a valid facebook user with a user uploaded image', sidekiq: :fake, vcr: { cassette_name: 'requests/api/users/with facebook/when the user already exists/creates a valid facebook user with a user uploaded image' } do
+          Sidekiq::Testing.inline! do
+            file = File.open("#{Rails.root}/spec/sample_data/default-avatar.png", 'r')
+            base_64_image = Base64.encode64(open(file) { |io| io.read })
+
+            post "#{host}/users", {
+              data: {
+                attributes: {
+                  facebook_id: @facebook_user["id"],
+                  facebook_access_token: @facebook_access_token,
+                  email: email,
+                  password: password,
+                  first_name: first_name,
+                  last_name: last_name,
+                  state_code: state_code,
+                  base_64_photo_data: base_64_image,
+                  lat: lat,
+                  lng: lng
+                }
+              }
+            }
+
+            expect(last_response.status).to eq 200
+
+            user = User.last
+            expect(user.base_64_photo_data).to be_nil
+            expect(user.photo.path).to_not be_nil
+            # expect photo saved from create action to be identical to our test photo
+            user_photo_file = File.open(user.photo.path, 'r')
+            base_64_saved_image = Base64.encode64(open(user_photo_file) { |io| io.read })
+            expect(base_64_saved_image).to include base_64_image
+
+            expect(AddFacebookProfilePicture.jobs.size).to eq 0
+          end
         end
 
         it "creates a valid user without a photo image", sidekiq: :fake, vcr: { cassette_name: 'requests/api/users/with facebook/when the user already exists/creates a user without a photo' } do
@@ -121,105 +159,233 @@ describe "Users API" do
           expect(InitializeNewFacebookUserWorker.jobs.size).to eq 1
         end
       end
+
+      describe "automatic leaderboard update" do
+
+        context "when a facebook user is being created with a photo", sidekiq: :fake, vcr: { cassette_name: 'requests/api/users/with facebook/when the user already exists/updates all leaderboards' }  do
+
+          before do
+
+            Sidekiq::Testing.inline! do
+              file = File.open("#{Rails.root}/spec/sample_data/default-avatar.png", 'r')
+              base_64_image = Base64.encode64(open(file) { |io| io.read })
+
+              @user_attributes = {
+                data: {
+                  attributes: {
+                    facebook_id: @facebook_user["id"],
+                    facebook_access_token: @facebook_access_token,
+                    email: email,
+                    password: password,
+                    first_name: first_name,
+                    last_name: last_name,
+                    state_code: state_code,
+                    base_64_photo_data: base_64_image,
+                    lat: lat,
+                    lng: lng
+                  }
+                }
+              }
+
+            end
+          end
+
+          after do
+            InitializeNewFacebookUserWorker.drain
+            AddFacebookProfilePicture.drain
+          end
+
+          it "should update the 'everyone' leaderboard" do
+            Sidekiq::Testing.inline! do
+              post "#{host}/users", @user_attributes
+
+              rankings = Ranking.for_everyone(id: User.last.id)
+              expect(rankings.length).to eq 1
+              expect(rankings.first.user).to eq User.last
+            end
+          end
+
+          it "should update the 'state' leaderboard" do
+            Sidekiq::Testing.inline! do
+              post "#{host}/users", @user_attributes
+
+              rankings = Ranking.for_state(id: User.last.id, state_code: "NY")
+              expect(rankings.length).to eq 1
+              expect(rankings.first.user).to eq User.last
+            end
+          end
+
+          it "should update the 'friends' leaderboard" do
+            Sidekiq::Testing.inline! do
+              post "#{host}/users", @user_attributes
+
+              rankings = Ranking.for_user_in_users_friend_list(user: User.last)
+              expect(rankings.length).to eq 1
+              expect(rankings.first.user).to eq User.last
+            end
+          end
+        end
+        context "when a facebook user is being created without a photo", sidekiq: :fake, vcr: { cassette_name: 'requests/api/users/with facebook/when the user already exists/updates all leaderboards' }  do
+
+          before do
+
+            Sidekiq::Testing.inline! do
+
+              @user_attributes = {
+                data: {
+                  attributes: {
+                    facebook_id: @facebook_user["id"],
+                    facebook_access_token: @facebook_access_token,
+                    email: email,
+                    password: password,
+                    first_name: first_name,
+                    last_name: last_name,
+                    state_code: state_code,
+                    lat: lat,
+                    lng: lng
+                  }
+                }
+              }
+
+            end
+          end
+
+          after do
+            InitializeNewFacebookUserWorker.drain
+            AddFacebookProfilePicture.drain
+          end
+
+          it "should update the 'everyone' leaderboard" do
+            Sidekiq::Testing.inline! do
+              post "#{host}/users", @user_attributes
+
+              rankings = Ranking.for_everyone(id: User.last.id)
+              expect(rankings.length).to eq 1
+              expect(rankings.first.user).to eq User.last
+            end
+          end
+
+          it "should update the 'state' leaderboard" do
+            Sidekiq::Testing.inline! do
+              post "#{host}/users", @user_attributes
+
+              rankings = Ranking.for_state(id: User.last.id, state_code: "NY")
+              expect(rankings.length).to eq 1
+              expect(rankings.first.user).to eq User.last
+            end
+          end
+
+          it "should update the 'friends' leaderboard" do
+            Sidekiq::Testing.inline! do
+              post "#{host}/users", @user_attributes
+
+              rankings = Ranking.for_user_in_users_friend_list(user: User.last)
+              expect(rankings.length).to eq 1
+              expect(rankings.first.user).to eq User.last
+            end
+          end
+        end
+      end
     end
 
-    it 'creates a valid user without a photo image' do
-      post "#{host}/users", {
-        data: { attributes: {
-          email: email,
-          password: password,
-          first_name: first_name,
-          last_name: last_name,
-          state_code: state_code,
-          lat: lat,
-          lng: lng
-        } }
-      }
-      expect(last_response.status).to eq 200
+    context "without Facebook" do
 
-      response_data = json.data.attributes
-      expect(response_data.email).to eq email
-      expect(response_data.first_name).to eq first_name
-      expect(response_data.last_name).to eq last_name
-      expect(response_data.state_code).to eq state_code
-      expect(response_data.lat).to eq lat.to_s
-      expect(response_data.lng).to eq lng.to_s
-      expect(response_data.photo_thumb_url).to include User::ASSET_HOST_FOR_DEFAULT_PHOTO
-      expect(response_data.photo_large_url).to include User::ASSET_HOST_FOR_DEFAULT_PHOTO
-
-      user = User.last
-      expect(user.persisted?).to be true
-      expect(user.email).to eq email
-      expect(user.first_name).to eq first_name
-      expect(user.last_name).to eq last_name
-      expect(user.state_code).to eq state_code
-      expect(user.lat).to eq lat
-      expect(user.lng).to eq lng
-    end
-
-    it 'creates a valid user with a photo image' do
-      Sidekiq::Testing.inline! do
-        file = File.open("#{Rails.root}/spec/sample_data/default-avatar.png", 'r')
-        base_64_image = Base64.encode64(open(file) { |io| io.read })
-
+      it 'creates a valid user without a photo image' do
         post "#{host}/users", {
           data: { attributes: {
             email: email,
             password: password,
             first_name: first_name,
             last_name: last_name,
-            base_64_photo_data: base_64_image,
+            state_code: state_code,
             lat: lat,
             lng: lng
           } }
         }
         expect(last_response.status).to eq 200
+
+        response_data = json.data.attributes
+        expect(response_data.email).to eq email
+        expect(response_data.first_name).to eq first_name
+        expect(response_data.last_name).to eq last_name
+        expect(response_data.state_code).to eq state_code
+        expect(response_data.lat).to eq lat.to_s
+        expect(response_data.lng).to eq lng.to_s
+        expect(response_data.photo_thumb_url).to include User::ASSET_HOST_FOR_DEFAULT_PHOTO
+        expect(response_data.photo_large_url).to include User::ASSET_HOST_FOR_DEFAULT_PHOTO
+
         user = User.last
-        expect(user.base_64_photo_data).to be_nil
-        expect(user.photo.path).to_not be_nil
-        # expect photo saved from create action to be identical to our test photo
-        user_photo_file = File.open(user.photo.path, 'r')
-        base_64_saved_image = Base64.encode64(open(user_photo_file) { |io| io.read })
-        expect(base_64_saved_image).to include base_64_image
-      end
-    end
-
-    context "with invalid data" do
-
-      it "fails on a blank password" do
-        post "#{host}/users", {
-          data: { attributes: {
-            email: "joshdotsmith@gmail.com",
-            password: "",
-          } }
-        }
-
-        expect(last_response.status).to eq 422
-
-        expect(json.errors.password).to eq "can't be blank"
-      end
-    end
-
-    context "when user accounts are taken" do
-      before do
-        create(:user, email: "joshdotsmith@gmail.com", password: "password")
+        expect(user.persisted?).to be true
+        expect(user.email).to eq email
+        expect(user.first_name).to eq first_name
+        expect(user.last_name).to eq last_name
+        expect(user.state_code).to eq state_code
+        expect(user.lat).to eq lat
+        expect(user.lng).to eq lng
       end
 
-      it "fails when the email is taken" do
-        post "#{host}/users", {
-          data: { attributes: {
-            email: "joshdotsmith@gmail.com",
-            password: "password"
-          } }
-        }
+      it 'creates a valid user with a photo image' do
+        Sidekiq::Testing.inline! do
+          file = File.open("#{Rails.root}/spec/sample_data/default-avatar.png", 'r')
+          base_64_image = Base64.encode64(open(file) { |io| io.read })
 
-        expect(last_response.status).to eq 422
-
-        expect(json.errors.email).to eq "has already been taken"
+          post "#{host}/users", {
+            data: { attributes: {
+              email: email,
+              password: password,
+              first_name: first_name,
+              last_name: last_name,
+              base_64_photo_data: base_64_image,
+              lat: lat,
+              lng: lng
+            } }
+          }
+          expect(last_response.status).to eq 200
+          user = User.last
+          expect(user.base_64_photo_data).to be_nil
+          expect(user.photo.path).to_not be_nil
+          # expect photo saved from create action to be identical to our test photo
+          user_photo_file = File.open(user.photo.path, 'r')
+          base_64_saved_image = Base64.encode64(open(user_photo_file) { |io| io.read })
+          expect(base_64_saved_image).to include base_64_image
+        end
       end
-    end
 
-    describe "automatic leaderboard update" do
+      context "with invalid data" do
+
+        it "fails on a blank password" do
+          post "#{host}/users", {
+            data: { attributes: {
+              email: "joshdotsmith@gmail.com",
+              password: "",
+            } }
+          }
+
+          expect(last_response.status).to eq 422
+
+          expect(json.errors.password).to eq "can't be blank"
+        end
+      end
+
+      context "when user accounts are taken" do
+
+        before do
+          create(:user, email: "joshdotsmith@gmail.com", password: "password")
+        end
+
+        it "fails when the email is taken" do
+          post "#{host}/users", {
+            data: { attributes: {
+              email: "joshdotsmith@gmail.com",
+              password: "password"
+            } }
+          }
+
+          expect(last_response.status).to eq 422
+
+          expect(json.errors.email).to eq "has already been taken"
+        end
+      end
 
       context "when the user is being created with a photo" do
         before do
@@ -316,7 +482,6 @@ describe "Users API" do
         end
       end
     end
-
   end
 
   context 'PATCH/user' do
