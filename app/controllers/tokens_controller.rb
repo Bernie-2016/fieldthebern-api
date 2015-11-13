@@ -12,6 +12,7 @@ class TokensController < Doorkeeper::TokensController
     handle_token_exception e
     Raven.capture_exception e
   rescue Koala::Facebook::AuthenticationError, ActiveRecord::RecordNotFound => e
+    Raven.capture_exception e
     error_hash = ErrorSerializer.serialize(e)
     render json: error_hash, status: error_hash[:errors][0][:status]
   end
