@@ -12,6 +12,8 @@ Rails.application.routes.draw do
     get 'users/me', to: 'users#me'
     patch 'users/me', to: 'users#update'
 
+    get 'users/lookup', to: 'users#lookup'
+
     resources :users, only: [:create, :show]
 
     resources :addresses, only: [:index]

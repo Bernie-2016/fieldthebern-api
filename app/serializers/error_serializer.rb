@@ -15,6 +15,7 @@ class ErrorSerializer
       return serialize_invalid_best_canvas_response_error(error) if error.class == GroundGame::InvalidBestCanvasResponse
       return serialize_easypost_error(error) if error.class == EasyPost::Error
       return serialize_address_unmatched_error(error) if error.class == GroundGame::AddressUnmatched
+      return serialize_facebook_authentication_error(error) if error.class == Koala::Facebook::AuthenticationError
     end
 
     def self.serialize_argument_error(error)
@@ -68,6 +69,15 @@ class ErrorSerializer
         title: "Address unmatched",
         detail: error.message,
         status: 404
+      }
+    end
+
+    def self.serialize_facebook_authentication_error(error)
+      return {
+        id: "FACEBOOK_AUTHENTICATION_ERROR",
+        title: "Facebook authentication error",
+        detail: error.fb_error_message,
+        status: error.http_status
       }
     end
 end

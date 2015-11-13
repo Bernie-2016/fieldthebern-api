@@ -16,3 +16,4 @@
 !/log/.keep
 /tmp
 .env
+dump.rdb
