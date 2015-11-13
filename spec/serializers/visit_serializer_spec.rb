@@ -88,6 +88,20 @@ describe VisitSerializer, :type => :serializer do
     end
 
     context "included" do
+      context "when including score" do
+        let(:serialization) { ActiveModel::Serializer::Adapter.create(serializer, include: ["score"]) }
+
+        subject do
+          JSON.parse(serialization.to_json)["included"]
+        end
+
+        it "should not be empty" do
+          expect(subject).not_to be_nil
+          expect(subject.first["id"]).not_to be nil
+          expect(subject.first["type"]).to eq "scores"
+        end
+      end
+
       subject do
         JSON.parse(serialization.to_json)["included"]
       end
