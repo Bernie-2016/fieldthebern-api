@@ -72,6 +72,7 @@ describe "Users API" do
 
           expect(InitializeNewFacebookUserWorker.jobs.size).to eq 1
           expect(AddFacebookProfilePicture.jobs.size).to eq 1
+          expect(UpdateProfilePictureWorker.jobs.size).to eq 0
         end
       end
 
@@ -81,7 +82,7 @@ describe "Users API" do
           create(:user, email: @facebook_user["email"])
         end
 
-        it 'creates a valid facebook user with a user uploaded image', sidekiq: :fake, vcr: { cassette_name: 'requests/api/users/with facebook/when the user already exists/creates a valid facebook user with a user uploaded image' } do
+        it 'updates the user with a user uploaded image', sidekiq: :fake, vcr: { cassette_name: 'requests/api/users/with facebook/when the user already exists/updates the user with a user uploaded image' } do
           Sidekiq::Testing.inline! do
             file = File.open("#{Rails.root}/spec/sample_data/default-avatar.png", 'r')
             base_64_image = Base64.encode64(open(file) { |io| io.read })
@@ -112,12 +113,10 @@ describe "Users API" do
             user_photo_file = File.open(user.photo.path, 'r')
             base_64_saved_image = Base64.encode64(open(user_photo_file) { |io| io.read })
             expect(base_64_saved_image).to include base_64_image
-
-            expect(AddFacebookProfilePicture.jobs.size).to eq 0
           end
         end
 
-        it "creates a valid user without a photo image", sidekiq: :fake, vcr: { cassette_name: 'requests/api/users/with facebook/when the user already exists/creates a user without a photo' } do
+        it "updates the user without a photo image", sidekiq: :fake, vcr: { cassette_name: 'requests/api/users/with facebook/when the user already exists/updates the user without a photo' } do
           post "#{host}/users", {
             data: {
               attributes: {
@@ -157,6 +156,8 @@ describe "Users API" do
           expect(user.facebook_access_token).to eq @facebook_access_token
 
           expect(InitializeNewFacebookUserWorker.jobs.size).to eq 1
+          expect(AddFacebookProfilePicture.jobs.size).to eq 1
+          expect(UpdateProfilePictureWorker.jobs.size).to eq 0
         end
       end
 
@@ -165,7 +166,6 @@ describe "Users API" do
         context "created with a photo", sidekiq: :fake, vcr: { cassette_name: 'requests/api/users/with facebook/automatic leaderboard update/created with a photo' }  do
 
           before do
-
             Sidekiq::Testing.inline! do
               file = File.open("#{Rails.root}/spec/sample_data/default-avatar.png", 'r')
               base_64_image = Base64.encode64(open(file) { |io| io.read })
@@ -186,13 +186,7 @@ describe "Users API" do
                   }
                 }
               }
-
             end
-          end
-
-          after do
-            InitializeNewFacebookUserWorker.drain
-            AddFacebookProfilePicture.drain
           end
 
           it "should update the 'everyone' leaderboard" do
@@ -229,7 +223,6 @@ describe "Users API" do
         context "created without a photo", sidekiq: :fake, vcr: { cassette_name: 'requests/api/users/with facebook/automatic leaderboard update/created without a photo' }  do
 
           before do
-
             Sidekiq::Testing.inline! do
 
               @user_attributes = {
@@ -247,13 +240,7 @@ describe "Users API" do
                   }
                 }
               }
-
             end
-          end
-
-          after do
-            InitializeNewFacebookUserWorker.drain
-            AddFacebookProfilePicture.drain
           end
 
           it "should update the 'everyone' leaderboard" do
@@ -323,6 +310,10 @@ describe "Users API" do
         expect(user.state_code).to eq state_code
         expect(user.lat).to eq lat
         expect(user.lng).to eq lng
+
+        expect(InitializeNewFacebookUserWorker.jobs.size).to eq 0
+        expect(AddFacebookProfilePicture.jobs.size).to eq 0
+        expect(UpdateProfilePictureWorker.jobs.size).to eq 0
       end
 
       it 'creates a valid user with a photo image' do
