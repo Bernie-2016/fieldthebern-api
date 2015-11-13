@@ -3,7 +3,18 @@ require 'rails_helper'
 describe PersonSerializer, :type => :serializer do
 
   context 'individual resource representation' do
-    let(:resource) { build(:person) }
+    let(:resource) {
+      create(:person,
+        first_name: "Josh",
+        last_name: "Smith",
+        party_affiliation: "Democrat",
+        canvas_response: "Strongly for",
+        previously_participated_in_caucus_or_primary: false,
+        phone: "415-706-4899",
+        email: "josh@coderly.com",
+        preferred_contact_method: "phone"
+      )
+    }
 
     let(:serializer) { PersonSerializer.new(resource) }
     let(:serialization) { ActiveModel::Serializer::Adapter.create(serializer) }
@@ -33,43 +44,45 @@ describe PersonSerializer, :type => :serializer do
       end
 
       it 'has a first_name' do
-        expect(subject['first_name']).to eql(resource.first_name)
+        expect(subject['first_name']).to eql "Josh"
       end
 
       it 'has a last_name' do
-        expect(subject['last_name']).to eql(resource.last_name)
+        expect(subject['last_name']).to eql "Smith"
       end
 
       it 'has a canvas_response' do
-        expect(subject['canvas_response']).to eql(resource.canvas_response)
+        expect(subject['canvas_response']).to eql "strongly_for"
       end
 
       it 'has a party_affiliation' do
-        expect(subject['party_affiliation']).to eql(resource.party_affiliation)
+        expect(subject['party_affiliation']).to eql "democrat_affiliation"
       end
 
       it 'has a created_at' do
-        expect(subject['created_at']).to eql(resource.created_at)
+        expect(subject['created_at']).to_not be_nil
+        expect(ActiveSupport::TimeZone['UTC'].parse(subject['created_at'])).to be_within(0.1).of(resource.created_at)
       end
 
       it 'has a updated_at' do
-        expect(subject['updated_at']).to eql(resource.updated_at)
+        expect(subject['updated_at']).to_not be_nil
+        expect(ActiveSupport::TimeZone['UTC'].parse(subject['updated_at'])).to be_within(0.1).of(resource.updated_at)
       end
 
       it 'has a previously_participated_in_caucus_or_primary' do
-        expect(subject['previously_participated_in_caucus_or_primary']).to eql(resource.previously_participated_in_caucus_or_primary)
+        expect(subject['previously_participated_in_caucus_or_primary']).to be_nil
       end
 
-      it 'has a phone' do
-        expect(subject['phone']).to eql(resource.phone)
+      it 'should not expose phone' do
+        expect(subject['phone']).to be_nil
       end
 
-      it 'has an email' do
-        expect(subject['email']).to eql(resource.email)
+      it 'should not expose email' do
+        expect(subject['email']).to be_nil
       end
 
-      it 'has a preferred_contact_method' do
-        expect(subject['preferred_contact_method']).to eql(resource.preferred_contact_method)
+      it 'should not expose a preferred_contact_method' do
+        expect(subject['preferred_contact_method']).to be_nil
       end
     end
 
