@@ -162,7 +162,7 @@ describe "Users API" do
 
       describe "automatic leaderboard update" do
 
-        context "when a facebook user is being created with a photo", sidekiq: :fake, vcr: { cassette_name: 'requests/api/users/with facebook/when the user already exists/updates all leaderboards' }  do
+        context "created with a photo", sidekiq: :fake, vcr: { cassette_name: 'requests/api/users/with facebook/automatic leaderboard update/created with a photo' }  do
 
           before do
 
@@ -225,7 +225,8 @@ describe "Users API" do
             end
           end
         end
-        context "when a facebook user is being created without a photo", sidekiq: :fake, vcr: { cassette_name: 'requests/api/users/with facebook/when the user already exists/updates all leaderboards' }  do
+
+        context "created without a photo", sidekiq: :fake, vcr: { cassette_name: 'requests/api/users/with facebook/automatic leaderboard update/created without a photo' }  do
 
           before do
 
