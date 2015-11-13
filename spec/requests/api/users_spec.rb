@@ -202,6 +202,7 @@ describe "Users API" do
               rankings = Ranking.for_everyone(id: User.last.id)
               expect(rankings.length).to eq 1
               expect(rankings.first.user).to eq User.last
+              expect(AddFacebookProfilePicture.jobs.size).to eq 0
             end
           end
 
@@ -212,6 +213,7 @@ describe "Users API" do
               rankings = Ranking.for_state(id: User.last.id, state_code: "NY")
               expect(rankings.length).to eq 1
               expect(rankings.first.user).to eq User.last
+              expect(AddFacebookProfilePicture.jobs.size).to eq 0
             end
           end
 
@@ -222,6 +224,7 @@ describe "Users API" do
               rankings = Ranking.for_user_in_users_friend_list(user: User.last)
               expect(rankings.length).to eq 1
               expect(rankings.first.user).to eq User.last
+              expect(AddFacebookProfilePicture.jobs.size).to eq 0
             end
           end
         end
@@ -262,6 +265,7 @@ describe "Users API" do
               rankings = Ranking.for_everyone(id: User.last.id)
               expect(rankings.length).to eq 1
               expect(rankings.first.user).to eq User.last
+              expect(AddFacebookProfilePicture.jobs.size).to eq 1
             end
           end
 
