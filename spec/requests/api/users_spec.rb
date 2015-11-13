@@ -207,7 +207,7 @@ describe "Users API" do
 
   end
 
-  context 'PATCH/user' do
+  context 'PATCH/users/me' do
     before do
         @user = create(:user, id: 11, email: "test-user@mail.com", password: "password", state_code: "NY")
     end
@@ -217,7 +217,7 @@ describe "Users API" do
     it 'returns unauthorized when you try to edit any user and are not logged in' do
       create(:user)
 
-      post "#{host}/users/me", {
+      patch "#{host}/users/me", {
         data: { attributes: {
           email: 'new@new.com'
         } }
@@ -228,7 +228,7 @@ describe "Users API" do
 
     it 'successfully updates yourself when you are logged in' do
 
-      authenticated_post "users/me", {
+      authenticated_patch "users/me", {
         data: { attributes: {
           email: 'new@new.com'
         } }
@@ -244,7 +244,7 @@ describe "Users API" do
         file = File.open("#{Rails.root}/spec/sample_data/default-avatar.png", 'r')
         base_64_image = Base64.encode64(open(file) { |io| io.read })
 
-        authenticated_post "users/me", {
+        authenticated_patch "users/me", {
           data: { attributes: { base_64_photo_data: base_64_image} }
         }, token
         expect(last_response.status).to eq 200
@@ -269,7 +269,7 @@ describe "Users API" do
 
         it "should update the 'everyone' leaderboard" do
           Sidekiq::Testing.inline! do
-            authenticated_post "users/me", @user_attributes, token
+            authenticated_patch "users/me", @user_attributes, token
 
             rankings = Ranking.for_everyone(id: User.last.id)
             expect(rankings.length).to eq 1
@@ -279,7 +279,7 @@ describe "Users API" do
 
         it "should update the 'state' leaderboard" do
           Sidekiq::Testing.inline! do
-            authenticated_post "users/me", @user_attributes, token
+            authenticated_patch "users/me", @user_attributes, token
 
             rankings = Ranking.for_state(id: User.last.id, state_code: "NY")
             expect(rankings.length).to eq 1
@@ -289,7 +289,7 @@ describe "Users API" do
 
         it "should update the 'friends' leaderboard" do
           Sidekiq::Testing.inline! do
-            authenticated_post "users/me", @user_attributes, token
+            authenticated_patch "users/me", @user_attributes, token
 
             rankings = Ranking.for_user_in_users_friend_list(user: User.last)
             expect(rankings.length).to eq 1
@@ -306,7 +306,7 @@ describe "Users API" do
 
         it "should update the 'everyone' leaderboard" do
           Sidekiq::Testing.inline! do
-            authenticated_post "users/me", @user_attributes, token
+            authenticated_patch "users/me", @user_attributes, token
 
             rankings = Ranking.for_everyone(id: User.last.id)
             expect(rankings.length).to eq 1
@@ -316,7 +316,7 @@ describe "Users API" do
 
         it "should update the 'state' leaderboard" do
           Sidekiq::Testing.inline! do
-            authenticated_post "users/me", @user_attributes, token
+            authenticated_patch "users/me", @user_attributes, token
 
             rankings = Ranking.for_state(id: User.last.id, state_code: "NY")
             expect(rankings.length).to eq 1
@@ -326,7 +326,7 @@ describe "Users API" do
 
         it "should update the 'friends' leaderboard" do
           Sidekiq::Testing.inline! do
-            authenticated_post "users/me", @user_attributes, token
+            authenticated_patch "users/me", @user_attributes, token
 
             rankings = Ranking.for_user_in_users_friend_list(user: User.last)
             expect(rankings.length).to eq 1
@@ -363,13 +363,13 @@ describe "Users API" do
     end
   end
 
-  context 'users/SHOW' do
+  context 'GET users/:id' do
     email = 'test-user@mail.com'
     password = 'password'
     state_code = "NY"
 
     before(:each) do
-        @user = create(:user, id: 11, email: email, password: password, state_code: state_code)
+      @user = create(:user, id: 11, email: email, password: password, state_code: state_code)
     end
 
     it 'should retrieve a specific user' do
