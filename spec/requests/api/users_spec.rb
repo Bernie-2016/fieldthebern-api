@@ -202,7 +202,6 @@ describe "Users API" do
               rankings = Ranking.for_everyone(id: User.last.id)
               expect(rankings.length).to eq 1
               expect(rankings.first.user).to eq User.last
-              expect(AddFacebookProfilePicture.jobs.size).to eq 0
             end
           end
 
@@ -213,7 +212,6 @@ describe "Users API" do
               rankings = Ranking.for_state(id: User.last.id, state_code: "NY")
               expect(rankings.length).to eq 1
               expect(rankings.first.user).to eq User.last
-              expect(AddFacebookProfilePicture.jobs.size).to eq 0
             end
           end
 
@@ -224,7 +222,6 @@ describe "Users API" do
               rankings = Ranking.for_user_in_users_friend_list(user: User.last)
               expect(rankings.length).to eq 1
               expect(rankings.first.user).to eq User.last
-              expect(AddFacebookProfilePicture.jobs.size).to eq 0
             end
           end
         end
@@ -265,7 +262,6 @@ describe "Users API" do
               rankings = Ranking.for_everyone(id: User.last.id)
               expect(rankings.length).to eq 1
               expect(rankings.first.user).to eq User.last
-              expect(AddFacebookProfilePicture.jobs.size).to eq 1
             end
           end
 
@@ -488,7 +484,7 @@ describe "Users API" do
     end
   end
 
-  context 'PATCH/users/me' do
+  context 'PATCH/user' do
     before do
         @user = create(:user, id: 11, email: "test-user@mail.com", password: "password", state_code: "NY")
     end
@@ -668,13 +664,13 @@ describe "Users API" do
     end
   end
 
-  context 'GET users/:id' do
+  context 'users/SHOW' do
     email = 'test-user@mail.com'
     password = 'password'
     state_code = "NY"
 
     before(:each) do
-      @user = create(:user, id: 11, email: email, password: password, state_code: state_code)
+        @user = create(:user, id: 11, email: email, password: password, state_code: state_code)
     end
 
     it 'should retrieve a specific user' do
