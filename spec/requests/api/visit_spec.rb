@@ -21,7 +21,6 @@ describe "Visit API" do
           authenticated_post "visits", {
             data: {
               attributes: { duration_sec: 200 },
-              relationships: { address: { data: { id: 1, type: "addresses" } } }
             },
             included: [ { id: 1, type: "addresses" } ]
           }, token
@@ -50,7 +49,6 @@ describe "Visit API" do
             authenticated_post "visits", {
               data: {
                 attributes: { duration_sec: 200 },
-                relationships: { address: { data: { id: 1, type: "addresses" } } }
               },
               included: [ { id: 1, type: "addresses" } ]
             }, token
@@ -68,7 +66,6 @@ describe "Visit API" do
             authenticated_post "visits", {
               data: {
                 attributes: { duration_sec: 200 },
-                relationships: { address: { data: { id: 1, type: "addresses" } } }
               },
               included: [ { id: 1, type: "addresses" } ]
             }, token
@@ -89,7 +86,6 @@ describe "Visit API" do
             authenticated_post "visits", {
               data: {
                 attributes: { duration_sec: 200 },
-                relationships: { address: { data: { id: 1, type: "addresses" } } }
               },
               included: [ { id: 1, type: "addresses" } ]
             }, token
@@ -110,7 +106,6 @@ describe "Visit API" do
             authenticated_post "visits", {
               data: {
                 attributes: { duration_sec: 200 },
-                relationships: { address: { data: { id: 1, type: "addresses" } } }
               },
               included: [ { id: 1, type: "addresses" } ]
             }, token
@@ -138,10 +133,6 @@ describe "Visit API" do
               authenticated_post "visits", {
                 data: {
                   attributes: { duration_sec: 200 },
-                  relationships: {
-                    address: { data: { id: 1, type: "addresses" } },
-                    person: { data: { id: 10, type: "people" } }
-                  }
                 },
                 included: [
                   {
@@ -213,10 +204,6 @@ describe "Visit API" do
               authenticated_post "visits", {
                 data: {
                   attributes: { duration_sec: 200 },
-                  relationships: {
-                    address: { data: { id: 1, type: "addresses" } },
-                    person: { data: { id: 10, type: "people" } }
-                  }
                 },
                 included: [
                   {
@@ -287,11 +274,7 @@ describe "Visit API" do
 
               authenticated_post "visits", {
                 data: {
-                  attributes: { duration_sec: 200 },
-                  relationships: {
-                    address: { data: { id: 1, type: "addresses" } },
-                    person: { data: { id: 10, type: "people" } }
-                  }
+                  attributes: { duration_sec: 200 }
                 },
                 included: [
                   {
@@ -458,7 +441,6 @@ describe "Visit API" do
           authenticated_post "visits", {
             data: {
               attributes: { duration_sec: 200 },
-              relationships: { address: { data: { id: 1, type: "addresses" } }, person: { data: { id: 10, type: "people" } } }
             },
             included: [ { type: "addresses", id: 1, attributes: { } }, { type: "people", id: 10, attributes: {} } ]
           }, token
@@ -481,7 +463,6 @@ describe "Visit API" do
           authenticated_post "visits", {
             data: {
               attributes: { duration_sec: 200 },
-              relationships: { address: { data: { id: 1, type: "addresses" } } }
             },
             included: [ { id: 1, type: "addresses", attributes: { best_canvas_response: best_canvas_response } } ]
           }, token
