@@ -82,6 +82,11 @@ module GroundGame
         end
 
         def create_or_update_person_for_address(person_params, address, visit)
+          # We remove the nils from params since our client may not have some
+          # values, e.g. phone or email; we want to allow API values to
+          # remain unchanged in this event
+          person_params = remove_nils_from_params(person_params)
+
           person = Person.new_or_existing_from_params(person_params)
           person.address = address
 
@@ -93,6 +98,10 @@ module GroundGame
 
           person.save!
           person
+        end
+
+        def remove_nils_from_params(params)
+          params.compact
         end
 
         def update_most_supportive_resident(address, people)

@@ -193,6 +193,69 @@ describe "Visit API" do
               expect(modified_address.most_supportive_resident).to eq modified_person
               expect(modified_address.best_canvas_response).to eq modified_person.canvas_response
             end
+
+            it "does not override nil values for some fields" do
+              address = create(:address, id: 1)
+              create(:person,
+                id: 10,
+                address: address,
+                canvas_response: :unknown,
+                party_affiliation: :unknown_affiliation,
+                email: "john@doe.com",
+                phone: "555-555-1212",
+                preferred_contact_method: "phone",
+                previously_participated_in_caucus_or_primary: false)
+
+              authenticated_post "visits", {
+                data: {
+                  attributes: { duration_sec: 200 },
+                },
+                included: [
+                  {
+                    type: "addresses",
+                    id: 1,
+                    attributes: {
+                      latitude: 2.0,
+                      longitude: 3.0,
+                      city: "New York",
+                      state_code: "NY",
+                      zip_code: "12345",
+                      street_1: "Test street",
+                      street_2: "Additional data"
+                    }
+                  },
+                  {
+                    type: "people",
+                    id: 10,
+                    attributes: {
+                      first_name: "John",
+                      last_name: "Doe",
+                      canvas_response: "leaning_for",
+                      party_affiliation: "Democrat",
+                      email: nil,
+                      phone: nil,
+                      preferred_contact_method: nil,
+                      previously_participated_in_caucus_or_primary: nil
+                    }
+                  }
+                ]
+              }, token
+
+              expect(last_response.status).to eq 200
+
+              expect(Person.count).to eq 1
+              expect(Address.count).to eq 1
+
+              modified_person = Person.find(10)
+              expect(modified_person.first_name).to eq "John"
+              expect(modified_person.last_name).to eq "Doe"
+              expect(modified_person.leaning_for?).to be true
+              expect(modified_person.democrat_affiliation?).to be true
+              expect(modified_person.email).to eq "john@doe.com"
+              expect(modified_person.phone).to eq "555-555-1212"
+              expect(modified_person.contact_by_phone?).to be true
+              expect(modified_person.previously_participated_in_caucus_or_primary?).to be false
+            end
           end
 
           context "when person does not exist" do
