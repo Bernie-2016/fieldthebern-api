@@ -29,7 +29,10 @@ class VisitsController < ApplicationController
 
   def people
     people = included_records.select{ |record| record[:type] == "people" }.map{ |person_params|
-      person = person_params.fetch(:attributes, {})
+      params = ActionController::Parameters.new(person_params.fetch(:attributes, {}))
+      person = params.permit(:first_name, :last_name, :email, :phone,
+        :preferred_contact_method, :previously_participated_in_caucus_or_primary,
+        :party_affiliation, :canvas_response)
       person_id  = person_params.fetch(:id, nil)
       person = person.merge(id: person_id) if person_id
       person
