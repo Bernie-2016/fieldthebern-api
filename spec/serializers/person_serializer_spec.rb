@@ -8,7 +8,7 @@ describe PersonSerializer, :type => :serializer do
         first_name: "Josh",
         last_name: "Smith",
         party_affiliation: "Democrat",
-        canvas_response: "Strongly for",
+        canvass_response: "Strongly for",
         previously_participated_in_caucus_or_primary: false,
         phone: "415-706-4899",
         email: "josh@coderly.com",
@@ -51,8 +51,8 @@ describe PersonSerializer, :type => :serializer do
         expect(subject['last_name']).to eql "Smith"
       end
 
-      it 'has a canvas_response' do
-        expect(subject['canvas_response']).to eql "strongly_for"
+      it 'has a canvass_response' do
+        expect(subject['canvass_response']).to eql "strongly_for"
       end
 
       it 'has a party_affiliation' do

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151111173024) do
+ActiveRecord::Schema.define(version: 20151116230108) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -37,7 +37,7 @@ ActiveRecord::Schema.define(version: 20151111173024) do
     t.string   "usps_verified_city"
     t.string   "usps_verified_state"
     t.string   "usps_verified_zip"
-    t.string   "best_canvas_response",        default: "Not yet visited"
+    t.string   "best_canvass_response",       default: "Not yet visited"
   end
 
   create_table "devices", force: :cascade do |t|
@@ -95,7 +95,7 @@ ActiveRecord::Schema.define(version: 20151111173024) do
   create_table "people", force: :cascade do |t|
     t.string   "first_name"
     t.string   "last_name"
-    t.string   "canvas_response",                              default: "Unknown"
+    t.string   "canvass_response",                             default: "Unknown"
     t.string   "party_affiliation",                            default: "Unknown"
     t.integer  "address_id"
     t.datetime "created_at"
@@ -110,8 +110,8 @@ ActiveRecord::Schema.define(version: 20151111173024) do
     t.integer "person_id"
     t.integer "visit_id"
     t.string  "update_type",           default: "created"
-    t.string  "old_canvas_response"
-    t.string  "new_canvas_response"
+    t.string  "old_canvass_response"
+    t.string  "new_canvass_response"
     t.string  "old_party_affiliation"
     t.string  "new_party_affiliation"
   end

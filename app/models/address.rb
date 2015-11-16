@@ -1,6 +1,6 @@
 require "ground_game/easypost_helper"
 require "ground_game/errors/visit_not_allowed"
-require "ground_game/errors/invalid_best_canvas_response"
+require "ground_game/errors/invalid_best_canvass_response"
 
 class Address < ActiveRecord::Base
   has_many :people
@@ -12,7 +12,7 @@ class Address < ActiveRecord::Base
                    :lat_column_name => :latitude,
                    :lng_column_name => :longitude
 
-  enum best_canvas_response: {
+  enum best_canvass_response: {
     asked_to_leave: "Asked to leave",
     unknown: "Unknown",
     strongly_for: "Strongly for",
@@ -32,7 +32,7 @@ class Address < ActiveRecord::Base
 
     if there_is_no_current_resident or person.more_supportive_than? current_resident
       self.most_supportive_resident = person
-      self.best_canvas_response = person.canvas_response
+      self.best_canvass_response = person.canvass_response
     end
   end
 
@@ -67,18 +67,18 @@ class Address < ActiveRecord::Base
     address = Address.find(id)
     raise GroundGame::VisitNotAllowed if address.recently_visited?
 
-    canvas_response = params[:best_canvas_response]
-    raise GroundGame::InvalidBestCanvasResponse.new(canvas_response) unless best_canvas_response_value_valid(canvas_response)
+    canvass_response = params[:best_canvass_response]
+    raise GroundGame::InvalidBestCanvassResponse.new(canvass_response) unless best_canvass_response_value_valid(canvass_response)
 
     address.assign_attributes(params)
     address
   end
 
-  def self.best_canvas_response_value_valid(value)
-    value.nil? or allowed_best_canvas_response_values_for_setting_directly.include? value.to_sym
+  def self.best_canvass_response_value_valid(value)
+    value.nil? or allowed_best_canvass_response_values_for_setting_directly.include? value.to_sym
   end
 
-  def self.allowed_best_canvas_response_values_for_setting_directly
+  def self.allowed_best_canvass_response_values_for_setting_directly
     [:asked_to_leave, :not_yet_visited, :not_home]
   end
 end

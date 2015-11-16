@@ -21,9 +21,9 @@ describe PersonUpdate do
   context 'validations' do
     it { should validate_presence_of(:person) }
     it { should validate_presence_of(:visit) }
-    it { should validate_presence_of(:new_canvas_response) }
+    it { should validate_presence_of(:new_canvass_response) }
     it { should validate_presence_of(:new_party_affiliation) }
-    it { should_not validate_presence_of(:old_canvas_response) }
+    it { should_not validate_presence_of(:old_canvass_response) }
     it { should_not validate_presence_of(:old_party_affiliation) }
   end
 
