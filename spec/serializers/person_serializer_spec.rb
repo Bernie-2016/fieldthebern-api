@@ -70,11 +70,11 @@ describe PersonSerializer, :type => :serializer do
       end
 
       it 'has a previously_participated_in_caucus_or_primary' do
-        expect(subject['previously_participated_in_caucus_or_primary']).to_not be_nil
+        expect(subject['previously_participated_in_caucus_or_primary']).to eql false
       end
 
       it 'has a preferred_contact_method' do
-        expect(subject['preferred_contact_method']).to_not be_nil
+        expect(subject['preferred_contact_method']).to eql "contact_by_phone"
       end
 
       it 'should not expose phone' do
