@@ -74,7 +74,7 @@ describe PersonSerializer, :type => :serializer do
       end
 
       it 'has a preferred_contact_method' do
-        expect(subject['preferred_contact_method']).to eql "contact_by_phone"
+        expect(subject['preferred_contact_method']).to eql "phone"
       end
 
       it 'should not expose phone' do
