@@ -8,7 +8,7 @@ describe Person do
   context 'schema' do
     it { should have_db_column(:first_name).of_type(:string) }
     it { should have_db_column(:last_name).of_type(:string) }
-    it { should have_db_column(:canvas_response).of_type(:string) }
+    it { should have_db_column(:canvass_response).of_type(:string) }
     it { should have_db_column(:party_affiliation).of_type(:string) }
     it { should have_db_column(:address_id).of_type(:integer) }
     it { should have_db_column(:created_at).of_type(:datetime) }
@@ -73,7 +73,7 @@ describe Person do
     end
   end
 
-  it "has a working 'canvas_response' enum" do
+  it "has a working 'canvass_response' enum" do
     person = create(:person)
 
     expect(person.unknown?).to be true
@@ -130,41 +130,41 @@ describe Person do
   describe "instance methods" do
     describe "#more_supportive_than?" do
       it "works" do
-        person = create(:person, canvas_response: :leaning_for)
-        other_person_1 = create(:person, canvas_response: :undecided)
-        other_person_2 = create(:person, canvas_response: :strongly_for)
+        person = create(:person, canvass_response: :leaning_for)
+        other_person_1 = create(:person, canvass_response: :undecided)
+        other_person_2 = create(:person, canvass_response: :strongly_for)
 
         expect(person.more_supportive_than? other_person_1).to be true
         expect(person.more_supportive_than? other_person_2).to be false
       end
     end
 
-    describe "#canvas_response_rating" do
+    describe "#canvass_response_rating" do
       it "works" do
         person = create(:person)
 
-        expect(person.canvas_response_rating).to eq 2
+        expect(person.canvass_response_rating).to eq 2
 
         person.strongly_for!
-        expect(person.canvas_response_rating).to eq 5
+        expect(person.canvass_response_rating).to eq 5
 
         person.leaning_for!
-        expect(person.canvas_response_rating).to eq 3
+        expect(person.canvass_response_rating).to eq 3
 
         person.undecided!
-        expect(person.canvas_response_rating).to eq 2
+        expect(person.canvass_response_rating).to eq 2
 
         person.leaning_against!
-        expect(person.canvas_response_rating).to eq 1
+        expect(person.canvass_response_rating).to eq 1
 
         person.strongly_against!
-        expect(person.canvas_response_rating).to eq 0
+        expect(person.canvass_response_rating).to eq 0
 
         person.unknown!
-        expect(person.canvas_response_rating).to eq 2
+        expect(person.canvass_response_rating).to eq 2
 
         person.asked_to_leave!
-        expect(person.canvas_response_rating).to eq -1
+        expect(person.canvass_response_rating).to eq -1
       end
     end
   end
@@ -178,7 +178,7 @@ describe Person do
         email: "john@doe.com",
         phone: "12345",
         party_affiliation: :democrat_affiliation,
-        canvas_response: :strongly_for,
+        canvass_response: :strongly_for,
         preferred_contact_method: :contact_by_phone,
         previously_participated_in_caucus_or_primary: true
       }
@@ -202,7 +202,7 @@ describe Person do
         email: "jake@smith.com",
         phone: "54321",
         party_affiliation: :republican_affiliation,
-        canvas_response: :leaning_for,
+        canvass_response: :leaning_for,
         preferred_contact_method: :contact_by_email,
         previously_participated_in_caucus_or_primary: false)
       params = {
@@ -212,7 +212,7 @@ describe Person do
         email: "john@doe.com",
         phone: "12345",
         party_affiliation: "Democrat",
-        canvas_response: "strongly_for",
+        canvass_response: "strongly_for",
         preferred_contact_method: "phone",
         previously_participated_in_caucus_or_primary: true
       }

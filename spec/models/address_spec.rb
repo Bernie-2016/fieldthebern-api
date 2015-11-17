@@ -18,7 +18,7 @@ describe Address do
     it {should have_db_column(:usps_verified_street_1).of_type(:string) }
     it {should have_db_column(:usps_verified_city).of_type(:string) }
     it {should have_db_column(:usps_verified_zip).of_type(:string) }
-    it {should have_db_column(:best_canvas_response).of_type(:string) }
+    it {should have_db_column(:best_canvass_response).of_type(:string) }
   end
 
   context 'associations' do
@@ -43,7 +43,7 @@ describe Address do
     end
   end
 
-  it "has a working 'best_canvas_response' enum" do
+  it "has a working 'best_canvass_response' enum" do
     address = create(:address)
 
     expect(address.not_yet_visited?).to be true
@@ -76,27 +76,27 @@ describe Address do
   describe "instance methods" do
 
     describe "#assign_most_supportive_resident" do
-      it "assigns person as most supportive resident and persons canvas_response as best_canvas_response" do
+      it "assigns person as most supportive resident and persons canvass_response as best_canvass_response" do
         address = create(:address)
-        person = create(:person, canvas_response: :strongly_for)
+        person = create(:person, canvass_response: :strongly_for)
 
         address.assign_most_supportive_resident(person)
 
         expect(address.most_supportive_resident).to eq person
-        expect(address.best_canvas_response).to eq person.canvas_response
+        expect(address.best_canvass_response).to eq person.canvass_response
       end
 
       it "doesn't assign the person if another person is assigned and is more supportive" do
-        more_supportive_person = create(:person, canvas_response: :strongly_for)
+        more_supportive_person = create(:person, canvass_response: :strongly_for)
         address = create(:address,
-          best_canvas_response: more_supportive_person.canvas_response,
+          best_canvass_response: more_supportive_person.canvass_response,
           most_supportive_resident: more_supportive_person)
 
-        less_supportive_person = create(:person, canvas_response: :leaning_for)
+        less_supportive_person = create(:person, canvass_response: :leaning_for)
         address.assign_most_supportive_resident(less_supportive_person)
 
         expect(address.most_supportive_resident).not_to be less_supportive_person
-        expect(address.best_canvas_response).not_to be :leaning_for
+        expect(address.best_canvass_response).not_to be :leaning_for
       end
     end
 
@@ -138,11 +138,11 @@ describe Address do
       end
     end
 
-    it "should raise an error if there's an invalid 'best_canvas_response' parameter value" do
+    it "should raise an error if there's an invalid 'best_canvass_response' parameter value" do
       create(:address, id: 1, latitude: 0, longitude: 0)
       params = {
         id: 1,
-        best_canvas_response: "strongly_for"
+        best_canvass_response: "strongly_for"
       }
       expect { Address.new_or_existing_from_params(params) }.to raise_error ArgumentError
     end

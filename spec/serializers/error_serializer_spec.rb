@@ -56,16 +56,16 @@ describe ErrorSerializer do
       expect(error[:status]).to eq 404
     end
 
-    it "can serialize GroundGame::InvalidBestCanvasResponse error" do
-      invalid_best_canvas_response_error = GroundGame::InvalidBestCanvasResponse.new("value")
-      result = ErrorSerializer.serialize(invalid_best_canvas_response_error)
+    it "can serialize GroundGame::InvalidBestCanvassResponse error" do
+      invalid_best_canvass_response_error = GroundGame::InvalidBestCanvassResponse.new("value")
+      result = ErrorSerializer.serialize(invalid_best_canvass_response_error)
       expect(result[:errors]).not_to be_nil
       expect(result[:errors].length).to eq 1
 
       error = result[:errors].first
-      expect(error[:id]).to eq "INVALID_BEST_CANVAS_RESPONSE"
-      expect(error[:title]).to eq "Invalid best canvas response"
-      expect(error[:detail]).to eq "Invalid argument 'value' for address.best_canvas_response"
+      expect(error[:id]).to eq "INVALID_BEST_CANVASS_RESPONSE"
+      expect(error[:title]).to eq "Invalid best canvass response"
+      expect(error[:detail]).to eq "Invalid argument 'value' for address.best_canvass_response"
       expect(error[:status]).to eq 422
     end
 

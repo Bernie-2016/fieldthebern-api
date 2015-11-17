@@ -22,7 +22,7 @@ describe PersonUpdate do
     it { should validate_presence_of(:person) }
     it { should validate_presence_of(:visit) }
     it { should validate_presence_of(:new_first_name) }
-    it { should validate_presence_of(:new_canvas_response) }
+    it { should validate_presence_of(:new_canvass_response) }
     it { should validate_presence_of(:new_party_affiliation) }
 
     it { should_not validate_presence_of(:new_last_name) }
@@ -31,7 +31,7 @@ describe PersonUpdate do
     it { should_not validate_presence_of(:new_phone) }
     it { should_not validate_presence_of(:new_preferred_contact_method) }
     it { should_not validate_presence_of(:new_previously_participated_in_caucus_or_primary) }
-    it { should_not validate_presence_of(:old_canvas_response) }
+    it { should_not validate_presence_of(:old_canvass_response) }
     it { should_not validate_presence_of(:old_party_affiliation) }
   end
 
@@ -53,7 +53,7 @@ describe PersonUpdate do
       person = build(:person,
         first_name: "John",
         last_name: "Doe",
-        canvas_response: :strongly_for,
+        canvass_response: :strongly_for,
         party_affiliation: :democrat_affiliation,
         phone: "555-555-1212",
         preferred_contact_method: "email",
@@ -64,7 +64,7 @@ describe PersonUpdate do
 
       expect(person_update.old_first_name).to be_nil
       expect(person_update.old_last_name).to be_nil
-      expect(person_update.old_canvas_response).to eq "unknown"
+      expect(person_update.old_canvass_response).to eq "unknown"
       expect(person_update.old_party_affiliation).to eq "unknown_affiliation"
       expect(person_update.old_phone).to be_nil
       expect(person_update.old_preferred_contact_method).to eq "contact_by_email"
@@ -72,7 +72,7 @@ describe PersonUpdate do
 
       expect(person_update.new_first_name).to eq "John"
       expect(person_update.new_last_name).to eq "Doe"
-      expect(person_update.new_canvas_response).to eq "strongly_for"
+      expect(person_update.new_canvass_response).to eq "strongly_for"
       expect(person_update.new_party_affiliation).to eq "democrat_affiliation"
       expect(person_update.new_phone).to eq "555-555-1212"
       expect(person_update.new_preferred_contact_method).to eq "contact_by_email"
@@ -84,7 +84,7 @@ describe PersonUpdate do
       person = create(:person,
         first_name: "John",
         last_name: "Doe",
-        canvas_response: :strongly_for,
+        canvass_response: :strongly_for,
         party_affiliation: :democrat_affiliation,
         phone: "555-555-1212",
         preferred_contact_method: "email",
@@ -93,7 +93,7 @@ describe PersonUpdate do
 
       person.first_name = "Josh"
       person.last_name = "Smith"
-      person.canvas_response = :strongly_against
+      person.canvass_response = :strongly_against
       person.party_affiliation = :republican_affiliation
       person.phone = "123-456-7890"
       person.preferred_contact_method = "phone"
@@ -104,7 +104,7 @@ describe PersonUpdate do
 
       expect(person_update.old_first_name).to eq "John"
       expect(person_update.old_last_name).to eq "Doe"
-      expect(person_update.old_canvas_response).to eq "strongly_for"
+      expect(person_update.old_canvass_response).to eq "strongly_for"
       expect(person_update.old_party_affiliation).to eq "democrat_affiliation"
       expect(person_update.old_phone).to eq "555-555-1212"
       expect(person_update.old_preferred_contact_method).to eq "contact_by_email"
@@ -112,7 +112,7 @@ describe PersonUpdate do
 
       expect(person_update.new_first_name).to eq "Josh"
       expect(person_update.new_last_name).to eq "Smith"
-      expect(person_update.new_canvas_response).to eq "strongly_against"
+      expect(person_update.new_canvass_response).to eq "strongly_against"
       expect(person_update.new_party_affiliation).to eq "republican_affiliation"
       expect(person_update.new_phone).to eq "123-456-7890"
       expect(person_update.new_preferred_contact_method).to eq "contact_by_phone"

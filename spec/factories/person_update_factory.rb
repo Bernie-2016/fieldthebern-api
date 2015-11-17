@@ -3,7 +3,7 @@ FactoryGirl.define do
     association :person
     association :visit
 
-    f.new_canvas_response :unknown
+    f.new_canvass_response :unknown
     f.new_party_affiliation :unknown_affiliation
     f.new_first_name "John"
 	f.new_last_name "Doe"

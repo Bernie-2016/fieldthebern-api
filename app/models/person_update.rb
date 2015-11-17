@@ -7,7 +7,7 @@ class PersonUpdate < ActiveRecord::Base
   validates :person, presence: true
   validates :visit, presence: true
   validates :new_first_name, presence: true
-  validates :new_canvas_response, presence: true
+  validates :new_canvass_response, presence: true
   validates :new_party_affiliation, presence: true
 
 
@@ -20,8 +20,8 @@ class PersonUpdate < ActiveRecord::Base
       new_first_name: person.first_name,
       old_last_name: person.last_name_was,
       new_last_name: person.last_name,
-      old_canvas_response: person.canvas_response_was,
-      new_canvas_response: person.canvas_response,
+      old_canvass_response: person.canvass_response_was,
+      new_canvass_response: person.canvass_response,
       old_party_affiliation: person.party_affiliation_was,
       new_party_affiliation: person.party_affiliation,
       old_address_id: person.address_id_was,
