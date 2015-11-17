@@ -7,12 +7,6 @@ class PersonUpdate < ActiveRecord::Base
   validates :person, presence: true
   validates :visit, presence: true
   validates :new_first_name, presence: true
-  validates :new_last_name, presence: true
-  validates :new_address_id, presence: true
-  validates :new_email, presence: true
-  validates :new_phone, presence: true
-  validates :new_preferred_contact_method, presence: true
-  validates :new_previously_participated_in_caucus_or_primary, presence: true
   validates :new_canvas_response, presence: true
   validates :new_party_affiliation, presence: true
 
