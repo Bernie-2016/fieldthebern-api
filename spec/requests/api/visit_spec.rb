@@ -126,7 +126,7 @@ describe "Visit API" do
               create(:person,
                 id: 10,
                 address: address,
-                canvas_response: :unknown,
+                canvass_response: :unknown,
                 party_affiliation: :unknown_affiliation,
                 previously_participated_in_caucus_or_primary: false)
 
@@ -154,7 +154,7 @@ describe "Visit API" do
                     attributes: {
                       first_name: "John",
                       last_name: "Doe",
-                      canvas_response: "leaning_for",
+                      canvass_response: "leaning_for",
                       party_affiliation: "Democrat",
                       email: "john@doe.com",
                       phone: "555-555-1212",
@@ -191,7 +191,7 @@ describe "Visit API" do
 
               expect(modified_person.address).to eq modified_address
               expect(modified_address.most_supportive_resident).to eq modified_person
-              expect(modified_address.best_canvas_response).to eq modified_person.canvas_response
+              expect(modified_address.best_canvass_response).to eq modified_person.canvass_response
             end
           end
 
@@ -224,7 +224,7 @@ describe "Visit API" do
                     attributes: {
                       first_name: "John",
                       last_name: "Doe",
-                      canvas_response: "leaning_for",
+                      canvass_response: "leaning_for",
                       party_affiliation: "Democrat",
                       email: "john@doe.com",
                       phone: "555-555-1212",
@@ -262,7 +262,7 @@ describe "Visit API" do
 
               expect(new_person.address).to eq modified_address
               expect(modified_address.most_supportive_resident).to eq new_person
-              expect(modified_address.best_canvas_response).to eq new_person.canvas_response
+              expect(modified_address.best_canvass_response).to eq new_person.canvass_response
             end
           end
 
@@ -270,7 +270,7 @@ describe "Visit API" do
 
             it "creates a visit, updates the address, creates people that don't exist, updates people that do" do
               address = create(:address, id: 1)
-              create(:person, id: 10, address: address, canvas_response: :unknown, party_affiliation: :unknown_affiliation)
+              create(:person, id: 10, address: address, canvass_response: :unknown, party_affiliation: :unknown_affiliation)
 
               authenticated_post "visits", {
                 data: {
@@ -296,7 +296,7 @@ describe "Visit API" do
                     attributes: {
                       first_name: "John",
                       last_name: "Doe",
-                      canvas_response: "leaning_for",
+                      canvass_response: "leaning_for",
                       party_affiliation: "Democrat",
                       email: "john@doe.com",
                       phone:"555-555-1212",
@@ -309,7 +309,7 @@ describe "Visit API" do
                     attributes: {
                       first_name: "Jane",
                       last_name: "Doe",
-                      canvas_response: "strongly_for",
+                      canvass_response: "strongly_for",
                       party_affiliation: "Republican",
                       email: "jane@doe.com",
                       phone: "555-555-1212",
@@ -357,7 +357,7 @@ describe "Visit API" do
               expect(modified_person.address).to eq modified_address
               expect(new_person.address).to eq modified_address
               expect(modified_address.most_supportive_resident).to eq new_person
-              expect(modified_address.best_canvas_response).to eq new_person.canvas_response
+              expect(modified_address.best_canvass_response).to eq new_person.canvass_response
             end
           end
         end
@@ -385,7 +385,7 @@ describe "Visit API" do
                   attributes: {
                     first_name: "John",
                     last_name: "Doe",
-                    canvas_response: "leaning_for",
+                    canvass_response: "leaning_for",
                     party_affiliation: "Democrat",
                     email: "john@doe.com",
                     phone: "555-555-1212",
@@ -429,7 +429,7 @@ describe "Visit API" do
 
             expect(new_person.address).to eq new_address
             expect(new_address.most_supportive_resident).to eq new_person
-            expect(new_address.best_canvas_response).to eq new_person.canvas_response
+            expect(new_address.best_canvass_response).to eq new_person.canvass_response
           end
         end
       end
@@ -454,62 +454,62 @@ describe "Visit API" do
         end
       end
 
-      describe "setting 'address.best_canvas_response' directly" do
+      describe "setting 'address.best_canvass_response' directly" do
         before do
           @address = create(:address, id: 1)
         end
 
-        def post_visit_with_address_best_canvas_response_set_to(best_canvas_response)
+        def post_visit_with_address_best_canvass_response_set_to(best_canvass_response)
           authenticated_post "visits", {
             data: {
               attributes: { duration_sec: 200 },
             },
-            included: [ { id: 1, type: "addresses", attributes: { best_canvas_response: best_canvas_response } } ]
+            included: [ { id: 1, type: "addresses", attributes: { best_canvass_response: best_canvass_response } } ]
           }, token
         end
 
         it "should be allowed for 'asked_to_leave'" do
-          post_visit_with_address_best_canvas_response_set_to "asked_to_leave"
+          post_visit_with_address_best_canvass_response_set_to "asked_to_leave"
           expect(@address.reload.asked_to_leave?).to be true
         end
 
         it "should be allowed for 'not_home'" do
-          post_visit_with_address_best_canvas_response_set_to "not_home"
+          post_visit_with_address_best_canvass_response_set_to "not_home"
           expect(@address.reload.not_home?).to be true
         end
 
         it "should be allowed for 'not_yet_visited" do
-          post_visit_with_address_best_canvas_response_set_to "not_yet_visited"
+          post_visit_with_address_best_canvass_response_set_to "not_yet_visited"
           expect(@address.reload.not_yet_visited?).to be true
         end
 
         it "should not be allowed for 'unknown'" do
-          post_visit_with_address_best_canvas_response_set_to "unknown"
+          post_visit_with_address_best_canvass_response_set_to "unknown"
           expect(@address.reload.unknown?).to be false
         end
 
         it "should not be allowed for 'strongly_for'" do
-          post_visit_with_address_best_canvas_response_set_to "strongly_for"
+          post_visit_with_address_best_canvass_response_set_to "strongly_for"
           expect(@address.reload.strongly_for?).to be false
         end
 
         it "should not be allowed for 'leaning_for'" do
-          post_visit_with_address_best_canvas_response_set_to "leaning_for"
+          post_visit_with_address_best_canvass_response_set_to "leaning_for"
           expect(@address.reload.leaning_for?).to be false
         end
 
         it "should not be allowed for 'undecided'" do
-          post_visit_with_address_best_canvas_response_set_to "undecided"
+          post_visit_with_address_best_canvass_response_set_to "undecided"
           expect(@address.reload.undecided?).to be false
         end
 
         it "should not be allowed for 'leaning_against'" do
-          post_visit_with_address_best_canvas_response_set_to "leaning_against"
+          post_visit_with_address_best_canvass_response_set_to "leaning_against"
           expect(@address.reload.leaning_against?).to be false
         end
 
         it "should not be allowed for 'strongly_against'" do
-          post_visit_with_address_best_canvas_response_set_to "strongly_against"
+          post_visit_with_address_best_canvass_response_set_to "strongly_against"
           expect(@address.reload.strongly_against?).to be false
         end
       end

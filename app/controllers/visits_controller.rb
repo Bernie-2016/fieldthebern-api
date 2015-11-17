@@ -21,7 +21,7 @@ class VisitsController < ApplicationController
 
   def address
     address_params = included_records.select{ |record| record[:type] == "addresses" }.first
-    address = address_params.fetch(:attributes, {}).permit(:best_canvas_response, :latitude, :longitude, :street_1, :street_2, :city, :state_code, :zip_code)
+    address = address_params.fetch(:attributes, {}).permit(:best_canvass_response, :latitude, :longitude, :street_1, :street_2, :city, :state_code, :zip_code)
     address_id = address_params.fetch(:id, nil)
     address = address.merge(id: address_id) if address_id
     address
