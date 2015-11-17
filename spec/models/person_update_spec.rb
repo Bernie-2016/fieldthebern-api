@@ -67,7 +67,7 @@ describe PersonUpdate do
       expect(person_update.old_canvass_response).to eq "unknown"
       expect(person_update.old_party_affiliation).to eq "unknown_affiliation"
       expect(person_update.old_phone).to be_nil
-      expect(person_update.old_preferred_contact_method).to eq "contact_by_email"
+      expect(person_update.old_preferred_contact_method).to be_nil
       expect(person_update.old_previously_participated_in_caucus_or_primary).to eq false
 
       expect(person_update.new_first_name).to eq "John"
