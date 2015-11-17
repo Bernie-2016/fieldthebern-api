@@ -38,7 +38,7 @@ ActiveRecord::Schema.define(version: 20151117091849) do
     t.string   "usps_verified_state"
     t.string   "usps_verified_zip"
     t.string   "best_canvass_response",       default: "Not yet visited"
-    t.string   "last_canvass_response",       default: "Unknown"
+    t.string   "last_canvass_response",       default: "unknown"
   end
 
   create_table "devices", force: :cascade do |t|

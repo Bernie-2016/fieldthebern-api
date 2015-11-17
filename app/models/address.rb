@@ -26,6 +26,18 @@ class Address < ActiveRecord::Base
     not_home: "Not home"
   }
 
+  validates :last_canvass_response, inclusion: { in: [
+    "asked_to_leave",
+    "unknown",
+    "strongly_for",
+    "leaning_for",
+    "undecided",
+    "leaning_against",
+    "strongly_against",
+    "not_yet_visited",
+    "not_home"
+  ]}
+
   validates :state_code, presence: true
 
   def assign_most_supportive_resident(person)

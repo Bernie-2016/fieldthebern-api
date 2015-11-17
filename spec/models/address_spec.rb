@@ -19,7 +19,7 @@ describe Address do
     it {should have_db_column(:usps_verified_city).of_type(:string) }
     it {should have_db_column(:usps_verified_zip).of_type(:string) }
     it {should have_db_column(:best_canvass_response).of_type(:string).with_options(default: "Not yet visited") }
-    it {should have_db_column(:last_canvass_response).of_type(:string).with_options(default: "Unknown") }
+    it {should have_db_column(:last_canvass_response).of_type(:string).with_options(default: "unknown") }
   end
 
   context 'associations' do
@@ -29,6 +29,9 @@ describe Address do
 
   context 'validations' do
     it { should validate_presence_of(:state_code) }
+    it { should validate_inclusion_of(:last_canvass_response).in_array([
+      "asked_to_leave", "unknown", "strongly_for", "leaning_for", "undecided",
+      "leaning_against", "strongly_against", "not_yet_visited", "not_home"]) }
   end
 
   context 'scopes' do
