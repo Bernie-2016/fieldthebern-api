@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151116230108) do
+ActiveRecord::Schema.define(version: 20151117042836) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -109,11 +109,25 @@ ActiveRecord::Schema.define(version: 20151116230108) do
   create_table "person_updates", force: :cascade do |t|
     t.integer "person_id"
     t.integer "visit_id"
-    t.string  "update_type",           default: "created"
+    t.string  "update_type",                                      default: "created"
     t.string  "old_canvass_response"
     t.string  "new_canvass_response"
     t.string  "old_party_affiliation"
     t.string  "new_party_affiliation"
+    t.string  "new_first_name"
+    t.string  "old_first_name"
+    t.string  "old_last_name"
+    t.string  "new_last_name"
+    t.integer "old_address_id"
+    t.integer "new_address_id"
+    t.string  "old_email"
+    t.string  "new_email"
+    t.string  "old_phone"
+    t.string  "new_phone"
+    t.string  "old_preferred_contact_method"
+    t.string  "new_preferred_contact_method"
+    t.boolean "old_previously_participated_in_caucus_or_primary"
+    t.boolean "new_previously_participated_in_caucus_or_primary"
   end
 
   create_table "relationships", force: :cascade do |t|
