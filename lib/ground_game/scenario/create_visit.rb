@@ -63,7 +63,9 @@ module GroundGame
           # In the case of a visit, however, it makes more sense for the default to ne "not home"
           # Due to this, it makes more sense to set that default here, in the CreateVisit scenario
           # instead of at the model level.
-          address.best_canvass_response = :not_home unless address.persisted? and address_params[:best_canvass_response]
+          address.best_canvass_response = :not_home if address.new_record? and address_params[:best_canvass_response].nil?
+
+          address.ensure_not_recently_visited!
 
           # I do not like that this is here, but I couldn't think of a better way.
           # AddressUpdate absolutely needs to be created after initializing/fetching
@@ -97,12 +99,17 @@ module GroundGame
 
         def update_most_supportive_resident(address, people)
           most_supportive_resident = person_with_highest_rated_canvass_response(people)
-          address.assign_most_supportive_resident(most_supportive_resident) if most_supportive_resident
+
+          if most_supportive_resident
+            address.assign_most_supportive_resident(most_supportive_resident)
+            address.last_canvass_response = most_supportive_resident.canvass_response
+          end
+
           address
         end
 
         def person_with_highest_rated_canvass_response(people)
-          people.max{ |person| person.canvass_response_rating }
+          people.max_by(&:canvass_response_rating)
         end
 
         def update_users_state_to_address_state(visit)

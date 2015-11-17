@@ -12,6 +12,8 @@ class Address < ActiveRecord::Base
                    :lat_column_name => :latitude,
                    :lng_column_name => :longitude
 
+
+
   enum best_canvass_response: {
     asked_to_leave: "Asked to leave",
     unknown: "Unknown",
@@ -44,41 +46,51 @@ class Address < ActiveRecord::Base
     invalid_interval.include? self.visited_at.to_i
   end
 
+  def ensure_not_recently_visited!
+    raise GroundGame::VisitNotAllowed if self.persisted? and self.recently_visited?
+  end
+
+  def assign_last_canvass_response(params)
+    self.last_canvass_response = params[:best_canvass_response] if params[:best_canvass_response].present?
+    self.last_canvass_response = params[:last_canvass_response] if params[:last_canvass_response].present?
+  end
+
   def self.new_or_existing_from_params(params)
     address_id = params.fetch(:id, nil)
 
-    if address_id
-      address = existing_with_params(address_id, params)
+    if address_id.nil?
+      address = Address.new
     else
-      address = new_from_params(params)
+      address = Address.find(address_id)
     end
+
+    address.ensure_not_recently_visited!
+
+    params = GroundGame::EasyPostHelper.extend_address_params_with_usps(params) if address.new_record?
+
+    ensure_best_canvas_response_valid!(params)
+
+    address.assign_attributes(params)
+    address.assign_last_canvass_response(params)
 
     address
   end
 
   private
 
-  def self.new_from_params(params)
-    params = GroundGame::EasyPostHelper.extend_address_params_with_usps(params)
-    Address.new(params)
-  end
+    def self.ensure_best_canvas_response_valid!(params)
+      canvass_response = params[:best_canvass_response]
 
-  def self.existing_with_params(id, params)
-    address = Address.find(id)
-    raise GroundGame::VisitNotAllowed if address.recently_visited?
+      if not best_canvass_response_value_valid?(canvass_response)
+        raise GroundGame::InvalidBestCanvassResponse.new(canvass_response)
+      end
+    end
 
-    canvass_response = params[:best_canvass_response]
-    raise GroundGame::InvalidBestCanvassResponse.new(canvass_response) unless best_canvass_response_value_valid(canvass_response)
+    def self.best_canvass_response_value_valid?(value)
+      value.nil? or allowed_best_canvass_response_values_for_setting_directly.include? value.to_sym
+    end
 
-    address.assign_attributes(params)
-    address
-  end
-
-  def self.best_canvass_response_value_valid(value)
-    value.nil? or allowed_best_canvass_response_values_for_setting_directly.include? value.to_sym
-  end
-
-  def self.allowed_best_canvass_response_values_for_setting_directly
-    [:asked_to_leave, :not_yet_visited, :not_home]
-  end
+    def self.allowed_best_canvass_response_values_for_setting_directly
+      [:asked_to_leave, :not_yet_visited, :not_home]
+    end
 end

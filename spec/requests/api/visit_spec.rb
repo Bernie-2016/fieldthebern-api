@@ -192,6 +192,7 @@ describe "Visit API" do
               expect(modified_person.address).to eq modified_address
               expect(modified_address.most_supportive_resident).to eq modified_person
               expect(modified_address.best_canvass_response).to eq modified_person.canvass_response
+              expect(modified_address.last_canvass_response).to eq modified_person.canvass_response
             end
           end
 
@@ -263,6 +264,7 @@ describe "Visit API" do
               expect(new_person.address).to eq modified_address
               expect(modified_address.most_supportive_resident).to eq new_person
               expect(modified_address.best_canvass_response).to eq new_person.canvass_response
+              expect(modified_address.last_canvass_response).to eq new_person.canvass_response
             end
           end
 
@@ -358,6 +360,7 @@ describe "Visit API" do
               expect(new_person.address).to eq modified_address
               expect(modified_address.most_supportive_resident).to eq new_person
               expect(modified_address.best_canvass_response).to eq new_person.canvass_response
+              expect(modified_address.last_canvass_response).to eq new_person.canvass_response
             end
           end
         end
@@ -511,6 +514,18 @@ describe "Visit API" do
         it "should not be allowed for 'strongly_against'" do
           post_visit_with_address_best_canvass_response_set_to "strongly_against"
           expect(@address.reload.strongly_against?).to be false
+        end
+      end
+
+      describe "allowed address attributes" do
+        it "allows setting 'address.last_canvass_response' directly" do
+          address = create(:address, id: 1)
+          authenticated_post "visits", {
+            data: { attributes: { duration_sec: 200 }, },
+            included: [ { id: 1, type: "addresses", attributes: { last_canvass_response: "not_yet_visited" } } ]
+          }, token
+
+          expect(Address.last.last_canvass_response).to eq "not_yet_visited"
         end
       end
     end

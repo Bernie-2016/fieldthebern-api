@@ -18,7 +18,8 @@ describe Address do
     it {should have_db_column(:usps_verified_street_1).of_type(:string) }
     it {should have_db_column(:usps_verified_city).of_type(:string) }
     it {should have_db_column(:usps_verified_zip).of_type(:string) }
-    it {should have_db_column(:best_canvass_response).of_type(:string) }
+    it {should have_db_column(:best_canvass_response).of_type(:string).with_options(default: "Not yet visited") }
+    it {should have_db_column(:last_canvass_response).of_type(:string).with_options(default: "Unknown") }
   end
 
   context 'associations' do

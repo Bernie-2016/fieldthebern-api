@@ -565,6 +565,44 @@ module GroundGame
             expect(result.error.id).to eq "INVALID_BEST_CANVASS_RESPONSE"
           end
         end
+
+        describe "setting 'address.last_canvass_response'" do
+          before do
+            @address = create(:address, id: 1)
+            @visit_params = {}
+          end
+
+          it "sets it to 'best_canvass_response' if there are no 'people_params' or 'last_canvass_response' parameter" do
+            address_params = { id: 1, best_canvass_response: "not_home" }
+            people_params = []
+
+            CreateVisit.new(@visit_params, address_params, people_params, user).call
+
+            expect(@address.reload.last_canvass_response).to eq "not_home"
+          end
+
+          it "sets it to 'last_canvass_response' if there are no 'people_params'" do
+            address_params = { id: 1, best_canvass_response: "not_home", last_canvass_response: "asked_to_leave" }
+            people_params = []
+
+            CreateVisit.new(@visit_params, address_params, people_params, user).call
+
+            expect(@address.reload.last_canvass_response).to eq "asked_to_leave"
+          end
+
+          it "sets it to 'most_supportive_resident.canvas_response' if there are 'people_params'" do
+            address_params = { id: 1 }
+            people_params = [
+              { canvass_response: "leaning_for" },
+              { canvass_response: "strongly_for" },
+              { canvass_response: "leaning_against"}
+            ]
+
+            CreateVisit.new(@visit_params, address_params, people_params, user).call
+
+            expect(@address.reload.last_canvass_response).to eq "strongly_for"
+          end
+        end
       end
     end
   end
