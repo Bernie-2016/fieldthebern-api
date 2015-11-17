@@ -65,8 +65,6 @@ module GroundGame
           # instead of at the model level.
           address.best_canvass_response = :not_home if address.new_record? and address_params[:best_canvass_response].nil?
 
-          address.ensure_not_recently_visited!
-
           # I do not like that this is here, but I couldn't think of a better way.
           # AddressUpdate absolutely needs to be created after initializing/fetching
           # and updating, but before saving the address due to it needing access to
