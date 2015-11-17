@@ -17,29 +17,9 @@ ActiveRecord::Schema.define(version: 20151117084043) do
   enable_extension "plpgsql"
 
   create_table "address_updates", force: :cascade do |t|
-    t.integer  "address_id"
-    t.integer  "visit_id"
-    t.string   "update_type",                     default: "created"
-    t.float    "old_latitude"
-    t.float    "old_longitude"
-    t.string   "old_street_1"
-    t.string   "old_street_2"
-    t.string   "old_city"
-    t.string   "old_state_code"
-    t.string   "old_zip_code"
-    t.datetime "old_visited_at"
-    t.integer  "old_most_supportive_resident_id"
-    t.string   "old_best_canvass_response"
-    t.float    "new_latitude"
-    t.float    "new_longitude"
-    t.string   "new_street_1"
-    t.string   "new_street_2"
-    t.string   "new_city"
-    t.string   "new_state_code"
-    t.string   "new_zip_code"
-    t.datetime "new_visited_at"
-    t.integer  "new_most_supportive_resident_id"
-    t.string   "new_best_canvass_response"
+    t.integer "address_id"
+    t.integer "visit_id"
+    t.string  "update_type", default: "created"
   end
 
   create_table "addresses", force: :cascade do |t|
