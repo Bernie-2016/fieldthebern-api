@@ -199,7 +199,7 @@ describe "Visit API" do
               create(:person,
                 id: 10,
                 address: address,
-                canvas_response: :unknown,
+                canvass_response: :unknown,
                 party_affiliation: :unknown_affiliation,
                 email: "john@doe.com",
                 phone: "555-555-1212",
@@ -230,7 +230,7 @@ describe "Visit API" do
                     attributes: {
                       first_name: "John",
                       last_name: "Doe",
-                      canvas_response: "leaning_for",
+                      canvass_response: "leaning_for",
                       party_affiliation: "Democrat",
                       email: nil,
                       phone: nil,
