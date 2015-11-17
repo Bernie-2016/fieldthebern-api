@@ -17,9 +17,29 @@ ActiveRecord::Schema.define(version: 20151117091849) do
   enable_extension "plpgsql"
 
   create_table "address_updates", force: :cascade do |t|
-    t.integer "address_id"
-    t.integer "visit_id"
-    t.string  "update_type", default: "created"
+    t.integer  "address_id"
+    t.integer  "visit_id"
+    t.string   "update_type",                     default: "created"
+    t.float    "old_latitude"
+    t.float    "old_longitude"
+    t.string   "old_street_1"
+    t.string   "old_street_2"
+    t.string   "old_city"
+    t.string   "old_state_code"
+    t.string   "old_zip_code"
+    t.datetime "old_visited_at"
+    t.integer  "old_most_supportive_resident_id"
+    t.string   "old_best_canvass_response"
+    t.float    "new_latitude"
+    t.float    "new_longitude"
+    t.string   "new_street_1"
+    t.string   "new_street_2"
+    t.string   "new_city"
+    t.string   "new_state_code"
+    t.string   "new_zip_code"
+    t.datetime "new_visited_at"
+    t.integer  "new_most_supportive_resident_id"
+    t.string   "new_best_canvass_response"
   end
 
   create_table "addresses", force: :cascade do |t|
@@ -103,18 +123,32 @@ ActiveRecord::Schema.define(version: 20151117091849) do
     t.datetime "updated_at"
     t.string   "email"
     t.string   "phone"
-    t.string   "preferred_contact_method",                     default: "email"
+    t.string   "preferred_contact_method"
     t.boolean  "previously_participated_in_caucus_or_primary", default: false
   end
 
   create_table "person_updates", force: :cascade do |t|
     t.integer "person_id"
     t.integer "visit_id"
-    t.string  "update_type",           default: "created"
+    t.string  "update_type",                                      default: "created"
     t.string  "old_canvass_response"
     t.string  "new_canvass_response"
     t.string  "old_party_affiliation"
     t.string  "new_party_affiliation"
+    t.string  "new_first_name"
+    t.string  "old_first_name"
+    t.string  "old_last_name"
+    t.string  "new_last_name"
+    t.integer "old_address_id"
+    t.integer "new_address_id"
+    t.string  "old_email"
+    t.string  "new_email"
+    t.string  "old_phone"
+    t.string  "new_phone"
+    t.string  "old_preferred_contact_method"
+    t.string  "new_preferred_contact_method"
+    t.boolean "old_previously_participated_in_caucus_or_primary"
+    t.boolean "new_previously_participated_in_caucus_or_primary"
   end
 
   create_table "relationships", force: :cascade do |t|
