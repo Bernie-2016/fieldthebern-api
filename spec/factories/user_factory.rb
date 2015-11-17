@@ -16,5 +16,13 @@ FactoryGirl.define do
         user.decode_image_data
       end
     end
+
+    trait :with_s3_photo do
+      after(:build) do |user, evaluator|
+        user.photo_file_name = 'user.jpg'
+        user.photo_content_type = 'image/jpeg'
+        user.photo_file_size = 1024
+      end
+    end
   end
 end

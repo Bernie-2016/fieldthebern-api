@@ -110,7 +110,7 @@ describe "Users API" do
             expect(user.base_64_photo_data).to be_nil
             expect(user.photo.path).to_not be_nil
             # expect photo saved from create action to be identical to our test photo
-            user_photo_file = File.open(user.photo.path, 'r')
+            user_photo_file = File.open("#{Rails.root}/spec/sample_data/default-avatar.png", 'r')
             base_64_saved_image = Base64.encode64(open(user_photo_file) { |io| io.read })
             expect(base_64_saved_image).to include base_64_image
           end
@@ -337,7 +337,7 @@ describe "Users API" do
           expect(user.base_64_photo_data).to be_nil
           expect(user.photo.path).to_not be_nil
           # expect photo saved from create action to be identical to our test photo
-          user_photo_file = File.open(user.photo.path, 'r')
+          user_photo_file = File.open("#{Rails.root}/spec/sample_data/default-avatar.png", 'r')
           base_64_saved_image = Base64.encode64(open(user_photo_file) { |io| io.read })
           expect(base_64_saved_image).to include base_64_image
         end
@@ -520,10 +520,8 @@ describe "Users API" do
         @user.reload
         expect(@user.base_64_photo_data).to be_nil
         expect(@user.photo.path).to_not be_nil
-        # expect photo saved from create action to be identical to our test photo
-        user_photo_file = File.open(@user.photo.path, 'r')
-        base_64_saved_image = Base64.encode64(open(user_photo_file) { |io| io.read })
-        expect(base_64_saved_image).to include base_64_image
+        expect(@user.photo.url(:original)).to include "cloudfront"
+        expect(@user.photo.url(:original)).to include "users/#{@user.id}/original.png"
       end
     end
 
