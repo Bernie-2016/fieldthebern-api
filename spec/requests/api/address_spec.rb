@@ -64,12 +64,12 @@ describe "Address API" do
             usps_verified_city: "NEW YORK",
             usps_verified_state: "NY",
             usps_verified_zip: "10009-7944")
-          person_a = create(:person, id: 5, address: address, canvas_response: :strongly_for)
-          person_b = create(:person, id: 6, address: address, canvas_response: :leaning_for)
+          person_a = create(:person, id: 5, address: address, canvass_response: :strongly_for)
+          person_b = create(:person, id: 6, address: address, canvass_response: :leaning_for)
 
           address.people = [person_a, person_b]
           address.most_supportive_resident = person_a
-          address.best_canvas_response = person_a.canvas_response
+          address.best_canvass_response = person_a.canvass_response
           address.save!
 
           authenticated_get "addresses", {
@@ -91,7 +91,7 @@ describe "Address API" do
           expect(address_attributes.city).to eq "New York"
           expect(address_attributes.state_code).to eq "NY"
           expect(address_attributes.zip_code).to eq ""
-          expect(address_attributes.best_canvas_response).to eq "strongly_for"
+          expect(address_attributes.best_canvass_response).to eq "strongly_for"
 
           address_relationships = address_json.relationships
           expect(address_relationships.most_supportive_resident.data.id).to eq "5"

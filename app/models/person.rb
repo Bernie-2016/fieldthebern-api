@@ -1,7 +1,9 @@
 class Person < ActiveRecord::Base
   belongs_to :address
+  validates :phone, phone: { possible: true, allow_blank: true }
+  validates :email, email: true, allow_blank: true
 
-  enum canvas_response: {
+  enum canvass_response: {
     unknown: "Unknown",
     strongly_for: "Strongly for",
     leaning_for: "Leaning for",
@@ -19,7 +21,12 @@ class Person < ActiveRecord::Base
     independent_affiliation: "Independent"
   }
 
-  def canvas_response_rating
+  enum preferred_contact_method: {
+    contact_by_phone: "phone",
+    contact_by_email: "email"
+  }
+
+  def canvass_response_rating
     if asked_to_leave?
       return -1
     elsif strongly_against?
@@ -36,7 +43,7 @@ class Person < ActiveRecord::Base
   end
 
   def more_supportive_than? other_person
-    self.canvas_response_rating > other_person.canvas_response_rating
+    self.canvass_response_rating > other_person.canvass_response_rating
   end
 
   def self.new_or_existing_from_params(params)
@@ -47,6 +54,7 @@ class Person < ActiveRecord::Base
     else
       person = Person.new(params)
     end
+
     person
   end
 end

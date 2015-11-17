@@ -21,12 +21,12 @@ module GroundGame
               usps_verified_city: "NEW YORK",
               usps_verified_state: "NY",
               usps_verified_zip: "10009-7944")
-            person_a = create(:person, id: 5, address: address, canvas_response: :strongly_for)
-            person_b = create(:person, id: 6, address: address, canvas_response: :leaning_for)
+            person_a = create(:person, id: 5, address: address, canvass_response: :strongly_for)
+            person_b = create(:person, id: 6, address: address, canvass_response: :leaning_for)
 
             address.people = [person_a, person_b]
             address.most_supportive_resident = person_a
-            address.best_canvas_response = person_a.canvas_response
+            address.best_canvass_response = person_a.canvass_response
             address.save!
 
             address_params ={
@@ -48,7 +48,7 @@ module GroundGame
             expect(matched_address.city).to eq "New York"
             expect(matched_address.state_code).to eq "NY"
             expect(matched_address.zip_code).to eq ""
-            expect(matched_address.best_canvas_response).to eq "strongly_for"
+            expect(matched_address.best_canvass_response).to eq "strongly_for"
 
             expect(matched_address.most_supportive_resident_id).to eq 5
             expect(matched_address.people.map(&:id)).to contain_exactly 5, 6

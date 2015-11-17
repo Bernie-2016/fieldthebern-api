@@ -16,16 +16,16 @@ FactoryGirl.define do
 
     trait :with_1_person do
       after(:build) do |address, evaluator|
-        person = FactoryGirl.build(:person, address: address, canvas_response: :strongly_for)
+        person = FactoryGirl.build(:person, address: address, canvass_response: :strongly_for)
         address.most_supportive_resident = person
-        address.best_canvas_response = person.canvas_response
+        address.best_canvass_response = person.canvass_response
         address.people = [person]
       end
 
       after(:create) do |address, evaluator|
-        person = FactoryGirl.create(:person, address: address, canvas_response: :strongly_for)
+        person = FactoryGirl.create(:person, address: address, canvass_response: :strongly_for)
         address.most_supportive_resident = person
-        address.best_canvas_response = person.canvas_response
+        address.best_canvass_response = person.canvass_response
         address.people = [person]
       end
     end
