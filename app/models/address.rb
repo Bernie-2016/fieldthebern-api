@@ -27,10 +27,10 @@ class Address < ActiveRecord::Base
   validates :state_code, presence: true
 
   def assign_most_supportive_resident(person)
-    current_resident = self.most_supportive_resident
-    there_is_no_current_resident = current_resident.nil?
+    current_most_supportive_resident = self.most_supportive_resident
+    there_is_no_current_most_supportive_resident = current_most_supportive_resident.nil?
 
-    if there_is_no_current_resident or person.more_supportive_than? current_resident
+    if there_is_no_current_most_supportive_resident or person.more_supportive_than? current_most_supportive_resident
       self.most_supportive_resident = person
       self.best_canvass_response = person.canvass_response
     end
