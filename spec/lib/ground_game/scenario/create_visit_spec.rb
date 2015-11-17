@@ -14,7 +14,7 @@ module GroundGame
 
           it "returns a visit" do
             address = create(:address, id: 1)
-            create(:person, id: 10, address: address, canvas_response: :unknown, party_affiliation: :unknown_affiliation)
+            create(:person, id: 10, address: address, canvass_response: :unknown, party_affiliation: :unknown_affiliation)
 
             visit_params = { duration_sec: 150 }
             address_params = { id: 1 }
@@ -28,7 +28,7 @@ module GroundGame
 
           it "computes and assigns the score" do
             address = create(:address, id: 1)
-            create(:person, id: 10, address: address, canvas_response: :unknown, party_affiliation: :unknown_affiliation)
+            create(:person, id: 10, address: address, canvass_response: :unknown, party_affiliation: :unknown_affiliation)
 
             visit_params = { duration_sec: 150 }
 
@@ -47,7 +47,7 @@ module GroundGame
               id: 10,
               first_name: "John",
               last_name: "Doe",
-              canvas_response: "Leaning for",
+              canvass_response: "Leaning for",
               party_affiliation: "Democrat"
             }]
 
@@ -59,7 +59,7 @@ module GroundGame
             user = create(:user, email: "josh@cookacademy.com", state_code: "MD")
 
             address = create(:address, id: 1, state_code: "CA")
-            create(:person, id: 10, address: address, canvas_response: :unknown, party_affiliation: :unknown_affiliation)
+            create(:person, id: 10, address: address, canvass_response: :unknown, party_affiliation: :unknown_affiliation)
 
             visit_params = { duration_sec: 150 }
             address_params = { id: 1 }
@@ -100,8 +100,8 @@ module GroundGame
             context "when the person already exists" do
               it "creates a person_update with proper contents for each person" do
                 address = create(:address, id: 1)
-                create(:person, id: 10, address: address, canvas_response: :unknown, party_affiliation: :unknown_affiliation)
-                create(:person, id: 11, address: address, canvas_response: :leaning_against, party_affiliation: :republican_affiliation)
+                create(:person, id: 10, address: address, canvass_response: :unknown, party_affiliation: :unknown_affiliation)
+                create(:person, id: 11, address: address, canvass_response: :leaning_against, party_affiliation: :republican_affiliation)
 
                 visit_params = { duration_sec: 150 }
 
@@ -111,11 +111,11 @@ module GroundGame
 
                 people_params = [{
                   id: 10,
-                  canvas_response: "Leaning for",
+                  canvass_response: "Leaning for",
                   party_affiliation: "Democrat"
                 }, {
                   id: 11,
-                  canvas_response: "Strongly for",
+                  canvass_response: "Strongly for",
                   party_affiliation: "Independent"
                 }]
 
@@ -125,8 +125,8 @@ module GroundGame
                 expect(first_person_update).not_to be_nil
                 expect(first_person_update.visit).to eq visit
                 expect(first_person_update.modified?).to be true
-                expect(first_person_update.old_canvas_response).to eq "unknown"
-                expect(first_person_update.new_canvas_response).to eq "leaning_for"
+                expect(first_person_update.old_canvass_response).to eq "unknown"
+                expect(first_person_update.new_canvass_response).to eq "leaning_for"
                 expect(first_person_update.old_party_affiliation).to eq "unknown_affiliation"
                 expect(first_person_update.new_party_affiliation).to eq "democrat_affiliation"
 
@@ -134,15 +134,15 @@ module GroundGame
                 expect(second_person_update).not_to be_nil
                 expect(second_person_update.visit).to eq visit
                 expect(second_person_update.modified?).to be true
-                expect(second_person_update.old_canvas_response).to eq "leaning_against"
-                expect(second_person_update.new_canvas_response).to eq "strongly_for"
+                expect(second_person_update.old_canvass_response).to eq "leaning_against"
+                expect(second_person_update.new_canvass_response).to eq "strongly_for"
                 expect(second_person_update.old_party_affiliation).to eq "republican_affiliation"
                 expect(second_person_update.new_party_affiliation).to eq "independent_affiliation"
               end
 
               it "creates a visit, updates the address, updates the person" do
                 address = create(:address, id: 1)
-                create(:person, id: 10, address: address, canvas_response: :unknown, party_affiliation: :unknown_affiliation)
+                create(:person, id: 10, address: address, canvass_response: :unknown, party_affiliation: :unknown_affiliation)
 
                 visit_params = { duration_sec: 150 }
 
@@ -161,7 +161,7 @@ module GroundGame
                   id: 10,
                   first_name: "John",
                   last_name: "Doe",
-                  canvas_response: "Leaning for",
+                  canvass_response: "Leaning for",
                   party_affiliation: "Democrat"
                 }]
 
@@ -187,12 +187,12 @@ module GroundGame
                 people_params = [{
                   first_name: "John",
                   last_name: "Doe",
-                  canvas_response: "Leaning for",
+                  canvass_response: "Leaning for",
                   party_affiliation: "Democrat"
                 }, {
                   first_name: "Jane",
                   last_name: "Doe",
-                  canvas_response: "Strongly for",
+                  canvass_response: "Strongly for",
                   party_affiliation: "Independent"
                 }]
 
@@ -203,8 +203,8 @@ module GroundGame
                 expect(first_person_update).not_to be_nil
                 expect(first_person_update.visit).to eq visit
                 expect(first_person_update.created?).to be true
-                expect(first_person_update.old_canvas_response).to eq "unknown"
-                expect(first_person_update.new_canvas_response).to eq "leaning_for"
+                expect(first_person_update.old_canvass_response).to eq "unknown"
+                expect(first_person_update.new_canvass_response).to eq "leaning_for"
                 expect(first_person_update.old_party_affiliation).to eq "unknown_affiliation"
                 expect(first_person_update.new_party_affiliation).to eq "democrat_affiliation"
 
@@ -213,8 +213,8 @@ module GroundGame
                 expect(second_person_update).not_to be_nil
                 expect(second_person_update.visit).to eq visit
                 expect(second_person_update.created?).to be true
-                expect(second_person_update.old_canvas_response).to eq "unknown"
-                expect(second_person_update.new_canvas_response).to eq "strongly_for"
+                expect(second_person_update.old_canvass_response).to eq "unknown"
+                expect(second_person_update.new_canvass_response).to eq "strongly_for"
                 expect(second_person_update.old_party_affiliation).to eq "unknown_affiliation"
                 expect(second_person_update.new_party_affiliation).to eq "independent_affiliation"
               end
@@ -238,7 +238,7 @@ module GroundGame
                 people_params = [{
                   first_name: "John",
                   last_name: "Doe",
-                  canvas_response: "Leaning for",
+                  canvass_response: "Leaning for",
                   party_affiliation: "Democrat"
                 }]
 
@@ -290,7 +290,7 @@ module GroundGame
               people_params = [{
                 first_name: "John",
                 last_name: "Doe",
-                canvas_response: "Leaning for",
+                canvass_response: "Leaning for",
                 party_affiliation: "Democrat"
               }]
 
@@ -325,7 +325,7 @@ module GroundGame
             create(:address, id: 1, latitude: 1, longitude: 2)
             visit_params = { duration_sec: 150 }
 
-            address_params = { id: 1, latitude: 1, longitude: 3, best_canvas_response: "invalid_value" }
+            address_params = { id: 1, latitude: 1, longitude: 3, best_canvass_response: "invalid_value" }
             people_params = []
 
             result = CreateVisit.new(visit_params, address_params, people_params, user).call
@@ -342,13 +342,13 @@ module GroundGame
             it "handles ArgumentError with code 422" do
               visit_params = { duration_sec: 150 }
               address_params = { id: 10}
-              people_params = [{ first_name: "John", last_name: "Doe", canvas_response: "invalid response" }]
+              people_params = [{ first_name: "John", last_name: "Doe", canvass_response: "invalid response" }]
 
               error = CreateVisit.new(visit_params, address_params, people_params, user).call.error
 
               expect(error.id).to eq "ARGUMENT_ERROR"
               expect(error.title).to eq "Argument error"
-              expect(error.detail).to eq "'invalid response' is not a valid canvas_response"
+              expect(error.detail).to eq "'invalid response' is not a valid canvass_response"
               expect(error.status).to eq 422
             end
 
@@ -380,16 +380,16 @@ module GroundGame
               expect(error.status).to eq 403
             end
 
-            it "handles GroundGame::InvalidBestCanvasResponse with code 422" do
+            it "handles GroundGame::InvalidBestCanvassResponse with code 422" do
               visit_params = { duration_sec: 150 }
-              address_params = { id: 10, best_canvas_response: "strongly_for"}
+              address_params = { id: 10, best_canvass_response: "strongly_for"}
               people_params = []
 
               error = CreateVisit.new(visit_params, address_params, people_params, user).call.error
 
-              expect(error.id).to eq "INVALID_BEST_CANVAS_RESPONSE"
-              expect(error.title).to eq "Invalid best canvas response"
-              expect(error.detail).to eq "Invalid argument 'strongly_for' for address.best_canvas_response"
+              expect(error.id).to eq "INVALID_BEST_CANVASS_RESPONSE"
+              expect(error.title).to eq "Invalid best canvass response"
+              expect(error.detail).to eq "Invalid argument 'strongly_for' for address.best_canvass_response"
               expect(error.status).to eq 422
             end
           end
@@ -400,7 +400,7 @@ module GroundGame
               create(:address, id: 1, latitude: 1, longitude: 2)
               visit_params = { duration_sec: 150 }
 
-              address_params = { id: 1, latitude: 1, longitude: 3, best_canvas_response: "invalid_value" }
+              address_params = { id: 1, latitude: 1, longitude: 3, best_canvass_response: "invalid_value" }
               people_params = []
 
               result = CreateVisit.new(visit_params, address_params, people_params, user).call
@@ -415,7 +415,7 @@ module GroundGame
 
             it "cleans up everything when address creation fails", vcr: { cassette_name: "lib/ground_game/scenario/create_visit/cleans_up_everything_when_address_update_fails" } do
               visit_params = { duration_sec: 150 }
-              address_params = { best_canvas_response: "invalid_value" }
+              address_params = { best_canvass_response: "invalid_value" }
               people_params = []
 
               result = CreateVisit.new(visit_params, address_params, people_params, user).call
@@ -433,7 +433,7 @@ module GroundGame
 
               visit_params = { duration_sec: 150 }
               address_params = { id: 1, latitude: 1, longitude: 3 }
-              people_params = [{ id: 2, first_name: "Jake", last_name: "Doe", canvas_response: "invalid_value" }]
+              people_params = [{ id: 2, first_name: "Jake", last_name: "Doe", canvass_response: "invalid_value" }]
 
               result = CreateVisit.new(visit_params, address_params, people_params, user).call
               expect(result.success?).to be false
@@ -459,7 +459,7 @@ module GroundGame
               address_params = { id: 1, latitude: 1, longitude: 3 }
               people_params = [
                 { id: 2, first_name: "Jake", last_name: "Doe" },
-                { first_name: "John", last_name: "Smith", canvas_response: "invalid_value" }
+                { first_name: "John", last_name: "Smith", canvass_response: "invalid_value" }
               ]
 
               result = CreateVisit.new(visit_params, address_params, people_params, user).call
@@ -502,67 +502,67 @@ module GroundGame
           end
         end
 
-        describe "setting 'address.best_canvas_response' directly" do
+        describe "setting 'address.best_canvass_response' directly" do
           before do
             @address = create(:address, id: 1)
           end
 
-          def create_visit_with_address_best_canvas_response_set_to(best_canvas_response)
+          def create_visit_with_address_best_canvass_response_set_to(best_canvass_response)
             visit_params = { duration_sec: 200 }
-            address_params = { id: 1, best_canvas_response: best_canvas_response }
+            address_params = { id: 1, best_canvass_response: best_canvass_response }
             people_params = []
 
             CreateVisit.new(visit_params, address_params, people_params, user).call
           end
 
           it "should be allowed for 'asked_to_leave'" do
-            result = create_visit_with_address_best_canvas_response_set_to "asked_to_leave"
+            result = create_visit_with_address_best_canvass_response_set_to "asked_to_leave"
             expect(@address.reload.asked_to_leave?).to be true
           end
 
           it "should be allowed for 'not_home'" do
-            create_visit_with_address_best_canvas_response_set_to "not_home"
+            create_visit_with_address_best_canvass_response_set_to "not_home"
             expect(@address.reload.not_home?).to be true
           end
 
           it "should be allowed for 'not_yet_visited" do
-            create_visit_with_address_best_canvas_response_set_to "not_yet_visited"
+            create_visit_with_address_best_canvass_response_set_to "not_yet_visited"
             expect(@address.reload.not_yet_visited?).to be true
           end
 
           it "should not be allowed for 'unknown'" do
-            create_visit_with_address_best_canvas_response_set_to "unknown"
+            create_visit_with_address_best_canvass_response_set_to "unknown"
             expect(@address.reload.unknown?).to be false
           end
 
           it "should not be allowed for 'strongly_for'" do
-            result = create_visit_with_address_best_canvas_response_set_to "strongly_for"
+            result = create_visit_with_address_best_canvass_response_set_to "strongly_for"
             expect(@address.reload.strongly_for?).to be false
-            expect(result.error.id).to eq "INVALID_BEST_CANVAS_RESPONSE"
+            expect(result.error.id).to eq "INVALID_BEST_CANVASS_RESPONSE"
           end
 
           it "should not be allowed for 'leaning_for'" do
-            result = create_visit_with_address_best_canvas_response_set_to "leaning_for"
+            result = create_visit_with_address_best_canvass_response_set_to "leaning_for"
             expect(@address.reload.leaning_for?).to be false
-            expect(result.error.id).to eq "INVALID_BEST_CANVAS_RESPONSE"
+            expect(result.error.id).to eq "INVALID_BEST_CANVASS_RESPONSE"
           end
 
           it "should not be allowed for 'undecided'" do
-            result = create_visit_with_address_best_canvas_response_set_to "undecided"
+            result = create_visit_with_address_best_canvass_response_set_to "undecided"
             expect(@address.reload.undecided?).to be false
-            expect(result.error.id).to eq "INVALID_BEST_CANVAS_RESPONSE"
+            expect(result.error.id).to eq "INVALID_BEST_CANVASS_RESPONSE"
           end
 
           it "should not be allowed for 'leaning_against'" do
-            result = create_visit_with_address_best_canvas_response_set_to "leaning_against"
+            result = create_visit_with_address_best_canvass_response_set_to "leaning_against"
             expect(@address.reload.leaning_against?).to be false
-            expect(result.error.id).to eq "INVALID_BEST_CANVAS_RESPONSE"
+            expect(result.error.id).to eq "INVALID_BEST_CANVASS_RESPONSE"
           end
 
           it "should not be allowed for 'strongly_against'" do
-            result = create_visit_with_address_best_canvas_response_set_to "strongly_against"
+            result = create_visit_with_address_best_canvass_response_set_to "strongly_against"
             expect(@address.reload.strongly_against?).to be false
-            expect(result.error.id).to eq "INVALID_BEST_CANVAS_RESPONSE"
+            expect(result.error.id).to eq "INVALID_BEST_CANVASS_RESPONSE"
           end
         end
       end

@@ -66,8 +66,8 @@ describe AddressSerializer, :type => :serializer do
         expect(subject["visited_at"]).to eql(resource.visited_at.iso8601(fraction_digits=3))
       end
 
-      it "has a 'best_canvas_response'" do
-        expect(subject["best_canvas_response"]).to eql(resource.best_canvas_response)
+      it "has a 'best_canvass_response'" do
+        expect(subject["best_canvass_response"]).to eql(resource.best_canvass_response)
       end
     end
 
