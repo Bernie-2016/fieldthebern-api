@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151118100746) do
+ActiveRecord::Schema.define(version: 20151118144034) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -40,6 +40,8 @@ ActiveRecord::Schema.define(version: 20151118100746) do
     t.datetime "new_visited_at"
     t.integer  "new_most_supportive_resident_id"
     t.string   "new_best_canvass_response"
+    t.string   "old_last_canvass_response"
+    t.string   "new_last_canvass_response"
   end
 
   create_table "addresses", force: :cascade do |t|
