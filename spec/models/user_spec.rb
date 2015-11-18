@@ -42,10 +42,26 @@ describe User do
   end
 
   context 'paperclip' do
-    it { should have_attached_file(:photo) }
-    it { should validate_attachment_content_type(:photo)
-        .allowing('image/png', 'image/gif')
-        .rejecting('text/plain', 'text/xml') }
+    context 'without cloudfront' do
+      it { should have_attached_file(:photo) }
+      it { should validate_attachment_content_type(:photo)
+          .allowing('image/png', 'image/gif')
+          .rejecting('text/plain', 'text/xml') }
+    end
+
+    context 'with cloudfront' do
+      before do
+        @user = create(:user, :with_s3_photo)
+      end
+
+      it 'should have cloudfront in the URL' do
+        expect(@user.photo.url(:thumb)).to include 'cloudfront'
+      end
+
+      it 'should have the right path' do
+        expect(@user.photo.url(:thumb)).to include "users/#{@user.id}/thumb.jpg"
+      end
+    end
   end
 
   context 'following behavior' do

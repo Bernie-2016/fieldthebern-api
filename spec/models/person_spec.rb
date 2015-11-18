@@ -16,7 +16,7 @@ describe Person do
     it { should have_db_column(:previously_participated_in_caucus_or_primary).of_type(:boolean).with_options(default: false) }
     it { should have_db_column(:phone).of_type(:string) }
     it { should have_db_column(:email).of_type(:string) }
-    it { should have_db_column(:preferred_contact_method).of_type(:string).with_options(default: "email") }
+    it { should have_db_column(:preferred_contact_method).of_type(:string).with_options(default: nil) }
   end
 
   context 'associations' do
@@ -118,7 +118,9 @@ describe Person do
   it "has a working 'preferred_contact_method' enum" do
     person = create(:person)
 
-    expect(person.contact_by_email?).to be true
+    expect(person.contact_by_email?).to be false
+    expect(person.contact_by_phone?).to be false
+    expect(person.preferred_contact_method.nil?).to be true
 
     person.contact_by_phone!
     expect(person.contact_by_phone?).to be true

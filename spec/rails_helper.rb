@@ -27,6 +27,10 @@ RSpec.configure do |config|
   config.include FactoryGirl::Syntax::Methods
   config.include Paperclip::Shoulda::Matchers
 
+  config.before(:each) do
+    Paperclip::Attachment.any_instance.stub(:save).and_return(true)
+  end
+
   config.after(:suite) do
     FileUtils.rm_rf(Dir["#{Rails.root}/spec/test_files/"])
   end
@@ -37,6 +41,7 @@ RSpec.configure do |config|
       with.library :rails
     end
   end
+
 
   def host
     "http://api.lvh.me:3000"
