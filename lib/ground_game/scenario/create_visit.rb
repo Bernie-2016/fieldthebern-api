@@ -57,13 +57,21 @@ module GroundGame
         end
 
         def create_or_update_address(address_params, visit)
-          address = Address.new_or_existing_from_params(address_params)
+          address_id = address_params.fetch(:id, nil)
 
-          # In a regular case, the default for address.best_canvass_response is "not yet visited"
-          # In the case of a visit, however, it makes more sense for the default to ne "not home"
-          # Due to this, it makes more sense to set that default here, in the CreateVisit scenario
-          # instead of at the model level.
-          address.best_canvass_response = "not_home" if address.new_record? and address_params[:best_canvass_response].nil?
+          if address_id.nil?
+            address = Address.new
+            address_params = GroundGame::EasyPostHelper.extend_address_params_with_usps(address_params)
+          else
+            address = Address.find(address_id)
+            raise GroundGame::VisitNotAllowed if address.recently_visited?
+          end
+
+
+          address.assign_attributes(address_params)
+
+          assign_address_best_canvas_response(address, address_params)
+          assign_address_last_canvas_response(address, address_params)
 
           # I do not like that this is here, but I couldn't think of a better way.
           # AddressUpdate absolutely needs to be created after initializing/fetching
@@ -126,6 +134,22 @@ module GroundGame
             user.state_code = visit.address.state_code
             user.save!
           end
+        end
+
+        def assign_address_best_canvas_response(address, params)
+          new_value = params[:best_canvass_response]
+          if new_value.present?
+            new_value_is_valid = ["asked_to_leave", "not_yet_visited", "not_home"].include? new_value
+            raise GroundGame::InvalidBestCanvassResponse.new(new_value) unless new_value_is_valid
+            address.best_canvass_response = new_value
+          elsif address.new_record?
+            address.best_canvass_response = "not_home"
+          end
+        end
+
+        def assign_address_last_canvas_response(address, params)
+          address.last_canvass_response = params[:best_canvass_response] if params[:best_canvass_response].present?
+          address.last_canvass_response = params[:last_canvass_response] if params[:last_canvass_response].present?
         end
     end
   end
