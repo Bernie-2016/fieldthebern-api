@@ -18,7 +18,7 @@ describe Address do
     it {should have_db_column(:usps_verified_street_1).of_type(:string) }
     it {should have_db_column(:usps_verified_city).of_type(:string) }
     it {should have_db_column(:usps_verified_zip).of_type(:string) }
-    it {should have_db_column(:best_canvass_response).of_type(:string).with_options(default: "Not yet visited") }
+    it {should have_db_column(:best_canvass_response).of_type(:string).with_options(default: "not_yet_visited") }
     it {should have_db_column(:last_canvass_response).of_type(:string).with_options(default: "unknown") }
   end
 
@@ -29,9 +29,6 @@ describe Address do
 
   context 'validations' do
     it { should validate_presence_of(:state_code) }
-    it { should validate_inclusion_of(:last_canvass_response).in_array([
-      "asked_to_leave", "unknown", "strongly_for", "leaning_for", "undecided",
-      "leaning_against", "strongly_against", "not_yet_visited", "not_home"]) }
   end
 
   context 'scopes' do
@@ -50,31 +47,61 @@ describe Address do
   it "has a working 'best_canvass_response' enum" do
     address = create(:address)
 
-    expect(address.not_yet_visited?).to be true
+    expect(address.best_is_not_yet_visited?).to be true
 
-    address.not_home!
-    expect(address.not_home?).to be true
+    address.best_is_not_home!
+    expect(address.best_is_not_home?).to be true
 
-    address.unknown!
-    expect(address.unknown?).to be true
+    address.best_is_unknown!
+    expect(address.best_is_unknown?).to be true
 
-    address.strongly_for!
-    expect(address.strongly_for?).to be true
+    address.best_is_strongly_for!
+    expect(address.best_is_strongly_for?).to be true
 
-    address.leaning_for!
-    expect(address.leaning_for?).to be true
+    address.best_is_leaning_for!
+    expect(address.best_is_leaning_for?).to be true
 
-    address.undecided!
-    expect(address.undecided?).to be true
+    address.best_is_undecided!
+    expect(address.best_is_undecided?).to be true
 
-    address.leaning_against!
-    expect(address.leaning_against?).to be true
+    address.best_is_leaning_against!
+    expect(address.best_is_leaning_against?).to be true
 
-    address.strongly_against!
-    expect(address.strongly_against?).to be true
+    address.best_is_strongly_against!
+    expect(address.best_is_strongly_against?).to be true
 
-    address.asked_to_leave!
-    expect(address.asked_to_leave?).to be true
+    address.best_is_asked_to_leave!
+    expect(address.best_is_asked_to_leave?).to be true
+  end
+
+  it "has a working 'last_canvass_response' enum" do
+    address = create(:address)
+
+    expect(address.last_is_unknown?).to be true
+
+    address.last_is_not_yet_visited!
+    expect(address.last_is_not_yet_visited?).to be true
+
+    address.last_is_not_home!
+    expect(address.last_is_not_home?).to be true
+
+    address.last_is_strongly_for!
+    expect(address.last_is_strongly_for?).to be true
+
+    address.last_is_leaning_for!
+    expect(address.last_is_leaning_for?).to be true
+
+    address.last_is_undecided!
+    expect(address.last_is_undecided?).to be true
+
+    address.last_is_leaning_against!
+    expect(address.last_is_leaning_against?).to be true
+
+    address.last_is_strongly_against!
+    expect(address.last_is_strongly_against?).to be true
+
+    address.last_is_asked_to_leave!
+    expect(address.last_is_asked_to_leave?).to be true
   end
 
   describe "instance methods" do

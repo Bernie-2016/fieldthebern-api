@@ -85,7 +85,7 @@ describe AddressUpdate do
         zip_code: 'Old zip code',
         visited_at: DateTime.new(2014, 1, 2, 3, 4, 5),
         most_supportive_resident_id: 1,
-        best_canvass_response: :leaning_against)
+        best_canvass_response: "leaning_against")
 
       address.assign_attributes(
         latitude: 4,
@@ -97,7 +97,7 @@ describe AddressUpdate do
         zip_code: 'New zip code',
         visited_at: DateTime.new(2015, 1, 2, 3, 4, 5),
         most_supportive_resident_id: 2,
-        best_canvass_response: :strongly_for)
+        best_canvass_response: "strongly_for")
 
       address_update = AddressUpdate.create_for_visit_and_address(visit, address)
 

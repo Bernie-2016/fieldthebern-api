@@ -63,7 +63,7 @@ module GroundGame
           # In the case of a visit, however, it makes more sense for the default to ne "not home"
           # Due to this, it makes more sense to set that default here, in the CreateVisit scenario
           # instead of at the model level.
-          address.best_canvass_response = :not_home if address.new_record? and address_params[:best_canvass_response].nil?
+          address.best_canvass_response = "not_home" if address.new_record? and address_params[:best_canvass_response].nil?
 
           # I do not like that this is here, but I couldn't think of a better way.
           # AddressUpdate absolutely needs to be created after initializing/fetching

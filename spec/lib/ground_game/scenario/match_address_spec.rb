@@ -48,7 +48,7 @@ module GroundGame
             expect(matched_address.city).to eq "New York"
             expect(matched_address.state_code).to eq "NY"
             expect(matched_address.zip_code).to eq ""
-            expect(matched_address.best_canvass_response).to eq "strongly_for"
+            expect(matched_address.best_is_strongly_for?).to be true
 
             expect(matched_address.most_supportive_resident_id).to eq 5
             expect(matched_address.people.map(&:id)).to contain_exactly 5, 6

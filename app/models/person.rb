@@ -4,13 +4,13 @@ class Person < ActiveRecord::Base
   validates :email, email: true, allow_blank: true
 
   enum canvass_response: {
-    unknown: "Unknown",
-    strongly_for: "Strongly for",
-    leaning_for: "Leaning for",
-    undecided: "Undecided",
-    leaning_against: "Leaning against",
-    strongly_against: "Strongly against",
-    asked_to_leave: "Asked to leave"
+    unknown: "unknown",
+    strongly_for: "strongly_for",
+    leaning_for: "leaning_for",
+    undecided: "undecided",
+    leaning_against: "leaning_against",
+    strongly_against: "strongly_against",
+    asked_to_leave: "asked_to_leave"
   }
 
   enum party_affiliation: {

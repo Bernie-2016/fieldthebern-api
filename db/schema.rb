@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151117091849) do
+ActiveRecord::Schema.define(version: 20151118100746) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -57,7 +57,7 @@ ActiveRecord::Schema.define(version: 20151117091849) do
     t.string   "usps_verified_city"
     t.string   "usps_verified_state"
     t.string   "usps_verified_zip"
-    t.string   "best_canvass_response",       default: "Not yet visited"
+    t.string   "best_canvass_response",       default: "not_yet_visited"
     t.string   "last_canvass_response",       default: "unknown"
   end
 
@@ -116,7 +116,7 @@ ActiveRecord::Schema.define(version: 20151117091849) do
   create_table "people", force: :cascade do |t|
     t.string   "first_name"
     t.string   "last_name"
-    t.string   "canvass_response",                             default: "Unknown"
+    t.string   "canvass_response",                             default: "unknown"
     t.string   "party_affiliation",                            default: "Unknown"
     t.integer  "address_id"
     t.datetime "created_at"

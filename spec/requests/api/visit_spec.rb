@@ -536,47 +536,47 @@ describe "Visit API" do
 
         it "should be allowed for 'asked_to_leave'" do
           post_visit_with_address_best_canvass_response_set_to "asked_to_leave"
-          expect(@address.reload.asked_to_leave?).to be true
+          expect(@address.reload.best_is_asked_to_leave?).to be true
         end
 
         it "should be allowed for 'not_home'" do
           post_visit_with_address_best_canvass_response_set_to "not_home"
-          expect(@address.reload.not_home?).to be true
+          expect(@address.reload.best_is_not_home?).to be true
         end
 
         it "should be allowed for 'not_yet_visited" do
           post_visit_with_address_best_canvass_response_set_to "not_yet_visited"
-          expect(@address.reload.not_yet_visited?).to be true
+          expect(@address.reload.best_is_not_yet_visited?).to be true
         end
 
         it "should not be allowed for 'unknown'" do
           post_visit_with_address_best_canvass_response_set_to "unknown"
-          expect(@address.reload.unknown?).to be false
+          expect(@address.reload.best_is_unknown?).to be false
         end
 
         it "should not be allowed for 'strongly_for'" do
           post_visit_with_address_best_canvass_response_set_to "strongly_for"
-          expect(@address.reload.strongly_for?).to be false
+          expect(@address.reload.best_is_strongly_for?).to be false
         end
 
         it "should not be allowed for 'leaning_for'" do
           post_visit_with_address_best_canvass_response_set_to "leaning_for"
-          expect(@address.reload.leaning_for?).to be false
+          expect(@address.reload.best_is_leaning_for?).to be false
         end
 
         it "should not be allowed for 'undecided'" do
           post_visit_with_address_best_canvass_response_set_to "undecided"
-          expect(@address.reload.undecided?).to be false
+          expect(@address.reload.best_is_undecided?).to be false
         end
 
         it "should not be allowed for 'leaning_against'" do
           post_visit_with_address_best_canvass_response_set_to "leaning_against"
-          expect(@address.reload.leaning_against?).to be false
+          expect(@address.reload.best_is_leaning_against?).to be false
         end
 
         it "should not be allowed for 'strongly_against'" do
           post_visit_with_address_best_canvass_response_set_to "strongly_against"
-          expect(@address.reload.strongly_against?).to be false
+          expect(@address.reload.best_is_strongly_against?).to be false
         end
       end
 

@@ -15,28 +15,48 @@ class Address < ActiveRecord::Base
 
 
   enum best_canvass_response: {
-    asked_to_leave: "Asked to leave",
-    unknown: "Unknown",
-    strongly_for: "Strongly for",
-    leaning_for: "Leaning for",
-    undecided: "Undecided",
-    leaning_against: "Leaning against",
-    strongly_against: "Strongly against",
-    not_yet_visited: "Not yet visited",
-    not_home: "Not home"
+    best_is_asked_to_leave: "asked_to_leave",
+    best_is_unknown: "unknown",
+    best_is_strongly_for: "strongly_for",
+    best_is_leaning_for: "leaning_for",
+    best_is_undecided: "undecided",
+    best_is_leaning_against: "leaning_against",
+    best_is_strongly_against: "strongly_against",
+    best_is_not_yet_visited: "not_yet_visited",
+    best_is_not_home: "not_home"
   }
 
-  validates :last_canvass_response, inclusion: { in: [
-    "asked_to_leave",
-    "unknown",
-    "strongly_for",
-    "leaning_for",
-    "undecided",
-    "leaning_against",
-    "strongly_against",
-    "not_yet_visited",
-    "not_home"
-  ]}
+  def best_canvass_response
+    self[:best_canvass_response]
+  end
+
+  def best_canvass_response_was
+    enum_value = self.changed_attributes[:best_canvass_response]
+    string_value = Address.best_canvass_responses[enum_value]
+    string_value
+  end
+
+  enum last_canvass_response: {
+    last_is_asked_to_leave: "asked_to_leave",
+    last_is_unknown: "unknown",
+    last_is_strongly_for: "strongly_for",
+    last_is_leaning_for: "leaning_for",
+    last_is_undecided: "undecided",
+    last_is_leaning_against: "leaning_against",
+    last_is_strongly_against: "strongly_against",
+    last_is_not_yet_visited: "not_yet_visited",
+    last_is_not_home: "not_home"
+  }
+
+  def last_canvass_response
+    self[:last_canvass_response]
+  end
+
+  def last_canvass_response_was
+    enum_value = self.changed_attributes[:last_canvass_response]
+    string_value = Address.last_canvass_responses[enum_value]
+    string_value
+  end
 
   validates :state_code, presence: true
 
@@ -93,16 +113,16 @@ class Address < ActiveRecord::Base
     def self.ensure_best_canvas_response_valid!(params)
       canvass_response = params[:best_canvass_response]
 
-      if not best_canvass_response_value_valid?(canvass_response)
+      if not best_canvass_response_valid?(canvass_response)
         raise GroundGame::InvalidBestCanvassResponse.new(canvass_response)
       end
     end
 
-    def self.best_canvass_response_value_valid?(value)
-      value.nil? or allowed_best_canvass_response_values_for_setting_directly.include? value.to_sym
+    def self.best_canvass_response_valid?(value)
+      value.nil? or allowed_best_canvass_responses_for_setting_directly.include? value.to_sym
     end
 
-    def self.allowed_best_canvass_response_values_for_setting_directly
+    def self.allowed_best_canvass_responses_for_setting_directly
       [:asked_to_leave, :not_yet_visited, :not_home]
     end
 end
