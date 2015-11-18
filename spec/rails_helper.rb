@@ -28,7 +28,7 @@ RSpec.configure do |config|
   config.include Paperclip::Shoulda::Matchers
 
   config.before(:each) do
-    Paperclip::Attachment.any_instance.stub(:save).and_return(true)
+    allow_any_instance_of(Paperclip::Attachment).to receive(:save).and_return(true)
   end
 
   config.after(:suite) do
