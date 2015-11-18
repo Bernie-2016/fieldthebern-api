@@ -20,6 +20,7 @@ describe AddressUpdate do
     it {should have_db_column(:old_visited_at).of_type(:datetime) }
     it {should have_db_column(:old_most_supportive_resident_id).of_type(:integer) }
     it {should have_db_column(:old_best_canvass_response).of_type(:string) }
+    it {should have_db_column(:old_last_canvass_response).of_type(:string) }
 
     it {should have_db_column(:new_latitude).of_type(:float) }
     it {should have_db_column(:new_longitude).of_type(:float) }
@@ -31,6 +32,7 @@ describe AddressUpdate do
     it {should have_db_column(:new_visited_at).of_type(:datetime) }
     it {should have_db_column(:new_most_supportive_resident_id).of_type(:integer) }
     it {should have_db_column(:new_best_canvass_response).of_type(:string) }
+    it {should have_db_column(:new_last_canvass_response).of_type(:string) }
   end
 
   context 'associations' do
@@ -85,7 +87,8 @@ describe AddressUpdate do
         zip_code: 'Old zip code',
         visited_at: DateTime.new(2014, 1, 2, 3, 4, 5),
         most_supportive_resident_id: 1,
-        best_canvass_response: :leaning_against)
+        best_canvass_response: "leaning_against",
+        last_canvass_response: "strongly_for")
 
       address.assign_attributes(
         latitude: 4,
@@ -97,7 +100,8 @@ describe AddressUpdate do
         zip_code: 'New zip code',
         visited_at: DateTime.new(2015, 1, 2, 3, 4, 5),
         most_supportive_resident_id: 2,
-        best_canvass_response: :strongly_for)
+        best_canvass_response: "strongly_for",
+        last_canvass_response: "leaning_against")
 
       address_update = AddressUpdate.create_for_visit_and_address(visit, address)
 
@@ -111,6 +115,7 @@ describe AddressUpdate do
       expect(address_update.old_visited_at).to eq DateTime.new(2014, 1, 2, 3, 4, 5)
       expect(address_update.old_most_supportive_resident_id).to eq 1
       expect(address_update.old_best_canvass_response).to eq "leaning_against"
+      expect(address_update.old_last_canvass_response).to eq "strongly_for"
 
       expect(address_update.new_latitude).to eq 4
       expect(address_update.new_longitude).to eq 5
@@ -122,6 +127,7 @@ describe AddressUpdate do
       expect(address_update.new_visited_at).to eq DateTime.new(2015, 1, 2, 3, 4, 5)
       expect(address_update.new_most_supportive_resident_id).to eq 2
       expect(address_update.new_best_canvass_response).to eq "strongly_for"
+      expect(address_update.new_last_canvass_response).to eq "leaning_against"
     end
   end
 end

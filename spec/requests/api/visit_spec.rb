@@ -192,6 +192,7 @@ describe "Visit API" do
               expect(modified_person.address).to eq modified_address
               expect(modified_address.most_supportive_resident).to eq modified_person
               expect(modified_address.best_canvass_response).to eq modified_person.canvass_response
+              expect(modified_address.last_canvass_response).to eq modified_person.canvass_response
             end
 
             it "does not override nil values for some fields" do
@@ -326,6 +327,7 @@ describe "Visit API" do
               expect(new_person.address).to eq modified_address
               expect(modified_address.most_supportive_resident).to eq new_person
               expect(modified_address.best_canvass_response).to eq new_person.canvass_response
+              expect(modified_address.last_canvass_response).to eq new_person.canvass_response
             end
           end
 
@@ -421,6 +423,7 @@ describe "Visit API" do
               expect(new_person.address).to eq modified_address
               expect(modified_address.most_supportive_resident).to eq new_person
               expect(modified_address.best_canvass_response).to eq new_person.canvass_response
+              expect(modified_address.last_canvass_response).to eq new_person.canvass_response
             end
           end
         end
@@ -533,47 +536,59 @@ describe "Visit API" do
 
         it "should be allowed for 'asked_to_leave'" do
           post_visit_with_address_best_canvass_response_set_to "asked_to_leave"
-          expect(@address.reload.asked_to_leave?).to be true
+          expect(@address.reload.best_is_asked_to_leave?).to be true
         end
 
         it "should be allowed for 'not_home'" do
           post_visit_with_address_best_canvass_response_set_to "not_home"
-          expect(@address.reload.not_home?).to be true
+          expect(@address.reload.best_is_not_home?).to be true
         end
 
         it "should be allowed for 'not_yet_visited" do
           post_visit_with_address_best_canvass_response_set_to "not_yet_visited"
-          expect(@address.reload.not_yet_visited?).to be true
+          expect(@address.reload.best_is_not_yet_visited?).to be true
         end
 
         it "should not be allowed for 'unknown'" do
           post_visit_with_address_best_canvass_response_set_to "unknown"
-          expect(@address.reload.unknown?).to be false
+          expect(@address.reload.best_is_unknown?).to be false
         end
 
         it "should not be allowed for 'strongly_for'" do
           post_visit_with_address_best_canvass_response_set_to "strongly_for"
-          expect(@address.reload.strongly_for?).to be false
+          expect(@address.reload.best_is_strongly_for?).to be false
         end
 
         it "should not be allowed for 'leaning_for'" do
           post_visit_with_address_best_canvass_response_set_to "leaning_for"
-          expect(@address.reload.leaning_for?).to be false
+          expect(@address.reload.best_is_leaning_for?).to be false
         end
 
         it "should not be allowed for 'undecided'" do
           post_visit_with_address_best_canvass_response_set_to "undecided"
-          expect(@address.reload.undecided?).to be false
+          expect(@address.reload.best_is_undecided?).to be false
         end
 
         it "should not be allowed for 'leaning_against'" do
           post_visit_with_address_best_canvass_response_set_to "leaning_against"
-          expect(@address.reload.leaning_against?).to be false
+          expect(@address.reload.best_is_leaning_against?).to be false
         end
 
         it "should not be allowed for 'strongly_against'" do
           post_visit_with_address_best_canvass_response_set_to "strongly_against"
-          expect(@address.reload.strongly_against?).to be false
+          expect(@address.reload.best_is_strongly_against?).to be false
+        end
+      end
+
+      describe "allowed address attributes" do
+        it "allows setting 'address.last_canvass_response' directly" do
+          address = create(:address, id: 1)
+          authenticated_post "visits", {
+            data: { attributes: { duration_sec: 200 }, },
+            included: [ { id: 1, type: "addresses", attributes: { last_canvass_response: "not_yet_visited" } } ]
+          }, token
+
+          expect(Address.last.last_canvass_response).to eq "not_yet_visited"
         end
       end
     end

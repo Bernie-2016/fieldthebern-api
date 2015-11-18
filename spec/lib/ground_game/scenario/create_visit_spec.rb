@@ -47,7 +47,7 @@ module GroundGame
               id: 10,
               first_name: "John",
               last_name: "Doe",
-              canvass_response: "Leaning for",
+              canvass_response: "leaning_for",
               party_affiliation: "Democrat"
             }]
 
@@ -111,11 +111,11 @@ module GroundGame
 
                 people_params = [{
                   id: 10,
-                  canvass_response: "Leaning for",
+                  canvass_response: "leaning_for",
                   party_affiliation: "Democrat"
                 }, {
                   id: 11,
-                  canvass_response: "Strongly for",
+                  canvass_response: "strongly_for",
                   party_affiliation: "Independent"
                 }]
 
@@ -161,7 +161,7 @@ module GroundGame
                   id: 10,
                   first_name: "John",
                   last_name: "Doe",
-                  canvass_response: "Leaning for",
+                  canvass_response: "leaning_for",
                   party_affiliation: "Democrat"
                 }]
 
@@ -187,12 +187,12 @@ module GroundGame
                 people_params = [{
                   first_name: "John",
                   last_name: "Doe",
-                  canvass_response: "Leaning for",
+                  canvass_response: "leaning_for",
                   party_affiliation: "Democrat"
                 }, {
                   first_name: "Jane",
                   last_name: "Doe",
-                  canvass_response: "Strongly for",
+                  canvass_response: "strongly_for",
                   party_affiliation: "Independent"
                 }]
 
@@ -238,7 +238,7 @@ module GroundGame
                 people_params = [{
                   first_name: "John",
                   last_name: "Doe",
-                  canvass_response: "Leaning for",
+                  canvass_response: "leaning_for",
                   party_affiliation: "Democrat"
                 }]
 
@@ -282,7 +282,7 @@ module GroundGame
               expect(address_update.visit).to eq visit
               expect(address_update.address).to eq visit.address
               expect(address_update.created?).to be true
-              expect(address_update.address.not_home?).to be true
+              expect(address_update.address.best_is_not_home?).to be true
             end
 
             it "creates the visit, the address and the people", vcr: { cassette_name: "lib/ground_game/scenario/create_visit/successful_easypost_request" } do
@@ -290,7 +290,7 @@ module GroundGame
               people_params = [{
                 first_name: "John",
                 last_name: "Doe",
-                canvass_response: "Leaning for",
+                canvass_response: "leaning_for",
                 party_affiliation: "Democrat"
               }]
 
@@ -517,52 +517,90 @@ module GroundGame
 
           it "should be allowed for 'asked_to_leave'" do
             result = create_visit_with_address_best_canvass_response_set_to "asked_to_leave"
-            expect(@address.reload.asked_to_leave?).to be true
+            expect(@address.reload.best_is_asked_to_leave?).to be true
           end
 
           it "should be allowed for 'not_home'" do
             create_visit_with_address_best_canvass_response_set_to "not_home"
-            expect(@address.reload.not_home?).to be true
+            expect(@address.reload.best_is_not_home?).to be true
           end
 
           it "should be allowed for 'not_yet_visited" do
             create_visit_with_address_best_canvass_response_set_to "not_yet_visited"
-            expect(@address.reload.not_yet_visited?).to be true
+            expect(@address.reload.best_is_not_yet_visited?).to be true
           end
 
           it "should not be allowed for 'unknown'" do
             create_visit_with_address_best_canvass_response_set_to "unknown"
-            expect(@address.reload.unknown?).to be false
+            expect(@address.reload.best_is_unknown?).to be false
           end
 
           it "should not be allowed for 'strongly_for'" do
             result = create_visit_with_address_best_canvass_response_set_to "strongly_for"
-            expect(@address.reload.strongly_for?).to be false
+            expect(@address.reload.best_is_strongly_for?).to be false
             expect(result.error.id).to eq "INVALID_BEST_CANVASS_RESPONSE"
           end
 
           it "should not be allowed for 'leaning_for'" do
             result = create_visit_with_address_best_canvass_response_set_to "leaning_for"
-            expect(@address.reload.leaning_for?).to be false
+            expect(@address.reload.best_is_leaning_for?).to be false
             expect(result.error.id).to eq "INVALID_BEST_CANVASS_RESPONSE"
           end
 
           it "should not be allowed for 'undecided'" do
             result = create_visit_with_address_best_canvass_response_set_to "undecided"
-            expect(@address.reload.undecided?).to be false
+            expect(@address.reload.best_is_undecided?).to be false
             expect(result.error.id).to eq "INVALID_BEST_CANVASS_RESPONSE"
           end
 
           it "should not be allowed for 'leaning_against'" do
             result = create_visit_with_address_best_canvass_response_set_to "leaning_against"
-            expect(@address.reload.leaning_against?).to be false
+            expect(@address.reload.best_is_leaning_against?).to be false
             expect(result.error.id).to eq "INVALID_BEST_CANVASS_RESPONSE"
           end
 
           it "should not be allowed for 'strongly_against'" do
             result = create_visit_with_address_best_canvass_response_set_to "strongly_against"
-            expect(@address.reload.strongly_against?).to be false
+            expect(@address.reload.best_is_strongly_against?).to be false
             expect(result.error.id).to eq "INVALID_BEST_CANVASS_RESPONSE"
+          end
+        end
+
+        describe "setting 'address.last_canvass_response'" do
+          before do
+            @address = create(:address, id: 1)
+            @visit_params = {}
+          end
+
+          it "sets it to 'best_canvass_response' if there are no 'people_params' or 'last_canvass_response' parameter" do
+            address_params = { id: 1, best_canvass_response: "not_home" }
+            people_params = []
+
+            CreateVisit.new(@visit_params, address_params, people_params, user).call
+
+            expect(@address.reload.last_is_not_home?).to be true
+          end
+
+          it "sets it to 'last_canvass_response' if there are no 'people_params'" do
+            address_params = { id: 1, best_canvass_response: "not_home", last_canvass_response: "asked_to_leave" }
+            people_params = []
+
+            CreateVisit.new(@visit_params, address_params, people_params, user).call
+
+            expect(@address.reload.last_is_asked_to_leave?).to be true
+          end
+
+          it "sets it to 'most_supportive_resident.canvas_response' if there are 'people_params'" do
+            address_params = { id: 1 }
+            people_params = [
+              { canvass_response: "leaning_for" },
+              { canvass_response: "strongly_for" },
+              { canvass_response: "leaning_against"}
+            ]
+
+            CreateVisit.new(@visit_params, address_params, people_params, user).call
+
+            expect(@address.reload.last_is_strongly_for?).to be true
           end
         end
       end

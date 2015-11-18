@@ -93,11 +93,10 @@ describe "Address API" do
           expect(address_attributes.state_code).to eq "NY"
           expect(address_attributes.zip_code).to eq ""
           expect(address_attributes.best_canvass_response).to eq "strongly_for"
-
+          expect(address_attributes.last_canvass_response).not_to be_nil
           address_relationships = address_json.relationships
           expect(address_relationships.most_supportive_resident.data.id).to eq "5"
           expect(address_relationships.people.data.map(&:id)).to contain_exactly "5","6"
-
           expect(json.included.length).to eq 2
           expect(json.included.all? { |person| person.type == "people" }).to be true
           expect(json.included.all? { |person| person.relationships.address.data.id == "1" }).to be true

@@ -69,6 +69,10 @@ describe AddressSerializer, :type => :serializer do
       it "has a 'best_canvass_response'" do
         expect(subject["best_canvass_response"]).to eql(resource.best_canvass_response)
       end
+
+      it "has a 'last_canvass_response'" do
+        expect(subject["last_canvass_response"]).to eql(resource.last_canvass_response)
+      end
     end
 
     context "relationships" do

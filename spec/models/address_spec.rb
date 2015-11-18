@@ -18,7 +18,8 @@ describe Address do
     it {should have_db_column(:usps_verified_street_1).of_type(:string) }
     it {should have_db_column(:usps_verified_city).of_type(:string) }
     it {should have_db_column(:usps_verified_zip).of_type(:string) }
-    it {should have_db_column(:best_canvass_response).of_type(:string) }
+    it {should have_db_column(:best_canvass_response).of_type(:string).with_options(default: "not_yet_visited") }
+    it {should have_db_column(:last_canvass_response).of_type(:string).with_options(default: "unknown") }
   end
 
   context 'associations' do
@@ -46,57 +47,134 @@ describe Address do
   it "has a working 'best_canvass_response' enum" do
     address = create(:address)
 
-    expect(address.not_yet_visited?).to be true
+    expect(address.best_is_not_yet_visited?).to be true
 
-    address.not_home!
-    expect(address.not_home?).to be true
+    address.best_is_not_home!
+    expect(address.best_is_not_home?).to be true
 
-    address.unknown!
-    expect(address.unknown?).to be true
+    address.best_is_unknown!
+    expect(address.best_is_unknown?).to be true
 
-    address.strongly_for!
-    expect(address.strongly_for?).to be true
+    address.best_is_strongly_for!
+    expect(address.best_is_strongly_for?).to be true
 
-    address.leaning_for!
-    expect(address.leaning_for?).to be true
+    address.best_is_leaning_for!
+    expect(address.best_is_leaning_for?).to be true
 
-    address.undecided!
-    expect(address.undecided?).to be true
+    address.best_is_undecided!
+    expect(address.best_is_undecided?).to be true
 
-    address.leaning_against!
-    expect(address.leaning_against?).to be true
+    address.best_is_leaning_against!
+    expect(address.best_is_leaning_against?).to be true
 
-    address.strongly_against!
-    expect(address.strongly_against?).to be true
+    address.best_is_strongly_against!
+    expect(address.best_is_strongly_against?).to be true
 
-    address.asked_to_leave!
-    expect(address.asked_to_leave?).to be true
+    address.best_is_asked_to_leave!
+    expect(address.best_is_asked_to_leave?).to be true
+  end
+
+  it "has a working 'last_canvass_response' enum" do
+    address = create(:address)
+
+    expect(address.last_is_unknown?).to be true
+
+    address.last_is_not_yet_visited!
+    expect(address.last_is_not_yet_visited?).to be true
+
+    address.last_is_not_home!
+    expect(address.last_is_not_home?).to be true
+
+    address.last_is_strongly_for!
+    expect(address.last_is_strongly_for?).to be true
+
+    address.last_is_leaning_for!
+    expect(address.last_is_leaning_for?).to be true
+
+    address.last_is_undecided!
+    expect(address.last_is_undecided?).to be true
+
+    address.last_is_leaning_against!
+    expect(address.last_is_leaning_against?).to be true
+
+    address.last_is_strongly_against!
+    expect(address.last_is_strongly_against?).to be true
+
+    address.last_is_asked_to_leave!
+    expect(address.last_is_asked_to_leave?).to be true
   end
 
   describe "instance methods" do
 
     describe "#assign_most_supportive_resident" do
-      it "assigns person as most supportive resident and persons canvass_response as best_canvass_response" do
-        address = create(:address)
-        person = create(:person, canvass_response: :strongly_for)
+      before do
+        @person = create(:person, canvass_response: "leaning_for")
+        other_person_1 = create(:person, canvass_response: "leaning_against")
+        other_person_2 = create(:person, canvass_response: "strongly_against")
 
-        address.assign_most_supportive_resident(person)
-
-        expect(address.most_supportive_resident).to eq person
-        expect(address.best_canvass_response).to eq person.canvass_response
+        @address = create(:address,
+          most_supportive_resident: @person,
+          best_canvass_response: @person.canvass_response,
+          people: [@person, other_person_1, other_person_2])
       end
 
-      it "doesn't assign the person if another person is assigned and is more supportive" do
-        more_supportive_person = create(:person, canvass_response: :strongly_for)
-        address = create(:address,
-          best_canvass_response: more_supportive_person.canvass_response,
-          most_supportive_resident: more_supportive_person)
+      context "when a different person is being assigned" do
 
-        less_supportive_person = create(:person, canvass_response: :leaning_for)
-        address.assign_most_supportive_resident(less_supportive_person)
+        context "and it has a higher 'canvass_response' than the current 'most_supportive_resident'" do
+          it "assigns them as the 'most_supportive_resident'" do
+            new_person = create(:person, canvass_response: "strongly_for")
 
-        expect(address.most_supportive_resident).not_to be less_supportive_person
-        expect(address.best_canvass_response).not_to be :leaning_for
+            @address.assign_most_supportive_resident(new_person)
+
+            expect(@address.most_supportive_resident).to eq new_person
+            expect(@address.best_is_strongly_for?).to be true
+          end
+        end
+
+        context "and it has a lower 'canvass_response' than the current 'most_supportive_resident'" do
+          it "keeps the old 'most_supportive_resident'" do
+            new_person = create(:person, canvass_response: "leaning_against")
+            @address.assign_most_supportive_resident(new_person)
+
+            expect(@address.most_supportive_resident).not_to be new_person
+            expect(@address.best_is_leaning_against?).to be false
+          end
+        end
+      end
+
+      context "when an existing person changes their canvass_response" do
+
+        context "when the new response is higher" do
+          it "updates best_canvass_response, keeps the same person" do
+            @person.strongly_for!
+            @address.assign_most_supportive_resident(@person)
+
+            expect(@address.most_supportive_resident).to eq @person
+            expect(@address.best_is_strongly_for?).to be true
+          end
+        end
+
+        context "when the new response is lower" do
+          context "when the person still has the highest canvass_response" do
+            it "updates best_canvass_response, keeps the same person" do
+              @person.undecided!
+              @address.assign_most_supportive_resident(@person)
+
+              expect(@address.most_supportive_resident).to eq @person
+              expect(@address.best_is_undecided?).to be true
+            end
+          end
+
+          context "when another person now has the highest canvass_response" do
+            it "updates best_canvass_response and the person" do
+              @person.strongly_against!
+              @address.assign_most_supportive_resident(@person)
+
+              expect(@address.most_supportive_resident).not_to eq @person
+              expect(@address.best_is_leaning_against?).to be true
+            end
+          end
+        end
       end
     end
 
@@ -110,41 +188,37 @@ describe Address do
         expect(address.reload.recently_visited?).to be false
       end
     end
-  end
 
-  describe "class methods" do
-    describe ".new_or_existing_from_params" do
-      it "initializes a new address if the params do not contain an id", vcr: { cassette_name: "models/address/creates_a_new_address_if_the_params_do_not_contain_an_id" } do
-        expect(Address.count).to eq 0
-        params = { latitude: 1, longitude: 1 }
-        address = Address.new_or_existing_from_params(params)
-        expect(address.persisted?).to be false
-      end
-
-      it "fetches and updates (without save) an existing address if the params do contain an id" do
-        create(:address, id: 1, latitude: 0, longitude: 0)
-        params = { id: 1, latitude: 1, longitude: 1 }
-        address = Address.new_or_existing_from_params(params)
-        expect(Address.count).to eq 1
-        expect(address.changed?).to be true
-        expect(address.latitude).to eq 1
-        expect(address.longitude).to eq 1
-      end
-
-      it "throws an error if updating the same address twice in a short period" do
-        address = create(:address, id: 1, recently_visited?: true)
-        params = { id: 1, latitude: 1, longitude: 1 }
-        expect { Address.new_or_existing_from_params(params) }.to raise_error GroundGame::VisitNotAllowed
+    describe "#best_canvass_response" do
+      it "returns the underlying string value" do
+        address = create(:address, best_canvass_response: "strongly_against")
+        address.best_is_leaning_for!
+        expect(address.best_canvass_response).to eq "leaning_for"
       end
     end
 
-    it "should raise an error if there's an invalid 'best_canvass_response' parameter value" do
-      create(:address, id: 1, latitude: 0, longitude: 0)
-      params = {
-        id: 1,
-        best_canvass_response: "strongly_for"
-      }
-      expect { Address.new_or_existing_from_params(params) }.to raise_error ArgumentError
+    describe "#best_canvass_response_was" do
+      it "returns the underlying string value" do
+        address = create(:address, best_canvass_response: "strongly_against")
+        address.best_canvass_response = "leaning_for"
+        expect(address.best_canvass_response_was).to eq "strongly_against"
+      end
+    end
+
+    describe "#last_canvass_response" do
+      it "returns the underlying string value" do
+        address = create(:address, last_canvass_response: "strongly_against")
+        address.last_is_leaning_for!
+        expect(address.last_canvass_response).to eq "leaning_for"
+      end
+    end
+
+    describe "#last_canvass_response_was" do
+      it "returns the underlying string value" do
+        address = create(:address, last_canvass_response: "strongly_against")
+        address.last_canvass_response = "leaning_for"
+        expect(address.last_canvass_response_was).to eq "strongly_against"
+      end
     end
   end
 end

@@ -31,6 +31,8 @@ class AddressUpdate < ActiveRecord::Base
       old_most_supportive_resident_id: address.most_supportive_resident_id_was,
       new_most_supportive_resident_id: address.most_supportive_resident_id,
       old_best_canvass_response: address.best_canvass_response_was,
-      new_best_canvass_response: address.best_canvass_response)
+      new_best_canvass_response: address.best_canvass_response,
+      old_last_canvass_response: address.last_canvass_response_was,
+      new_last_canvass_response: address.last_canvass_response)
   end
 end

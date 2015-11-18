@@ -8,7 +8,7 @@ describe PersonSerializer, :type => :serializer do
         first_name: "Josh",
         last_name: "Smith",
         party_affiliation: "Democrat",
-        canvass_response: "Strongly for",
+        canvass_response: "strongly_for",
         previously_participated_in_caucus_or_primary: false,
         phone: "415-706-4899",
         email: "josh@coderly.com",
