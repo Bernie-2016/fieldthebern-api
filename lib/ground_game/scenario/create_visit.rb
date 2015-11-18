@@ -56,19 +56,16 @@ module GroundGame
           visit
         end
 
-        def create_or_update_address(address_params, visit)
-          address_id = address_params.fetch(:id, nil)
+        # address
 
-          if address_id.nil?
-            address = Address.new
-            address_params = GroundGame::EasyPostHelper.extend_address_params_with_usps(address_params)
-          else
-            address = Address.find(address_id)
-            raise GroundGame::VisitNotAllowed if address.recently_visited?
-          end
+        def create_or_update_address(address_params, visit)
+          address = fetch_or_initialize_address(address_params)
+
+          address_params = GroundGame::EasyPostHelper.extend_address_params_with_usps(address_params) if address.new_record?
+
+          raise GroundGame::VisitNotAllowed if address.recently_visited?
 
           address.assign_attributes(address_params)
-
           assign_address_best_canvas_response(address, address_params)
           assign_address_last_canvas_response(address, address_params)
 
@@ -80,6 +77,31 @@ module GroundGame
           address.save!
           address
         end
+
+        def assign_address_best_canvas_response(address, params)
+          new_value = params[:best_canvass_response]
+          if new_value.present?
+            new_value_is_valid = ["asked_to_leave", "not_yet_visited", "not_home"].include? new_value
+            raise GroundGame::InvalidBestCanvassResponse.new(new_value) unless new_value_is_valid
+            address.best_canvass_response = new_value
+          elsif address.new_record?
+            address.best_canvass_response = "not_home"
+          end
+        end
+
+        def assign_address_last_canvas_response(address, params)
+          address.last_canvass_response = params[:best_canvass_response] if params[:best_canvass_response].present?
+          address.last_canvass_response = params[:last_canvass_response] if params[:last_canvass_response].present?
+        end
+
+        def fetch_or_initialize_address(address_params)
+          address_id = address_params[:id]
+          address = Address.new if address_id.nil?
+          address = Address.find(address_id) if address_id.present?
+          address
+        end
+
+        # people
 
         def create_or_update_people_for_address(people_params, address, visit)
           people_params.map do |person_params|
@@ -132,22 +154,6 @@ module GroundGame
             user.state_code = visit.address.state_code
             user.save!
           end
-        end
-
-        def assign_address_best_canvas_response(address, params)
-          new_value = params[:best_canvass_response]
-          if new_value.present?
-            new_value_is_valid = ["asked_to_leave", "not_yet_visited", "not_home"].include? new_value
-            raise GroundGame::InvalidBestCanvassResponse.new(new_value) unless new_value_is_valid
-            address.best_canvass_response = new_value
-          elsif address.new_record?
-            address.best_canvass_response = "not_home"
-          end
-        end
-
-        def assign_address_last_canvas_response(address, params)
-          address.last_canvass_response = params[:best_canvass_response] if params[:best_canvass_response].present?
-          address.last_canvass_response = params[:last_canvass_response] if params[:last_canvass_response].present?
         end
     end
   end
