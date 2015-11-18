@@ -3,25 +3,28 @@ require 'cgi'
 
 describe "Compatibility API" do
 
-  before do
-    stub_const('ENV', ENV.to_hash.merge("MIN_COMPATIBLE_APP_VERSION" => "1.2.3"))
-  end
+  describe "GET /compatibility" do
 
-  it "returns 'true' if app version is compatible with API version" do
-    app_version = CGI.escape("1.2.4")
+    before do
+      stub_const('ENV', ENV.to_hash.merge("MIN_COMPATIBLE_APP_VERSION" => "1.2.3"))
+    end
 
-    get "#{host}/compatibility/", { version: app_version }
+    it "returns 'true' if app version is compatible with API version" do
+      app_version = CGI.escape("1.2.4")
 
-    expect(last_response.status).to eq 200
-    expect(json.compatible).to be true
-  end
+      get "#{host}/compatibility/", { version: app_version }
 
-  it "returns 'false' if app version is not compatible with API version" do
-    app_version = CGI.escape("1.2.2")
+      expect(last_response.status).to eq 200
+      expect(json.compatible).to be true
+    end
 
-    get "#{host}/compatibility/", { version: app_version }
+    it "returns 'false' if app version is not compatible with API version" do
+      app_version = CGI.escape("1.2.2")
 
-    expect(last_response.status).to eq 200
-    expect(json.compatible).to be false
+      get "#{host}/compatibility/", { version: app_version }
+
+      expect(last_response.status).to eq 200
+      expect(json.compatible).to be false
+    end
   end
 end

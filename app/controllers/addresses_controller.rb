@@ -38,8 +38,4 @@ class AddressesController < ApplicationController
     def search_params
       params.permit(:latitude, :longitude, :street_1, :street_2, :city, :state_code, :zip_code)
     end
-
-    def update_params
-      params.permit(:id).merge(update_params)
-    end
 end
