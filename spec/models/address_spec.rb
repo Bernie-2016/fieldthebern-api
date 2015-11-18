@@ -188,5 +188,37 @@ describe Address do
         expect(address.reload.recently_visited?).to be false
       end
     end
+
+    describe "#best_canvass_response" do
+      it "returns the underlying string value" do
+        address = create(:address, best_canvass_response: "strongly_against")
+        address.best_is_leaning_for!
+        expect(address.best_canvass_response).to eq "leaning_for"
+      end
+    end
+
+    describe "#best_canvass_response_was" do
+      it "returns the underlying string value" do
+        address = create(:address, best_canvass_response: "strongly_against")
+        address.best_canvass_response = "leaning_for"
+        expect(address.best_canvass_response_was).to eq "strongly_against"
+      end
+    end
+
+    describe "#last_canvass_response" do
+      it "returns the underlying string value" do
+        address = create(:address, last_canvass_response: "strongly_against")
+        address.last_is_leaning_for!
+        expect(address.last_canvass_response).to eq "leaning_for"
+      end
+    end
+
+    describe "#last_canvass_response_was" do
+      it "returns the underlying string value" do
+        address = create(:address, last_canvass_response: "strongly_against")
+        address.last_canvass_response = "leaning_for"
+        expect(address.last_canvass_response_was).to eq "strongly_against"
+      end
+    end
   end
 end

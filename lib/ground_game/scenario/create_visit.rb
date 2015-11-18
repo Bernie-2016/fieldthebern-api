@@ -67,16 +67,14 @@ module GroundGame
             raise GroundGame::VisitNotAllowed if address.recently_visited?
           end
 
-
           address.assign_attributes(address_params)
 
           assign_address_best_canvas_response(address, address_params)
           assign_address_last_canvas_response(address, address_params)
 
-          # I do not like that this is here, but I couldn't think of a better way.
           # AddressUpdate absolutely needs to be created after initializing/fetching
           # and updating, but before saving the address due to it needing access to
-          # old and new address attributes.
+          # old and new address attribute values.
           AddressUpdate.create_for_visit_and_address(visit, address)
 
           address.save!
