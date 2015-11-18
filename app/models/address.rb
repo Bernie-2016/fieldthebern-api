@@ -61,13 +61,18 @@ class Address < ActiveRecord::Base
   validates :state_code, presence: true
 
   def assign_most_supportive_resident(person)
-    current_most_supportive_resident = self.most_supportive_resident
-    there_is_no_current_most_supportive_resident = current_most_supportive_resident.nil?
+    current_best = self.most_supportive_resident
 
-    if there_is_no_current_most_supportive_resident or person.more_supportive_than? current_most_supportive_resident
+    if current_best.nil? or person.more_supportive_than? current_best
       self.most_supportive_resident = person
-      self.best_canvass_response = person.canvass_response
+    elsif current_best == person
+      other_people_at_address = people - [current_best]
+      next_best = other_people_at_address.max_by(&:canvass_response_rating)
+
+      self.most_supportive_resident = next_best if next_best.present? and next_best.more_supportive_than? person
     end
+
+    self.best_canvass_response = self.most_supportive_resident.canvass_response
   end
 
   def recently_visited?
@@ -100,7 +105,7 @@ class Address < ActiveRecord::Base
 
     params = GroundGame::EasyPostHelper.extend_address_params_with_usps(params) if address.new_record?
 
-    ensure_best_canvas_response_valid!(params)
+    ensure_best_canvass_response_valid!(params)
 
     address.assign_attributes(params)
     address.assign_last_canvass_response(params)
@@ -110,7 +115,7 @@ class Address < ActiveRecord::Base
 
   private
 
-    def self.ensure_best_canvas_response_valid!(params)
+    def self.ensure_best_canvass_response_valid!(params)
       canvass_response = params[:best_canvass_response]
 
       if not best_canvass_response_valid?(canvass_response)

@@ -127,7 +127,52 @@ describe Address do
         address.assign_most_supportive_resident(less_supportive_person)
 
         expect(address.most_supportive_resident).not_to be less_supportive_person
-        expect(address.best_canvass_response).not_to be :leaning_for
+        expect(address.best_is_leaning_for?).not_to be true
+      end
+
+      context "when an existing person changes their canvass_response" do
+        before do
+          @person = create(:person, canvass_response: "leaning_for")
+          other_person_1 = create(:person, canvass_response: "leaning_against")
+          other_person_2 = create(:person, canvass_response: "strongly_against")
+
+          @address = create(:address,
+            most_supportive_resident: @person,
+            best_canvass_response: @person.canvass_response,
+            people: [@person, other_person_1, other_person_2])
+        end
+
+        context "when the new response is higher" do
+          it "updates best_canvass_response, keeps the same person" do
+            @person.strongly_for!
+            @address.assign_most_supportive_resident(@person)
+
+            expect(@address.most_supportive_resident).to eq @person
+            expect(@address.best_is_strongly_for?).to be true
+          end
+        end
+
+        context "when the new response is lower" do
+          context "when the person still has the highest canvass_response" do
+            it "updates best_canvass_response, keeps the same person" do
+              @person.undecided!
+              @address.assign_most_supportive_resident(@person)
+
+              expect(@address.most_supportive_resident).to eq @person
+              expect(@address.best_is_undecided?).to be true
+            end
+          end
+
+          context "when another person now has the highest canvass_response" do
+            it "updates best_canvass_response and the person" do
+              @person.strongly_against!
+              @address.assign_most_supportive_resident(@person)
+
+              expect(@address.most_supportive_resident).not_to eq @person
+              expect(@address.best_is_leaning_against?).to be true
+            end
+          end
+        end
       end
     end
 
