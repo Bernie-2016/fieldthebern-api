@@ -6,6 +6,7 @@ describe "Address API" do
     it "requires authentication" do
       get "#{host}/addresses"
       expect(last_response.status).to eq 401
+      expect(json).to be_a_valid_json_api_error.with_id "NOT_AUTHORIZED"
     end
 
     context "when authenticated" do
