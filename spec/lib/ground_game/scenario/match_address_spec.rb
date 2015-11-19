@@ -65,10 +65,10 @@ module GroundGame
 
             result = MatchAddress.new(address_params).call
 
+
             expect(result.success?).to be false
-            expect(result.error.status).to eq 404
-            expect(result.error.detail).to eq "The requested address does not exist in the database."
-            expect(result.address).to be_nil
+            expect(result.error.class).to eq ScenarioError
+            expect(result.error.hash).to be_a_valid_json_api_error.with_id "ADDRESS_UNMATCHED"
           end
 
           it "handles an EasyPost::Error" do
@@ -81,9 +81,8 @@ module GroundGame
               result = MatchAddress.new(address_params).call
 
               expect(result.success?).to be false
-              expect(result.error.status).to eq 400
-              expect(result.error.detail).to eq "Insufficient address data provided. A city and state or a zip must be provided."
-              expect(result.address).to be_nil
+              expect(result.error.class).to eq ScenarioError
+              expect(result.error.hash).to be_a_valid_json_api_error.with_id "EASYPOST_ERROR"
             end
 
 
@@ -96,9 +95,8 @@ module GroundGame
               result = MatchAddress.new(address_params).call
 
               expect(result.success?).to be false
-              expect(result.error.status).to eq 400
-              expect(result.error.detail).to eq "Insufficient address data provided. A street must be provided."
-              expect(result.address).to be_nil
+              expect(result.error.class).to eq ScenarioError
+              expect(result.error.hash).to be_a_valid_json_api_error.with_id "EASYPOST_ERROR"
             end
           end
         end

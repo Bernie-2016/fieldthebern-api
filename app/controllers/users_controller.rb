@@ -1,6 +1,6 @@
 
 class UsersController < ApplicationController
-  before_filter :require_login, only: [:update, :me]
+  before_action :doorkeeper_authorize!, only: [:update, :me]
 
   def create
     if creating_with_facebook?

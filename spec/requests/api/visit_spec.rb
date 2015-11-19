@@ -511,12 +511,7 @@ describe "Visit API" do
             included: [ { type: "addresses", id: 1, attributes: { } }, { type: "people", id: 10, attributes: {} } ]
           }, token
           expect(last_response.status).to eq 404
-          expect(json.errors.length).to eq 1
-          error = json.errors.first
-          expect(error.id).to eq "RECORD_NOT_FOUND"
-          expect(error.title).to eq "Record not found"
-          expect(error.detail).to eq "Couldn't find Person with 'id'=10"
-          expect(error.status).to eq 404
+          expect(json).to be_a_valid_json_api_error.with_id "RECORD_NOT_FOUND"
         end
       end
 
