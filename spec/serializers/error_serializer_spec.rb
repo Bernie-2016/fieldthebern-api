@@ -39,7 +39,7 @@ describe ErrorSerializer do
       error = result[:errors].first
       expect(error[:id]).to eq "VISIT_NOT_ALLOWED"
       expect(error[:title]).to eq "Visit not allowed"
-      expect(error[:detail]).to eq "You can't submit the same address so quickly after it was last visited."
+      expect(error[:detail]).to eq "You can't canvass the same address so soon after it was last canvassed."
       expect(error[:status]).to eq 403
     end
 
@@ -70,15 +70,15 @@ describe ErrorSerializer do
     end
 
     it "can serialize EasyPost::Error" do
-      easypost_error = EasyPost::Error.new("A message", 400)
+      easypost_error = EasyPost::Error.new("A message", 400, nil, { error: { code: "A.CODE"}})
       result = ErrorSerializer.serialize(easypost_error)
 
       expect(result[:errors]).not_to be_nil
       expect(result[:errors].length).to eq 1
 
       error = result[:errors].first
-      expect(error[:id]).to eq "EASYPOST_ERROR"
-      expect(error[:title]).to eq "Easypost error"
+      expect(error[:id]).to eq "EASYPOST_UNKNOWN_ERROR"
+      expect(error[:title]).to eq "Unknown address error"
       expect(error[:detail]).to eq "A message"
       expect(error[:status]).to eq 400
     end

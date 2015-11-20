@@ -71,8 +71,8 @@ module GroundGame
             expect(result.error.hash).to be_a_valid_json_api_error.with_id "ADDRESS_UNMATCHED"
           end
 
-          it "handles an EasyPost::Error" do
-            address_params ={
+          it "handles an EasyPost::Error when there's no state" do
+            address_params = {
               street_1: "5th avenue",
               city: "New York",
             }
@@ -81,12 +81,19 @@ module GroundGame
               result = MatchAddress.new(address_params).call
 
               expect(result.success?).to be false
+              expect(result.error.status).to eq 400
+              expect(result.error.id).to eq "EASYPOST_ADDRESS_VERIFICATION_ERROR"
+              expect(result.error.title).to eq "Unable to verify address"
+              expect(result.error.detail).to eq "Insufficient address data provided. A city and state or a zip must be provided."
+              expect(result.address).to be_nil
               expect(result.error.class).to eq ScenarioError
-              expect(result.error.hash).to be_a_valid_json_api_error.with_id "EASYPOST_ERROR"
+              expect(result.error.hash).to be_a_valid_json_api_error.with_id "EASYPOST_ADDRESS_VERIFICATION_ERROR"
             end
+          end
 
+          it "handles an EasyPost::Error when there's no street" do
 
-            address_params ={
+            address_params = {
               city: "New York",
               state_code: "NY",
             }
@@ -95,8 +102,33 @@ module GroundGame
               result = MatchAddress.new(address_params).call
 
               expect(result.success?).to be false
+              expect(result.error.status).to eq 400
+              expect(result.error.id).to eq "EASYPOST_ADDRESS_VERIFICATION_ERROR"
+              expect(result.error.title).to eq "Unable to verify address"
+              expect(result.error.detail).to eq "Insufficient address data provided. A street must be provided."
+              expect(result.address).to be_nil
               expect(result.error.class).to eq ScenarioError
-              expect(result.error.hash).to be_a_valid_json_api_error.with_id "EASYPOST_ERROR"
+              expect(result.error.hash).to be_a_valid_json_api_error.with_id "EASYPOST_ADDRESS_VERIFICATION_ERROR"
+            end
+          end
+
+          it "handles an EasyPost::Error when address is not specific enough" do
+            address_params = {
+              street_1: "4166 Wilson Ave",
+              city: "San Diego",
+              state_code: "CA",
+              zip_code: "92104"
+            }
+
+            VCR.use_cassette "lib/ground_game/scenario/match_address/failed_easypost_request_not_specific_enough" do
+              result = MatchAddress.new(address_params).call
+
+              expect(result.success?).to be false
+              expect(result.error.status).to eq 400
+              expect(result.error.id).to eq "EASYPOST_ADDRESS_VERIFICATION_ERROR"
+              expect(result.error.title).to eq "Unable to verify address"
+              expect(result.error.detail).to eq "The address you entered was found but more information is needed (such as an apartment, suite, or box number) to match to a specific address."
+              expect(result.address).to be_nil
             end
           end
         end

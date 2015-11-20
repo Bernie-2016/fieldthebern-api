@@ -1,5 +1,6 @@
 require "ground_game/errors/visit_not_allowed"
 require "ground_game/errors/invalid_best_canvass_response"
+require "ground_game/easypost_error_adapter"
 
 class ErrorSerializer
   def self.serialize(error)
@@ -57,11 +58,12 @@ class ErrorSerializer
     end
 
     def self.serialize_easypost_error(error)
+      adapted_error = GroundGame::EasyPostErrorAdapter.new(error)
       return {
-        id: "EASYPOST_ERROR",
-        title: "Easypost error",
-        detail: error.message,
-        status: error.http_status
+        id: adapted_error.id,
+        title: adapted_error.title,
+        detail: adapted_error.detail,
+        status: adapted_error.status
       }
     end
 
