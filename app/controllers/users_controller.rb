@@ -45,12 +45,12 @@ class UsersController < ApplicationController
 
     if user.save
       InitializeNewFacebookUserWorker.perform_async(user.id)
+
       if photo_param?
         UpdateProfilePictureWorker.perform_async(user.id)
       else
         AddFacebookProfilePicture.perform_async(user.id)
       end
-      UpdateUsersLeaderboardsWorker.perform_async(user.id)
 
       render json: user
     else
