@@ -70,15 +70,15 @@ describe ErrorSerializer do
     end
 
     it "can serialize EasyPost::Error" do
-      easypost_error = EasyPost::Error.new("A message", 400)
+      easypost_error = EasyPost::Error.new("A message", 400, nil, { error: { code: "A.CODE"}})
       result = ErrorSerializer.serialize(easypost_error)
 
       expect(result[:errors]).not_to be_nil
       expect(result[:errors].length).to eq 1
 
       error = result[:errors].first
-      expect(error[:id]).to eq "EASYPOST_ERROR"
-      expect(error[:title]).to eq "Easypost error"
+      expect(error[:id]).to eq "EASYPOST_ERROR_A_CODE"
+      expect(error[:title]).to eq "Easypost: A code"
       expect(error[:detail]).to eq "A message"
       expect(error[:status]).to eq 400
     end

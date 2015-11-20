@@ -55,9 +55,12 @@ class ErrorSerializer
     end
 
     def self.serialize_easypost_error(error)
+      ep_code = error.code
+      friendly_code = ep_code.gsub(".", " ").capitalize
+      id_code = ep_code.gsub(".", "_")
       return {
-        id: "EASYPOST_ERROR",
-        title: "Easypost error",
+        id: "EASYPOST_ERROR_#{id_code}",
+        title: "Easypost: #{friendly_code}",
         detail: error.message,
         status: error.http_status
       }
