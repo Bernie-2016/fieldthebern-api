@@ -4,6 +4,6 @@ module GroundGame
       super ERROR_MESSAGE
     end
     private
-      ERROR_MESSAGE = "You can't submit the same address so quickly after it was last visited."
+      ERROR_MESSAGE = "You can't canvass the same address so soon after it was last canvassed."
   end
 end
