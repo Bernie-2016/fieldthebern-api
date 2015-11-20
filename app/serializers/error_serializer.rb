@@ -16,6 +16,8 @@ class ErrorSerializer
       return serialize_easypost_error(error) if error.class == EasyPost::Error
       return serialize_address_unmatched_error(error) if error.class == GroundGame::AddressUnmatched
       return serialize_facebook_authentication_error(error) if error.class == Koala::Facebook::AuthenticationError
+      return serialize_doorkeeper_oauth_invalid_token_response(error) if error.class == Doorkeeper::OAuth::InvalidTokenResponse
+      return serialize_doorkeeper_oauth_error_response(error) if error.class == Doorkeeper::OAuth::ErrorResponse
     end
 
     def self.serialize_argument_error(error)
@@ -78,6 +80,24 @@ class ErrorSerializer
         title: "Facebook authentication error",
         detail: error.fb_error_message,
         status: error.http_status
+      }
+    end
+
+    def self.serialize_doorkeeper_oauth_invalid_token_response(error)
+      return {
+        id: "NOT_AUTHORIZED",
+        title: "Not authorized",
+        detail: error.description,
+        status: 401
+      }
+    end
+
+    def self.serialize_doorkeeper_oauth_error_response(error)
+      return {
+        id: "INVALID_GRANT",
+        title: "Invalid grant",
+        detail: error.description,
+        status: 401
       }
     end
 end

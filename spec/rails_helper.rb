@@ -42,7 +42,6 @@ RSpec.configure do |config|
     end
   end
 
-
   def host
     "http://api.lvh.me:3000"
   end

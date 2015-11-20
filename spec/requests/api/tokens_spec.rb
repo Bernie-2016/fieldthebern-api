@@ -27,7 +27,7 @@ describe "Tokens API" do
         }
 
         expect(last_response.status).to eq 401
-        expect(json.error).to eq 'invalid_grant'
+        expect(json).to be_a_valid_json_api_error.with_id "INVALID_GRANT"
       end
 
       it "fails with 401 when password is invalid" do
@@ -38,7 +38,7 @@ describe "Tokens API" do
         }
 
         expect(last_response.status).to eq 401
-        expect(json.error).to eq 'invalid_grant'
+        expect(json).to be_a_valid_json_api_error.with_id "INVALID_GRANT"
       end
 
       describe "automatic leaderboard update" do
