@@ -346,10 +346,8 @@ module GroundGame
 
               error = CreateVisit.new(visit_params, address_params, people_params, user).call.error
 
-              expect(error.id).to eq "ARGUMENT_ERROR"
-              expect(error.title).to eq "Argument error"
-              expect(error.detail).to eq "'invalid response' is not a valid canvass_response"
-              expect(error.status).to eq 422
+              expect(error.class).to eq ScenarioError
+              expect(error.hash).to be_a_valid_json_api_error.with_id "ARGUMENT_ERROR"
             end
 
             it "handles ActiveRecord::RecordNotFound with code 404" do
@@ -359,10 +357,8 @@ module GroundGame
 
               error = CreateVisit.new(visit_params, address_params, people_params, user).call.error
 
-              expect(error.id).to eq "RECORD_NOT_FOUND"
-              expect(error.title).to eq "Record not found"
-              expect(error.detail).to eq "Couldn't find Address with 'id'=11"
-              expect(error.status).to eq 404
+              expect(error.class).to eq ScenarioError
+              expect(error.hash).to be_a_valid_json_api_error.with_id "RECORD_NOT_FOUND"
             end
 
             it "handles GroundGame::VisitNotAllowedError with code 403" do
@@ -374,10 +370,8 @@ module GroundGame
 
               error = CreateVisit.new(visit_params, address_params, people_params, user).call.error
 
-              expect(error.id).to eq "VISIT_NOT_ALLOWED"
-              expect(error.title).to eq "Visit not allowed"
-              expect(error.detail).to eq "You can't canvass the same address so soon after it was last canvassed."
-              expect(error.status).to eq 403
+              expect(error.class).to eq ScenarioError
+              expect(error.hash).to be_a_valid_json_api_error.with_id "VISIT_NOT_ALLOWED"
             end
 
             it "handles GroundGame::InvalidBestCanvassResponse with code 422" do
@@ -387,10 +381,8 @@ module GroundGame
 
               error = CreateVisit.new(visit_params, address_params, people_params, user).call.error
 
-              expect(error.id).to eq "INVALID_BEST_CANVASS_RESPONSE"
-              expect(error.title).to eq "Invalid best canvass response"
-              expect(error.detail).to eq "Invalid argument 'strongly_for' for address.best_canvass_response"
-              expect(error.status).to eq 422
+              expect(error.class).to eq ScenarioError
+              expect(error.hash).to be_a_valid_json_api_error.with_id "INVALID_BEST_CANVASS_RESPONSE"
             end
           end
 

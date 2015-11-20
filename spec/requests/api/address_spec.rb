@@ -6,6 +6,7 @@ describe "Address API" do
     it "requires authentication" do
       get "#{host}/addresses"
       expect(last_response.status).to eq 401
+      expect(json).to be_a_valid_json_api_error.with_id "NOT_AUTHORIZED"
     end
 
     context "when authenticated" do
@@ -42,12 +43,7 @@ describe "Address API" do
           }, token
 
           expect(last_response.status).to eq 404
-          expect(json.errors.length).to eq 1
-          error = json.errors.first
-          expect(error.id).to eq "ADDRESS_UNMATCHED"
-          expect(error.title).to eq "Address unmatched"
-          expect(error.detail).to eq "The requested address does not exist in the database."
-          expect(error.status).to eq 404
+          expect(json).to be_a_valid_json_api_error.with_id "ADDRESS_UNMATCHED"
         end
 
         it "returns an existing address with people included if the address exists", vcr: { cassette_name: "requests/api/addresses/succesful_easypost_response" } do

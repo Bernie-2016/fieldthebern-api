@@ -8,16 +8,22 @@ class TokensController < Doorkeeper::TokensController
 
     UpdateUsersLeaderboardsWorker.perform_async(user_id) if user_id
 
-  rescue Doorkeeper::Errors::DoorkeeperError, Doorkeeper::OAuth::Error => e
-    handle_token_exception e
+  rescue Doorkeeper::Errors::DoorkeeperError,
+         Doorkeeper::Errors::InvalidGrantReuse,
+         Doorkeeper::OAuth::Error,
+         Koala::Facebook::AuthenticationError,
+         ActiveRecord::RecordNotFound => e
+
     Raven.capture_exception e
-  rescue Koala::Facebook::AuthenticationError, ActiveRecord::RecordNotFound => e
-    Raven.capture_exception e
-    error_hash = ErrorSerializer.serialize(e)
-    render json: error_hash, status: error_hash[:errors][0][:status]
+    render_error e
   end
 
   private
+
+    def render_error(error)
+      error_hash = ErrorSerializer.serialize(error)
+      render json: error_hash, status: error_hash[:errors][0][:status]
+    end
 
     def authenticate_with_facebook
       user_id = get_user_id_from_facebook_information
@@ -51,6 +57,14 @@ class TokensController < Doorkeeper::TokensController
 
     def authenticate_with_credentials
       response = strategy.authorize
+      if response.class == Doorkeeper::OAuth::TokenResponse
+        handle_authentication_successful response
+      elsif response.class == Doorkeeper::OAuth::ErrorResponse
+        render_error response
+      end
+    end
+
+    def handle_authentication_successful(response)
       self.headers.merge! response.headers
       self.status = response.status
 
@@ -60,4 +74,5 @@ class TokensController < Doorkeeper::TokensController
 
       return user_id
     end
+
 end

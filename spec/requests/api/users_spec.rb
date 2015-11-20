@@ -493,6 +493,7 @@ describe "Users API" do
       }
 
       expect(last_response.status).to eq 401
+      expect(json).to be_a_valid_json_api_error.with_id "NOT_AUTHORIZED"
     end
 
     it 'successfully updates yourself when you are logged in' do
@@ -618,6 +619,7 @@ describe "Users API" do
     it 'should return unauthorized if not logged in' do
       get "#{host}/users/me"
       expect(last_response.status).to eq 401
+      expect(json).to be_a_valid_json_api_error.with_id "NOT_AUTHORIZED"
     end
 
     it 'should return the correct data if logged in' do

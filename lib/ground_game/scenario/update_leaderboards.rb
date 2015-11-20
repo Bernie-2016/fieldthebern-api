@@ -1,3 +1,5 @@
+require 'ground_game/scenario/update_users_friend_leaderboard'
+
 module GroundGame
   module Scenario
     class UpdateLeaderboards
@@ -7,8 +9,12 @@ module GroundGame
 
       def call
         everyone_leaderboard.rank_user(@user)
-        friends_leaderboard.rank_user(@user)
         state_leaderboard.rank_user(@user) if @user.state_code
+
+        friends_leaderboard.rank_user(@user)
+        @user.followers.each do |friend|
+          friends_leaderboard.rank_user(friend)
+        end
       end
 
       private

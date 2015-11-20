@@ -1,6 +1,6 @@
 
 class UsersController < ApplicationController
-  before_filter :require_login, only: [:update, :me]
+  before_action :doorkeeper_authorize!, only: [:update, :me]
 
   def create
     if creating_with_facebook?
@@ -45,12 +45,12 @@ class UsersController < ApplicationController
 
     if user.save
       InitializeNewFacebookUserWorker.perform_async(user.id)
+
       if photo_param?
         UpdateProfilePictureWorker.perform_async(user.id)
       else
         AddFacebookProfilePicture.perform_async(user.id)
       end
-      UpdateUsersLeaderboardsWorker.perform_async(user.id)
 
       render json: user
     else

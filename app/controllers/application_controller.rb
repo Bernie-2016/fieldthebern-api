@@ -4,6 +4,10 @@ class ApplicationController < ActionController::API
 
   before_action :set_default_response_format
 
+  def doorkeeper_unauthorized_render_options(error: nil)
+    { json: ErrorSerializer.serialize(error) }
+  end
+
   def signed_in?
     current_user.present?
   end
