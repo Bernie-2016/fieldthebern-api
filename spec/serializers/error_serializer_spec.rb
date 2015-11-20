@@ -77,8 +77,8 @@ describe ErrorSerializer do
       expect(result[:errors].length).to eq 1
 
       error = result[:errors].first
-      expect(error[:id]).to eq "EASYPOST_ERROR_A_CODE"
-      expect(error[:title]).to eq "Easypost: A code"
+      expect(error[:id]).to eq "EASYPOST_UNKNOWN_ERROR"
+      expect(error[:title]).to eq "Unknown address error"
       expect(error[:detail]).to eq "A message"
       expect(error[:status]).to eq 400
     end
