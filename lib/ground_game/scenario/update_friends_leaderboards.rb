@@ -6,10 +6,15 @@ module GroundGame
       def initialize(user)
         @user = user
         @followers = user.followers
+        @following = user.following
       end
 
       def call
         @followers.each do |friend|
+          GroundGame::Scenario::UpdateUsersFriendLeaderboard.new(friend, @user).call
+        end
+
+        @following.each do |friend|
           GroundGame::Scenario::UpdateUsersFriendLeaderboard.new(friend, @user).call
         end
       end
