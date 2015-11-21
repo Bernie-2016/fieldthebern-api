@@ -59,7 +59,7 @@ describe User do
       end
 
       it 'should have the right path' do
-        expect(@user.photo.url(:thumb)).to include "users/#{@user.id}/thumb.jpg"
+        expect(@user.photo.url(:thumb)).to include "users/#{@user.id}/thumb"
       end
     end
   end
