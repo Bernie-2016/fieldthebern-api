@@ -22,6 +22,7 @@ FactoryGirl.define do
         user.photo_file_name = 'user.jpg'
         user.photo_content_type = 'image/jpeg'
         user.photo_file_size = 1024
+        user.photo_updated_at = Time.now
       end
     end
   end
