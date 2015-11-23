@@ -71,6 +71,20 @@ module GroundGame
             expect(user.state_code).to eq "CA"
           end
 
+          it "sets the address 'last_visited_by' to the user creating the visit" do
+            user = create(:user, email: "josh@cookacademy.com")
+
+            address = create(:address, id: 1)
+            create(:person, id: 10, address: address, canvass_response: :unknown, party_affiliation: :unknown_affiliation)
+
+            visit_params = { duration_sec: 150 }
+            address_params = { id: 1 }
+            people_params = [{ id: 10 }]
+
+            result = CreateVisit.new(visit_params, address_params, people_params, user).call
+            expect(address.reload.last_visited_by_id).to eq user.id
+          end
+
           context "when the address already exists" do
 
             it "updates address.visited_at" do
