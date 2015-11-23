@@ -7,6 +7,19 @@ class ErrorSerializer
     { errors: [serialize_error(error)] }
   end
 
+  def self.serialize_validation_errors(errors)
+    return if errors.nil?
+
+    json = {}
+    new_hash = errors.to_hash(true).map do |k, v|
+      v.map do |msg|
+        { id: "VALIDATION_ERROR", title: "#{k.capitalize} error", detail: msg, status: 422 }
+      end
+    end.flatten
+    json[:errors] = new_hash
+    json
+  end
+
   private
 
     def self.serialize_error(error)

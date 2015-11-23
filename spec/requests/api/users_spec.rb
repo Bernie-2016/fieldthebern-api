@@ -354,8 +354,7 @@ describe "Users API" do
           }
 
           expect(last_response.status).to eq 422
-
-          expect(json.errors.password).to eq "can't be blank"
+          expect(json).to be_a_valid_json_api_error.with_id "VALIDATION_ERROR"
         end
       end
 
@@ -375,7 +374,7 @@ describe "Users API" do
 
           expect(last_response.status).to eq 422
 
-          expect(json.errors.email).to eq "has already been taken"
+          expect(json).to be_a_valid_json_api_error.with_id "VALIDATION_ERROR"
         end
       end
 

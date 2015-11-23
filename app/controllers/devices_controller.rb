@@ -22,8 +22,4 @@ class DevicesController < ApplicationController
       :token, :enabled, :platform
     ).merge(user_id: current_user.id)
   end
-
-  def render_validation_errors errors
-    render json: {errors: errors.to_h}, status: 422
-  end
 end
