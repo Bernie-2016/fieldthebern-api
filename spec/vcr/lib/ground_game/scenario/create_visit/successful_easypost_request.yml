@@ -1,0 +1,65 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: https://api.easypost.com/v2/addresses/create_and_verify
+    body:
+      encoding: US-ASCII
+      string: address[street1]=5th%20Avenue&address[city]=New%20York&address[state]=NY
+    headers:
+      Accept:
+      - "*/*; q=0.5, application/xml"
+      Accept-Encoding:
+      - gzip, deflate
+      User-Agent:
+      - EasyPost/v2 RubyClient/2.1.8
+      Authorization:
+      - Bearer EASYPOST_API_KEY
+      Content-Type:
+      - application/x-www-form-urlencoded
+      Content-Length:
+      - '72'
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Date:
+      - Tue, 03 Nov 2015 12:16:31 GMT
+      Status:
+      - 200 OK
+      Connection:
+      - close
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Xss-Protection:
+      - 1; mode=block
+      X-Content-Type-Options:
+      - nosniff
+      Location:
+      - "/api/v2/addresses/adr_ee167f3e3bff4e60bfdb8f8aceb6845c"
+      Content-Type:
+      - application/json; charset=utf-8
+      Etag:
+      - W/"6940bebfedca4cf33e4a42a7779996ab"
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      X-Request-Id:
+      - 326fbe30-708a-484e-a185-57e9616a97b3
+      X-Runtime:
+      - '7.567162'
+      X-Node:
+      - web3sj, 7d16932bbc
+      X-Backend:
+      - easypost
+      X-Proxied:
+      - lb4sj, e7a611e00e
+      Strict-Transport-Security:
+      - max-age=86400
+    body:
+      encoding: UTF-8
+      string: '{"address":{"id":"adr_ee167f3e3bff4e60bfdb8f8aceb6845c","object":"Address","created_at":"2015-11-03T12:16:31Z","updated_at":"2015-11-03T12:16:31Z","name":null,"company":null,"street1":"5
+        AVENUE A","street2":"","city":"NEW YORK","state":"NY","zip":"10009-7944","country":"US","phone":null,"email":null,"mode":"test","carrier_facility":null,"residential":false,"federal_tax_id":null}}'
+    http_version: 
+  recorded_at: Tue, 03 Nov 2015 12:16:32 GMT
+recorded_with: VCR 2.9.3
