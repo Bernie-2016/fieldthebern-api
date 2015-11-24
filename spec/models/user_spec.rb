@@ -61,6 +61,16 @@ describe User do
       it 'should have the right path' do
         expect(@user.photo.url(:thumb)).to include "users/#{@user.id}/thumb"
       end
+
+      it 'should change the full url when the photo gets modified' do
+        old_url = @user.photo.url
+        allow(Time).to receive(:now).and_return(Time.now + 1.second)
+        # this simulates a reprocessing of the photo, while skiping the actual request
+        @user.photo.send(:assign_timestamps)
+        @user.photo.send(:save)
+        new_url = @user.photo.url
+        expect(new_url).not_to eq old_url
+      end
     end
   end
 
