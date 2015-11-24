@@ -3,6 +3,73 @@ require "ground_game/errors/visit_not_allowed"
 require "ground_game/errors/invalid_best_canvass_response"
 require "ground_game/scenario/scenario_result"
 
+###
+#
+# This could easily just become CreateOrUpdateVisit
+#
+# 1. If visit_params has an id, we fetch the visit
+# 2. We update the one visit attribute
+# 3. Handling address_params
+#    - Do we allow changing the address for the visit? I'm thinking no, that would then be a new visit.
+#    - If we allow changing the address,
+#      - We find the old one through the address_update associated with the visit,
+#      - If the new id is different than the old id, we fetch and update the new address
+#      - If there's no new id, we create a new address
+#      - Additionally, we can use the address_update to determine if the old address was created with this visit.
+#          In that case, we could delete it. We should definitely delete its address_update
+#    - If we don't allow changing the address in the interface, then we just
+#      - Fetch the address by id and update it
+#      - Fetch the address_update and update it
+# 4. Handling people params
+#    - In this case, I think it makes sense that we can create or update a completely different set of people,
+#      which includes adding new people, but there are arguments for and against it.
+#    - If we can
+#      - We get the people updates created by this visit and figure out which people are created or modified
+#      - We compare that list with people params
+#      - For each person in the old list
+#        - If there's no person_param with that id and the person vas created with this visit,
+#          we could delete it and should definitely its person update
+#      - For each person in the people_params
+#        - If there's no id, we create that person and a person_update
+#        - If there is an id, we fetch the person and update it. We also fetch the person_update and update it.
+#    - If we can't modify the list of people
+#      - For each person in person_params
+#        - We fetch the person by id and update it
+#        - We fetch the person_update and update it
+# 5. Handling score
+#    - We should probably just delete the old score and create a new one
+#    - We use Visit#number_of_updated_people to determine the score, which depends on
+#      Visit#people_updates.count. This means we probably should not be creating new x_update rows and just
+#      update old ones instead. Otherwise, there is no way for us to figure out which updates are active.
+#
+# ADDENDUM: Why we update/delete old x_update records?
+# - A visit itself doesn't store a list of records it updates.
+# - PeopleUpdates and AddressUpdates serve that purpose.
+# - Right now, there is no way for us to know if the Address/PersonUpdate we're looking at is still valid,
+#   or if it has been overriden by another.
+# - Because of that, every time we update a record, we should fetch the associated x_update and
+#   update it as well, instead of just creating a new one
+# - Also, we we want to allow changing the address associated with the visit, we should either
+#   a. Find the old address update and delete it, create a new one
+#   b. Find the old address update and update it, including the address it's associated with
+# - For people associated with the visit, it's slightly different
+#   - We have to delete the old person_update for people no longer associated with the visit, since it's a
+#     one-to-many relationship
+#
+# ADDENDUM: Updating an x_update record
+#   - We leave the old_x attributes untouched
+#   - We update the new_x attributes
+#   - We leave the update_type untouched
+#
+#   - If we're changing the address associated with the visit, then we also update the
+#     address association, as well as the old_x attributes
+#
+# QUESTIONS
+#
+# 1. We mentioned the editing serves for quick changes shortly after submiting a visit. Should we be
+#    enforcing what "shortly" means, as in, not allowing the edit if too much time has passed?
+###
+
 module GroundGame
   module Scenario
     class CreateVisitResult < ScenarioResult
