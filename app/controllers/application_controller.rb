@@ -33,7 +33,8 @@ class ApplicationController < ActionController::API
   end
 
   def render_validation_errors errors
-    render json: {errors: errors.to_h}, status: 422
+    error_hash = ErrorSerializer.serialize errors
+    render json: error_hash, status: error_hash[:errors][0][:status]
   end
 
   private

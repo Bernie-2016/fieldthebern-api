@@ -88,8 +88,4 @@ class UsersController < ApplicationController
     user_params[:base_64_photo_data].present?
   end
 
-  def render_validation_errors errors
-    render json: {errors: errors.to_h}, status: 422
-  end
-
 end
