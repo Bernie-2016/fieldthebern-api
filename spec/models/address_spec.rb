@@ -14,17 +14,20 @@ describe Address do
     it {should have_db_column(:state_code).of_type(:string) }
     it {should have_db_column(:zip_code).of_type(:string) }
     it {should have_db_column(:visited_at).of_type(:datetime) }
-    it {should have_db_column(:most_supportive_resident_id).of_type(:integer) }
     it {should have_db_column(:usps_verified_street_1).of_type(:string) }
     it {should have_db_column(:usps_verified_city).of_type(:string) }
     it {should have_db_column(:usps_verified_zip).of_type(:string) }
     it {should have_db_column(:best_canvass_response).of_type(:string).with_options(default: "not_yet_visited") }
     it {should have_db_column(:last_canvass_response).of_type(:string).with_options(default: "unknown") }
+
+    it {should have_db_column(:most_supportive_resident_id).of_type(:integer) }
+    it {should have_db_column(:last_visited_by_id).of_type(:integer) }
   end
 
   context 'associations' do
     it { should have_many(:people) }
-    it { should belong_to(:most_supportive_resident) }
+    it { should belong_to(:most_supportive_resident).class_name("Person") }
+    it { should belong_to(:last_visited_by).class_name("User") }
   end
 
   context 'validations' do

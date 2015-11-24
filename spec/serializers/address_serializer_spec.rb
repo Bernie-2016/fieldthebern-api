@@ -3,7 +3,7 @@ require "rails_helper"
 describe AddressSerializer, :type => :serializer do
 
   context "individual resource representation" do
-    let(:resource) { build(:address, :with_1_person) }
+    let(:resource) { build(:address, :with_1_person, last_visited_by: create(:user)) }
 
     let(:serializer) { AddressSerializer.new(resource) }
     let(:serialization) { ActiveModel::Serializer::Adapter.create(serializer) }
@@ -89,15 +89,37 @@ describe AddressSerializer, :type => :serializer do
         expect(subject["most_supportive_resident"]).not_to be_nil
         expect(subject["most_supportive_resident"]["data"]["id"]).to eq resource.most_supportive_resident_id.to_s
       end
+
+      it "should include a 'last_visited_by' relationship" do
+        expect(subject["last_visited_by"]).not_to be_nil
+        expect(subject["last_visited_by"]["data"]["id"]).to eq resource.last_visited_by_id.to_s
+      end
     end
 
     context "includes" do
-      subject do
-        JSON.parse(serialization.to_json)["data"]["includes"]
+      context "when including 'last_visited_by'" do
+        let(:serialization) { ActiveModel::Serializer::Adapter.create(serializer, include: ["last_visited_by"]) }
+
+        subject do
+          JSON.parse(serialization.to_json)["included"]
+        end
+
+        it "should not be empty" do
+          expect(subject).not_to be_nil
+          expect(subject.first["id"]).not_to be nil
+          expect(subject.first["type"]).to eq "users"
+        end
       end
 
-      it "should be empty" do
-        expect(subject).to be_nil
+      context "when not including anything" do
+
+        subject do
+          JSON.parse(serialization.to_json)["included"]
+        end
+
+        it "should be empty" do
+          expect(subject).to be_nil
+        end
       end
     end
   end

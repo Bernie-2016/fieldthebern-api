@@ -15,14 +15,14 @@ class AddressesController < ApplicationController
 
     def match_addresses_using_radius
       addresses = Address.within(index_params[:radius], origin: [index_params[:latitude], index_params[:longitude]])
-                         .includes([:most_supportive_resident, :people])
-      render json: addresses
+                         .includes([:most_supportive_resident, :people, :last_visited_by])
+      render json: addresses, include: ['last_visited_by']
     end
 
     def match_address_using_search_parameters
       result = GroundGame::Scenario::MatchAddress.new(search_params).call
       if result.success?
-        render json: [result.address], include: ['people']
+        render json: [result.address], include: ['people', 'last_visited_by']
       else
         render json: result.error.hash, status: result.error.status
       end

@@ -4,6 +4,7 @@ require "ground_game/errors/visit_not_allowed"
 class Address < ActiveRecord::Base
   has_many :people
   belongs_to :most_supportive_resident, class_name: "Person"
+  belongs_to :last_visited_by, class_name: "User"
 
   acts_as_mappable :default_units => :meters,
                    :default_formula => :sphere,

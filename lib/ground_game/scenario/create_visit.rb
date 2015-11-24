@@ -42,6 +42,7 @@ module GroundGame
 
           address = create_or_update_address(address_params, visit)
           address.visited_at = DateTime.now
+          address.last_visited_by = user
 
           people = create_or_update_people_for_address(people_params, address, visit)
 
