@@ -42,6 +42,8 @@ gem 'unicorn'
 
 gem "sentry-raven"
 
+gem 'newrelic_rpm'
+
 gem 'rack-cors', require: 'rack/cors'
 
 group :development, :production do
