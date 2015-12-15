@@ -1,5 +1,6 @@
 require "ground_game/errors/visit_not_allowed"
 require "ground_game/errors/invalid_best_canvass_response"
+require "ground_game/errors/address_unmatched"
 require "ground_game/easypost_error_adapter"
 
 class ErrorSerializer

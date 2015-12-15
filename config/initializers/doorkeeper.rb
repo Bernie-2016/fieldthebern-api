@@ -1,4 +1,6 @@
 Doorkeeper.configure do
+  use_refresh_token
+
   # Change the ORM that doorkeeper will use (needs plugins)
   orm :active_record
 
