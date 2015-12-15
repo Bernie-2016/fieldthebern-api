@@ -23,13 +23,13 @@ describe "EmberIndex API" do
         allow(Rails.env).to receive(:development?).and_return true
       end
 
-      it "fetches 'code-corps-ember:index:__development__' from redis" do
-        expect_any_instance_of(Redis).to receive(:get).with("code-corps-ember:index:__development__")
+      it "fetches 'fieldthebern-ember:index:__development__' from redis" do
+        expect_any_instance_of(Redis).to receive(:get).with("fieldthebern-ember:index:__development__")
         get "#{host}"
       end
 
       it "renders the fetched index" do
-        allow_any_instance_of(Redis).to receive(:get).with("code-corps-ember:index:__development__").and_return "HELLO DEV"
+        allow_any_instance_of(Redis).to receive(:get).with("fieldthebern-ember:index:__development__").and_return "HELLO DEV"
         get "#{host}"
         expect(last_response.status).to eq 200
         expect(last_response.body).to eq "HELLO DEV"
@@ -42,13 +42,13 @@ describe "EmberIndex API" do
         @revision = "abcd123"
       end
 
-      it "fetches 'code-corps-ember:index:{revision}' from redis" do
-        expect_any_instance_of(Redis).to receive(:get).with("code-corps-ember:index:#{@revision}")
+      it "fetches 'fieldthebern-ember:index:{revision}' from redis" do
+        expect_any_instance_of(Redis).to receive(:get).with("fieldthebern-ember:index:#{@revision}")
         get "#{host}", { revision: @revision }
       end
 
       it "renders the fetched index" do
-        allow_any_instance_of(Redis).to receive(:get).with("code-corps-ember:index:#{@revision}").and_return "HELLO REVISION"
+        allow_any_instance_of(Redis).to receive(:get).with("fieldthebern-ember:index:#{@revision}").and_return "HELLO REVISION"
         get "#{host}", { revision: @revision }
 
         expect(last_response.status).to eq 200
@@ -60,16 +60,16 @@ describe "EmberIndex API" do
     context "when fetching latest" do
       before do
         @current_revision = "123abcd"
-        allow_any_instance_of(Redis).to receive(:get).with("code-corps-ember:index:current").and_return(@current_revision)
+        allow_any_instance_of(Redis).to receive(:get).with("fieldthebern-ember:index:current").and_return(@current_revision)
       end
 
-      it "fetches 'code-corps-ember:index:current' from redis" do
-        expect_any_instance_of(Redis).to receive(:get).with("code-corps-ember:index:#{@current_revision}")
+      it "fetches 'fieldthebern-ember:index:current' from redis" do
+        expect_any_instance_of(Redis).to receive(:get).with("fieldthebern-ember:index:#{@current_revision}")
         get "#{host}"
       end
 
       it "renders the fetched index" do
-        allow_any_instance_of(Redis).to receive(:get).with("code-corps-ember:index:#{@current_revision}").and_return "HELLO CURRENT"
+        allow_any_instance_of(Redis).to receive(:get).with("fieldthebern-ember:index:#{@current_revision}").and_return "HELLO CURRENT"
         get "#{host}"
 
         expect(last_response.status).to eq 200

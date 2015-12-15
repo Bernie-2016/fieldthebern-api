@@ -5,11 +5,11 @@ class EmberIndexController < ApplicationController
 
   def index
     index_key = if Rails.env.development?
-                  'code-corps-ember:index:__development__'
+                  'fieldthebern-ember:index:__development__'
                 elsif fetch_revision
-                  "code-corps-ember:index:#{fetch_revision}"
+                  "fieldthebern-ember:index:#{fetch_revision}"
                 else
-                  Sidekiq.redis { |r| "code-corps-ember:index:#{r.get('code-corps-ember:index:current')}" }
+                  Sidekiq.redis { |r| "fieldthebern-ember:index:#{r.get('fieldthebern-ember:index:current')}" }
                 end
     index = Sidekiq.redis { |r| r.get(index_key) }
     render text: process_index(index).html_safe, layout: false
