@@ -16,7 +16,8 @@ describe "Tokens API" do
           password: 'test_password'
         }
         expect(last_response.status).to eq 200
-        expect(json.access_token).not_to be nil
+        expect(json.access_token).not_to be_nil
+        expect(json.refresh_token).not_to be_nil
       end
 
       it "fails with 401 when email is invalid" do
@@ -100,7 +101,7 @@ describe "Tokens API" do
           }
 
           expect(last_response.status).to eq 400
-          expect(json.access_token).to be nil
+          expect(json.access_token).to be_nil
         end
       end
 
@@ -130,7 +131,8 @@ describe "Tokens API" do
             }
 
             expect(last_response.status).to eq 200
-            expect(json.access_token).not_to be nil
+            expect(json.access_token).not_to be_nil
+            expect(json.refresh_token).not_to be_nil
           end
 
           it "updates leaderboards" do
@@ -166,7 +168,7 @@ describe "Tokens API" do
             }
 
             expect(last_response.status).to eq 404
-            expect(json.access_token).to be nil
+            expect(json.access_token).to be_nil
           end
         end
       end

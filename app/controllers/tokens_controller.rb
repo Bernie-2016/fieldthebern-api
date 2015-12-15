@@ -43,12 +43,14 @@ class TokensController < Doorkeeper::TokensController
 
     def generate_token_data(user_id)
       doorkeeper_access_token = Doorkeeper::AccessToken.create!({
+        use_refresh_token: true,
         application_id: nil,
         resource_owner_id: user_id,
         expires_in: 7200})
 
       return {
         access_token: doorkeeper_access_token.token,
+        refresh_token: doorkeeper_access_token.refresh_token,
         token_type: 'bearer',
         expires_in: doorkeeper_access_token.expires_in,
         user_id: user_id.to_s
