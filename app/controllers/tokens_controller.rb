@@ -14,7 +14,6 @@ class TokensController < Doorkeeper::TokensController
          Koala::Facebook::AuthenticationError,
          ActiveRecord::RecordNotFound => e
 
-    binding.pry
     Raven.capture_exception e
     render_error e
   end
