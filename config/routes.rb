@@ -24,4 +24,6 @@ Rails.application.routes.draw do
 
     resources :devices, only: [:create]
   end
+
+  get '/(*path)' => "ember_index#index", as: :root, format: :html
 end
