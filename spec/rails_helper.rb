@@ -43,7 +43,7 @@ RSpec.configure do |config|
   end
 
   def host
-    "http://api.lvh.me:3000"
+    "https://api.lvh.me:3000"
   end
 
   def authenticated_get(path, args, token)

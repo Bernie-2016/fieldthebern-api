@@ -60,4 +60,6 @@ Rails.application.configure do
     Bullet.bullet_logger = true
     Bullet.raise = true
   end
+
+  config.force_ssl = true
 end
