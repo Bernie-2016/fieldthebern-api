@@ -37,6 +37,13 @@ describe Address do
     it { should validate_presence_of(:longitude) }
     it { should validate_presence_of(:city) }
     it { should validate_presence_of(:state_code) }
+
+    it { should validate_numericality_of(:latitude).
+      is_greater_than_or_equal_to(-90).
+      is_less_than_or_equal_to(90) }
+    it { should validate_numericality_of(:longitude).
+      is_greater_than_or_equal_to(-180).
+      is_less_than_or_equal_to(180) }
   end
 
   context 'scopes' do
