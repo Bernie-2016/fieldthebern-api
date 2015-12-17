@@ -30,6 +30,9 @@ class User < ActiveRecord::Base
   validates_uniqueness_of :email, case_sensitive: false
   validates_uniqueness_of :facebook_id, allow_nil: true
 
+  validates_presence_of :first_name
+  validates_presence_of :last_name
+
   def self.friendly_token
     # Borrowed from Devise.friendly_token
     SecureRandom.urlsafe_base64(15).tr('lIO0', 'sxyz').first(12)

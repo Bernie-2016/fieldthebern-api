@@ -39,6 +39,9 @@ describe User do
     it { should validate_presence_of(:password) }
     it { should validate_uniqueness_of(:email).case_insensitive }
     it { should validate_uniqueness_of(:facebook_id).allow_nil }
+
+    it { should validate_presence_of(:first_name) }
+    it { should validate_presence_of(:last_name) }
   end
 
   context 'paperclip' do
