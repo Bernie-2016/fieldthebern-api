@@ -58,14 +58,19 @@ class Address < ActiveRecord::Base
     string_value
   end
 
+  validates :street_1, presence: true
+
   validates :latitude,
     presence: true,
     numericality: { greater_than_or_equal_to: -90, less_than_or_equal_to: 90 }
   validates :longitude,
     presence: true,
     numericality: { greater_than_or_equal_to: -180, less_than_or_equal_to: 180 }
+
   validates :state_code, presence: true
-  validates :city, presence: true
+
+  validates_presence_of :city, unless: proc{|a| a.zip_code.present?}, message: "can't be empty if zip code is empty"
+  validates_presence_of :zip_code, unless: proc{|a| a.city.present?}, message: "can't be empty if city is empty"
 
   def assign_most_supportive_resident(person)
     current_best = self.most_supportive_resident
@@ -89,4 +94,5 @@ class Address < ActiveRecord::Base
     invalid_interval = lower_bound..upper_bound
     invalid_interval.include? self.visited_at.to_i
   end
+
 end

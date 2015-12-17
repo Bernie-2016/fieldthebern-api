@@ -33,10 +33,11 @@ describe Address do
   end
 
   context 'validations' do
+    it { should validate_presence_of(:street_1) }
+    it { should validate_presence_of(:state_code) }
+
     it { should validate_presence_of(:latitude) }
     it { should validate_presence_of(:longitude) }
-    it { should validate_presence_of(:city) }
-    it { should validate_presence_of(:state_code) }
 
     it { should validate_numericality_of(:latitude).
       is_greater_than_or_equal_to(-90).
@@ -44,6 +45,13 @@ describe Address do
     it { should validate_numericality_of(:longitude).
       is_greater_than_or_equal_to(-180).
       is_less_than_or_equal_to(180) }
+
+    it "should require at least city or zip code" do
+      expect(build(:address, zip_code: nil, city: "Something")).to be_valid
+      expect(build(:address, zip_code: "ABC", city: nil)).to be_valid
+      expect(build(:address, zip_code: "ABC", city: "Something")).to be_valid
+      expect(build(:address, zip_code: nil, city: nil)).not_to be_valid
+    end
   end
 
   context 'scopes' do
