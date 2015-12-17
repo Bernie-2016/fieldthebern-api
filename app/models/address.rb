@@ -58,7 +58,10 @@ class Address < ActiveRecord::Base
     string_value
   end
 
+  validates :latitude, presence: true
+  validates :longitude, presence: true
   validates :state_code, presence: true
+  validates :city, presence: true
 
   def assign_most_supportive_resident(person)
     current_best = self.most_supportive_resident

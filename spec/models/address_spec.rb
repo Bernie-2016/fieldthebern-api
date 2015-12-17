@@ -6,22 +6,24 @@ describe Address do
   end
 
   context 'schema' do
-    it {should have_db_column(:latitude).of_type(:float) }
-    it {should have_db_column(:longitude).of_type(:float) }
-    it {should have_db_column(:street_1).of_type(:string) }
-    it {should have_db_column(:street_2).of_type(:string) }
-    it {should have_db_column(:city).of_type(:string) }
-    it {should have_db_column(:state_code).of_type(:string) }
-    it {should have_db_column(:zip_code).of_type(:string) }
-    it {should have_db_column(:visited_at).of_type(:datetime) }
-    it {should have_db_column(:usps_verified_street_1).of_type(:string) }
-    it {should have_db_column(:usps_verified_city).of_type(:string) }
-    it {should have_db_column(:usps_verified_zip).of_type(:string) }
-    it {should have_db_column(:best_canvass_response).of_type(:string).with_options(default: "not_yet_visited") }
-    it {should have_db_column(:last_canvass_response).of_type(:string).with_options(default: "unknown") }
+    it { should have_db_column(:latitude).of_type(:float) }
+    it { should have_db_column(:longitude).of_type(:float) }
+    it { should have_db_column(:street_1).of_type(:string) }
+    it { should have_db_column(:street_2).of_type(:string) }
+    it { should have_db_column(:city).of_type(:string) }
+    it { should have_db_column(:state_code).of_type(:string) }
+    it { should have_db_column(:zip_code).of_type(:string) }
+    it { should have_db_column(:visited_at).of_type(:datetime) }
+    it { should have_db_column(:usps_verified_street_1).of_type(:string) }
+    it { should have_db_column(:usps_verified_street_2).of_type(:string) }
+    it { should have_db_column(:usps_verified_city).of_type(:string) }
+    it { should have_db_column(:usps_verified_zip).of_type(:string) }
+    it { should have_db_column(:usps_verified_state).of_type(:string) }
+    it { should have_db_column(:best_canvass_response).of_type(:string).with_options(default: "not_yet_visited") }
+    it { should have_db_column(:last_canvass_response).of_type(:string).with_options(default: "unknown") }
 
-    it {should have_db_column(:most_supportive_resident_id).of_type(:integer) }
-    it {should have_db_column(:last_visited_by_id).of_type(:integer) }
+    it { should have_db_column(:most_supportive_resident_id).of_type(:integer) }
+    it { should have_db_column(:last_visited_by_id).of_type(:integer) }
   end
 
   context 'associations' do
@@ -31,6 +33,9 @@ describe Address do
   end
 
   context 'validations' do
+    it { should validate_presence_of(:latitude) }
+    it { should validate_presence_of(:longitude) }
+    it { should validate_presence_of(:city) }
     it { should validate_presence_of(:state_code) }
   end
 
