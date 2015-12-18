@@ -21,7 +21,7 @@ class User < ActiveRecord::Base
                       thumb: "150x150#",
                       large: "500x500#"
                     },
-                    path: "users/:id/:style-:suffix.:extension",
+                    path: "users/:id/:style.:extension",
                     default_url: ASSET_HOST_FOR_DEFAULT_PHOTO + '/default_:style.png'
 
   validates_attachment_content_type :photo,
@@ -29,6 +29,9 @@ class User < ActiveRecord::Base
 
   validates_uniqueness_of :email, case_sensitive: false
   validates_uniqueness_of :facebook_id, allow_nil: true
+
+  validates_presence_of :first_name
+  validates_presence_of :last_name
 
   def self.friendly_token
     # Borrowed from Devise.friendly_token
@@ -80,12 +83,5 @@ class User < ActiveRecord::Base
     data.original_filename = SecureRandom.hex + '.png'
     data.content_type = 'image/png'
     self.photo = data
-  end
-
-  # We version the photo with a timestamp suffix
-  # which prevents issues with old photos showing due
-  # to remaining on CloudFront edge servers
-  Paperclip.interpolates :suffix  do |attachment, style|
-    attachment.updated_at.to_s
   end
 end

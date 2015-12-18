@@ -48,7 +48,7 @@ module GroundGame
               first_name: "John",
               last_name: "Doe",
               canvass_response: "leaning_for",
-              party_affiliation: "Democrat"
+              party_affiliation: "democrat_affiliation"
             }]
 
             visit = CreateVisit.new(visit_params, address_params, people_params, user).call.visit
@@ -126,11 +126,11 @@ module GroundGame
                 people_params = [{
                   id: 10,
                   canvass_response: "leaning_for",
-                  party_affiliation: "Democrat"
+                  party_affiliation: "democrat_affiliation"
                 }, {
                   id: 11,
                   canvass_response: "strongly_for",
-                  party_affiliation: "Independent"
+                  party_affiliation: "independent_affiliation"
                 }]
 
                 visit = CreateVisit.new(visit_params, address_params, people_params, user).call.visit
@@ -176,7 +176,7 @@ module GroundGame
                   first_name: "John",
                   last_name: "Doe",
                   canvass_response: "leaning_for",
-                  party_affiliation: "Democrat"
+                  party_affiliation: "democrat_affiliation"
                 }]
 
                 visit = CreateVisit.new(visit_params, address_params, people_params, user).call.visit
@@ -202,12 +202,12 @@ module GroundGame
                   first_name: "John",
                   last_name: "Doe",
                   canvass_response: "leaning_for",
-                  party_affiliation: "Democrat"
+                  party_affiliation: "democrat_affiliation"
                 }, {
                   first_name: "Jane",
                   last_name: "Doe",
                   canvass_response: "strongly_for",
-                  party_affiliation: "Independent"
+                  party_affiliation: "independent_affiliation"
                 }]
 
                 visit = CreateVisit.new(visit_params, address_params, people_params, user).call.visit
@@ -253,7 +253,7 @@ module GroundGame
                   first_name: "John",
                   last_name: "Doe",
                   canvass_response: "leaning_for",
-                  party_affiliation: "Democrat"
+                  party_affiliation: "democrat_affiliation"
                 }]
 
                 visit = CreateVisit.new(visit_params, address_params, people_params, user).call.visit
@@ -305,7 +305,7 @@ module GroundGame
                 first_name: "John",
                 last_name: "Doe",
                 canvass_response: "leaning_for",
-                party_affiliation: "Democrat"
+                party_affiliation: "democrat_affiliation"
               }]
 
               visit = CreateVisit.new(@visit_params, @address_params, people_params, user).call.visit
