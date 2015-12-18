@@ -43,7 +43,9 @@ RSpec.configure do |config|
   end
 
   def host
-    "https://api.lvh.me:3000"
+    protocol = "https" if ENV['FORCE_SSL'] == "true"
+    protocol = "http" unless ENV['FORCE_SSL'] == "true"
+    "#{protocol}://api.lvh.me:3000"
   end
 
   def authenticated_get(path, args, token)
