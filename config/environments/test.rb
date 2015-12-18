@@ -61,5 +61,5 @@ Rails.application.configure do
     Bullet.raise = true
   end
 
-  config.force_ssl = true
+  config.force_ssl = (ENV['FORCE_SSL'] == 'true')
 end
