@@ -113,6 +113,9 @@ describe Person do
 
     person.independent_affiliation!
     expect(person.independent_affiliation?).to be true
+
+    person.other_affiliation!
+    expect(person.other_affiliation?).to be true
   end
 
   it "has a working 'preferred_contact_method' enum" do
