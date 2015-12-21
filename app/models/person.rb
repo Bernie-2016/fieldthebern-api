@@ -18,7 +18,8 @@ class Person < ActiveRecord::Base
     democrat_affiliation: "Democrat",
     republican_affiliation: "Republican",
     undeclared_affiliation: "Undeclared",
-    independent_affiliation: "Independent"
+    independent_affiliation: "Independent",
+    other_affiliation: "Other"
   }
 
   enum preferred_contact_method: {
