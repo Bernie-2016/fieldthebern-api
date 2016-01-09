@@ -14,8 +14,15 @@ class AddressesController < ApplicationController
   private
 
     def match_addresses_using_radius
-      addresses = Address.within(index_params[:radius], origin: [index_params[:latitude], index_params[:longitude]])
-                         .includes([:most_supportive_resident, :people, :last_visited_by])
+      addresses = Address.within(
+          index_params[:radius],
+          origin: [index_params[:latitude], index_params[:longitude]]
+        ).
+        includes([
+          :most_supportive_resident,
+          :people,
+          :last_visited_by
+        ])
       render json: addresses, include: ['last_visited_by']
     end
 
