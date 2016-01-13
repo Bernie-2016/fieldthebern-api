@@ -16,4 +16,4 @@
 # Using secret_token for rails3 compatibility. Change to secret_key_base
 # to avoid deprecation warning.
 # Can be safely removed in a rails3 api-only application.
-GroundGame::Application.config.secret_token = '6998a73c024508d1e598b78c4fe726d16de876d8267a9b5a05ad1621b364010eb64886645ca6d3a3968a2910ed13f68bbd48780e374be34abfadb4a19bf544fc'
+GroundGame::Application.config.secret_token = ENV['SECRET_TOKEN']
