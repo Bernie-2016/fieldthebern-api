@@ -27,7 +27,6 @@ class User < ActiveRecord::Base
   validates_attachment_content_type :photo,
                                     content_type: %r{^image\/(png|gif|jpeg)}
 
-  validates_uniqueness_of :email, case_sensitive: false
   validates_uniqueness_of :facebook_id, allow_nil: true
 
   validates_presence_of :first_name
