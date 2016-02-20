@@ -30,6 +30,7 @@ class UsersController < ApplicationController
     user.update(user_params)
 
     if user.save
+      user.api_user.api_save!(user_params)
       update_leaderboards_and_render_json(user)
     else
       render_validation_errors(user.errors)
@@ -52,6 +53,8 @@ class UsersController < ApplicationController
         AddFacebookProfilePicture.perform_async(user.id)
       end
 
+      user.api_user = ApiUser.new.api_create!(user)
+
       render json: user
     else
       render_validation_errors(user.errors)
@@ -62,6 +65,7 @@ class UsersController < ApplicationController
     user = User.new(user_params)
 
     if user.save
+      user.api_user = ApiUser.new.api_create!(user)
       update_leaderboards_and_render_json(user)
     else
       render_validation_errors(user.errors)
