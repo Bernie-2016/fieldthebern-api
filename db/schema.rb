@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151220213249) do
+ActiveRecord::Schema.define(version: 20160220020210) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -62,6 +62,14 @@ ActiveRecord::Schema.define(version: 20151220213249) do
     t.string   "best_canvass_response",       default: "not_yet_visited"
     t.string   "last_canvass_response",       default: "unknown"
     t.integer  "last_visited_by_id"
+  end
+
+  create_table "api_users", force: :cascade do |t|
+    t.string   "api_access_token"
+    t.integer  "api_user_id"
+    t.integer  "user_id"
+    t.datetime "created_at",       null: false
+    t.datetime "updated_at",       null: false
   end
 
   create_table "devices", force: :cascade do |t|

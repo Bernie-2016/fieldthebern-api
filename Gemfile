@@ -46,6 +46,8 @@ gem 'newrelic_rpm'
 
 gem 'rack-cors', require: 'rack/cors'
 
+gem 'rest-client'
+
 group :development, :production do
   gem 'rails_12factor'
 end
