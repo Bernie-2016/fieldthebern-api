@@ -12,4 +12,18 @@ namespace :gatekeeper do
 
     puts "API integration completed!"
   end
+
+  task notify_users: :environment do
+    users = User.all
+    counter = 0
+    puts "Sending notification mailers for #{users.count} users"
+
+    users.each do |user|
+      GatekeeperMailer.pre_transfer(user)
+      counter += 1
+      puts "Sent notification mailer for #{counter}/#{users.count}"
+    end
+
+    puts "Notification mailer email blast completed!"
+  end
 end
