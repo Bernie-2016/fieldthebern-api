@@ -5,9 +5,9 @@ class ApiUser < ActiveRecord::Base
     user_info = {
       "user" => {
         "email" => user.email,
+        "encrypted_password" => user.encrypted_password,
         "first_name" => user.first_name,
-        "last_name" => user.last_name,
-        "password" => user.password
+        "last_name" => user.last_name
       }
     }
 
@@ -21,7 +21,7 @@ class ApiUser < ActiveRecord::Base
     user_params = ActionController::Parameters.new({ user: user_params })
 
     user_info = {
-      "user" => user_params.require(:user).permit(:email, :first_name, :last_name, :password).to_h
+      "user" => user_params.require(:user).permit(:email, :encrypted_password, :first_name, :last_name).to_h
     }
 
     RestClient.put("#{ENV["AUTH_API_URL"]}/users/me", user_info, access_token: self.api_access_token)
