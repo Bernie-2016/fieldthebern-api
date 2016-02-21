@@ -3,6 +3,8 @@ class User < ActiveRecord::Base
 
   include Clearance::User
 
+  has_one :api_user
+
   has_many :devices
 
   has_many :visits

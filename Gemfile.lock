@@ -329,6 +329,7 @@ DEPENDENCIES
   rails (= 4.2.4)
   rails-api
   rails_12factor
+  rest-client
   rspec-rails
   rspec-sidekiq
   sentry-raven

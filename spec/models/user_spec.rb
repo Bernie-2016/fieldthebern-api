@@ -32,6 +32,7 @@ describe User do
     it { should have_many(:passive_relationships) }
     it { should have_many(:followers) }
     it { should have_many(:following) }
+    it { should have_one(:api_user) }
   end
 
   context 'validations' do
