@@ -8,6 +8,14 @@ GIT
       railties (>= 4.0)
 
 GIT
+  remote: https://github.com/christopherstyles/ngp_van.git
+  revision: c5b32106c1727cca35ebbf8807acd140d049ccb5
+  specs:
+    ngp_van (0.1.0)
+      faraday (~> 0.9.2)
+      faraday_middleware (~> 0.10.0)
+
+GIT
   remote: https://github.com/thoughtbot/paperclip
   revision: 523bd46c768226893f23889079a7aa9c73b57d68
   ref: 523bd46c768226893f23889079a7aa9c73b57d68
@@ -317,6 +325,7 @@ DEPENDENCIES
   koala
   leaderboard
   newrelic_rpm
+  ngp_van!
   oauth2
   paperclip!
   parse-ruby-client
@@ -340,4 +349,4 @@ DEPENDENCIES
   webmock
 
 BUNDLED WITH
-   1.10.6
+   1.11.2
