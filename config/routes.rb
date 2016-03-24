@@ -14,7 +14,7 @@ Rails.application.routes.draw do
 
     get 'users/lookup', to: 'users#lookup'
 
-    resources :users, only: [:create, :show]
+    resources :users, only: [:index, :create, :show]
 
     resources :addresses, only: [:index]
 
