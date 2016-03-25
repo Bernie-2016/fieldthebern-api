@@ -16,8 +16,9 @@ class UsersController < ApplicationController
   end
 
   def show
-    user = User.find(params[:id])
-    render json: user
+    ids = params[:id].split(',') if params.key(:id)
+    users = User.where(id: ids || [])
+    render json: users.first if ids.count == 1 else users 
   end
 
   def me
