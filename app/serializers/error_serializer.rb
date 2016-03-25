@@ -5,21 +5,26 @@ require "ground_game/easypost_error_adapter"
 
 class ErrorSerializer
   def self.serialize(error)
-    error_hash = serialize_argument_error(error) if error.class == ArgumentError
-    error_hash = serialize_record_not_found_error(error) if error.class == ActiveRecord::RecordNotFound
-    error_hash = serialize_visit_not_allowed_error(error) if error.class == GroundGame::VisitNotAllowed
-    error_hash = serialize_invalid_best_canvass_response_error(error) if error.class == GroundGame::InvalidBestCanvassResponse
-    error_hash = serialize_easypost_error(error) if error.class == EasyPost::Error
-    error_hash = serialize_address_unmatched_error(error) if error.class == GroundGame::AddressUnmatched
-    error_hash = serialize_facebook_authentication_error(error) if error.class == Koala::Facebook::AuthenticationError
-    error_hash = serialize_doorkeeper_oauth_invalid_token_response(error) if error.class == Doorkeeper::OAuth::InvalidTokenResponse
-    error_hash = serialize_doorkeeper_oauth_error_response(error) if error.class == Doorkeeper::OAuth::ErrorResponse
-    error_hash = serialize_validation_errors(error) if error.class == ActiveModel::Errors
+    error_hash = send(serializer_mapping[error.class], error)
 
     { errors: Array.wrap(error_hash) }
   end
 
   private
+    def self.serializer_mapping
+      {
+        ArgumentError                                 => :serialize_argument_error,
+        ActiveRecord::RecordNotFound                  => :serialize_record_not_found_error,
+        GroundGame::VisitNotAllowed                   => :serialize_visit_not_allowed_error,
+        GroundGame::InvalidBestCanvassResponse        => :serialize_invalid_best_canvass_response_error,
+        EasyPost::Error                               => :serialize_easypost_error,
+        GroundGame::AddressUnmatched                  => :serialize_address_unmatched_error,
+        Koala::Facebook::AuthenticationError          => :serialize_facebook_authentication_error,
+        Doorkeeper::OAuth::InvalidTokenResponse       => :serialize_doorkeeper_oauth_invalid_token_response,
+        Doorkeeper::OAuth::ErrorResponse              => :serialize_doorkeeper_oauth_error_response,
+        ActiveModel::Errors                           => :serialize_validation_errors,
+      }
+    end
 
     def self.serialize_argument_error(error)
       {
