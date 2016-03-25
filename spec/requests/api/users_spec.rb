@@ -655,11 +655,11 @@ describe "Users API" do
     end
   end
 
-  context 'GET /users?id=:id,:id2,' do
+  context 'GET /users/:id,:id2,' do
     context "with mutliple ids" do
       it "returns the 2 the two users"  do
         users = create_list(:user, 2)
-        get "#{host}/users?ids=#{users[0].id},#{users[1].id}"
+        get "#{host}/users/#{users[0].id},#{users[1].id}"
 
         expect(json.data.first.attributes.state_code).to eq(users[0].state_code)
         expect(json.data.first.attributes.email).to eq(users[0].email)
@@ -672,7 +672,7 @@ describe "Users API" do
 
       it "is successfull response" do
         users = create_list(:user, 2)
-        get "#{host}/users?ids=#{users[0].id},#{users[1].id}"
+        get "#{host}/users/#{users[0].id},#{users[1].id}"
         expect(last_response.status).to eq(200)
       end
     end
