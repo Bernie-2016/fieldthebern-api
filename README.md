@@ -13,11 +13,13 @@ Rails API for crowdsourced voter canvassing.
 ### Setup
 
 1. Clone the repository (`git clone git@github.com:Bernie-2016/fieldthebern-api.git`)
-2. Install gem dependencies: `bundle install`
-3. Create and migrate the database: `rake db:setup`
-4. Copy `.env.sample` to `.env`. Create test apps with the relevant services to get credentials.
-5. Run `gem install foreman` to install the foreman gem, used for running Procfile-based apps.
-6. Run `foreman start` to start the server.
+2. Obtain an oauth access token for `ngp_van` from a team member in Slack.
+3. Configure the project locally: `bundle config --local GITHUB_OAUTH_TOKEN <token>:x-oauth-basic`
+4. Install gem dependencies: `bundle install`
+5. Create and migrate the database: `rake db:setup`
+6. Copy `.env.sample` to `.env`. Create test apps with the relevant services to get credentials.
+7. Run `gem install foreman` to install the foreman gem, used for running Procfile-based apps.
+8. Run `foreman start` to start the server.
 
 ### Testing
 `http://api.lvh.me:5000/ping`

@@ -46,6 +46,8 @@ gem 'newrelic_rpm'
 
 gem 'rack-cors', require: 'rack/cors'
 
+gem 'ngp_van', git: 'https://github.com/christopherstyles/ngp_van.git'
+
 group :development, :production do
   gem 'rails_12factor'
 end
