@@ -36,6 +36,12 @@ class UsersController < ApplicationController
     end
   end
 
+  def index
+    ids = params[:ids].split(',') if params.key(:ids)
+    users = User.where(id: ids || [])
+    render json: users, each_serializer: UserSerializerWithoutIncludes
+  end
+
   private
 
   def create_user_from_facebook_and_render_json
