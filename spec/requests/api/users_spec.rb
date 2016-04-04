@@ -520,8 +520,6 @@ describe "Users API" do
         @user.reload
         expect(@user.base_64_photo_data).to be_nil
         expect(@user.photo.path).to_not be_nil
-        expect(@user.photo.url(:original)).to include "cloudfront"
-        expect(@user.photo.url(:original)).to include "users/#{@user.id}/original"
       end
     end
 
